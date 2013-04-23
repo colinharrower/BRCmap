@@ -1,5 +1,15 @@
 helmert_trans <-
-function(x, y, z, trans = "OSNItoOSGB", trans_params = helmert_trans_vars, full_output = FALSE){
+function(x, y, z, trans = "OSNItoOSGB", trans_params = NULL, full_output = FALSE){
+	# If trans_params is null then check where helmert_trans_vars data.frame has been loaded from package
+		if(is.null(trans_params)){
+			# If it doesn't exist then load
+			if(!exists("helmert_trans_vars")){
+				data(helmert_trans_vars)
+			}
+			# set trans_params = helmert_trans_vars
+			trans_params = helmert_trans_vars
+		}
+
 	# Determine length of input vars x,y,z and check all 3 variables are same length
 		len_x = length(x)
 		if(length(y) != len_x | length(z) != len_x){

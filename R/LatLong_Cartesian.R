@@ -1,5 +1,16 @@
 LatLong_Cartesian <-
-function(Latitude, Longitude, Datum = "OSGB", datum_params = datum_vars, H = NULL, full_output = FALSE){
+function(Latitude, Longitude, Datum = "OSGB", datum_params = NULL, H = NULL, full_output = FALSE){
+	# If datum_params is null then defaults data.frame included with package will be used
+		if(is.null(datum_params)){
+			# Determine if datum variables data.frame is already loaded from package
+			if(!exists("datum_vars")){
+				# If not load from package
+					data(datum_vars)
+			}
+			# Set datum_params to datum_vars
+				datum_params = datum_vars
+		}
+		
 	# Determine length of Latitude & check same as Longitude
 		lat_len = length(Latitude)
 		if(length(Longitude) != lat_len){

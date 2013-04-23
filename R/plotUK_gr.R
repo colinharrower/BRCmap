@@ -1,5 +1,5 @@
 plotUK_gr <-
-function(gridref, gr_prec = 10000, ci_insert = TRUE, ci_origin = c(-180000,30000), unit_conv = NULL, ...){
+function(gridref, gr_prec = 10000, ci_insert = FALSE, ci_origin = c(-180000,30000), unit_conv = NULL, ...){
 	# Extract only unique gridrefs
 		gridref = unique(gridref)	
 		
