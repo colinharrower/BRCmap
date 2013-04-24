@@ -1,15 +1,26 @@
 plotUK_gr <-
 function(gridref, gr_prec = 10000, ci_insert = FALSE, ci_origin = c(-180000,30000), unit_conv = NULL, ...){
 	# Extract only unique gridrefs
-		gridref = unique(gridref)	
+		# If gr_prec is single value then can deal directly with grid ref, if not then need to look for unique gridref/gr_prec combinations
+		if( length(gr_prec) == 1 | is.null(gr_prec) ){
+			gridref = unique(gridref)	
+		} else if( length(gridref) == length(gr_prec) ) {
+			temp = unique(data.frame(gridref = gridref, gr_prec = gr_prec, stringsAsFactors = FALSE))
+			gridref = temp$gridref
+			gr_prec = temp$gr_prec
+		} else {
+			stop("Invalid Value for gr_prec: accepted values are NULL, a single value (used for all gridrefs), or a vector of values the same length as gridref vector")
+		}
 		
 	
 	# Determine number of unique gridrefs
 		gr_len = length(gridref)
 		
-	# If gr_prec is null then determine precision from gridref
+	# If gr_prec is null then determine precision from gridref, if not check whether gr_prec is 1 value (if so create vector of length gr_len) or a vector of length gr_len
 		if(is.null(gr_prec)){
 			gr_prec = det_gr_precision(gridref)
+		} else if(length(gr_prec) == 1) {
+			gr_prec = rep(gr_prec, gr_len)
 		}
 		
 	# Setup dataframe to hold data
@@ -20,11 +31,11 @@ function(gridref, gr_prec = 10000, ci_insert = FALSE, ci_origin = c(-180000,3000
 		
 	# Determine other three corners and assign to every fith row in data.frame (i.e. 2nd, 7th for TL corner, 3rd, 8th for TR, etc)
 		# Top Left
-		gr_poly[seq(2,by=5, length.out=gr_len),] = gr_poly[seq(1,by=5, length.out=gr_len),] + data.frame(rep(0,gr_len),rep(gr_prec,gr_len))
+		gr_poly[seq(2,by=5, length.out=gr_len),] = gr_poly[seq(1,by=5, length.out=gr_len),] + data.frame(rep(0,gr_len),gr_prec)
 		# Top Right
-		gr_poly[seq(3,by=5, length.out=gr_len),] = gr_poly[seq(1,by=5, length.out=gr_len),] + data.frame(rep(gr_prec,gr_len),rep(gr_prec,gr_len))
+		gr_poly[seq(3,by=5, length.out=gr_len),] = gr_poly[seq(1,by=5, length.out=gr_len),] + data.frame(gr_prec,gr_prec)
 		# Bottom Right
-		gr_poly[seq(4,by=5, length.out=gr_len),] = gr_poly[seq(1,by=5, length.out=gr_len),] + data.frame(rep(gr_prec,gr_len), rep(0,gr_len))
+		gr_poly[seq(4,by=5, length.out=gr_len),] = gr_poly[seq(1,by=5, length.out=gr_len),] + data.frame(gr_prec, rep(0,gr_len))
 		
 	# Find Irish gridrefs
 		ir_inds = which(grepl("(^[[:upper:]]{1}[[:digit:]]{2}([[:upper:]]?|[[:upper:]]{2})$)|(^[[:upper:]]{1}[[:digit:]]{2,}$)", rep(gridref,each=5)) & !is.na(gr_poly$EASTING))
