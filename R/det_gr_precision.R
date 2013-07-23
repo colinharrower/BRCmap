@@ -1,6 +1,7 @@
-det_gr_precision <-
-function(gridref){
-	# Convert letters to upppercase
+det_gr_precision <- function(
+	gridref
+){
+	# Convert letters to uppercase
 		gridref = toupper(gridref)
 		
 	# Set up variable to store output
@@ -23,9 +24,13 @@ function(gridref){
 		
 	# If gr_tet contains valid letter then ignore precision based on gridref length and assign 2000
 		gr_prec[gr_tet %in% LETTERS[-15]] = 2000
+		# If not valid tetrad code in gr_tet then set to NA (i.e. O is not a valid tetrad code)
+		gr_prec[!gr_tet %in% LETTERS[-15] & gr_tet != ""] = NA
 		
 	# If gr_quad contains valid letter then ignore precision based on gridref length and assign 5000
 		gr_prec[gr_quad %in% c("NW","NE","SW","SE")] = 5000
+		# If not valid quadrant code in gr_tet then set to NA
+		gr_prec[!gr_quad %in% c("NW","NE","SW","SE") & gr_quad != ""] = NA
 		
 	# Write gr_prec values to output variable
 		prec_out[v_inds] = gr_prec
