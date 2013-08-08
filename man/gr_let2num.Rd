@@ -2,10 +2,10 @@
 \alias{gr_let2num}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Convert Grid references to eastings and northings
+Convert Grid References to eastings and northings
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+A function to convert UK, Irish or Channel Islands grid references to eastings and northings in their respective coordinate system
 }
 \usage{
 gr_let2num(gridref, centre = FALSE, gr_prec = NULL, return_projection = FALSE)
@@ -13,33 +13,35 @@ gr_let2num(gridref, centre = FALSE, gr_prec = NULL, return_projection = FALSE)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{gridref}{
-%%     ~~Describe \code{gridref} here~~
+Valid UK, Irish or Channel islands grid references (see details)
 }
   \item{centre}{
-%%     ~~Describe \code{centre} here~~
+Logical variable determining whether the eastings and northing returned should be for the bottom left of the grid reference square or for the centre point. The default \code{centre = FALSe} returns the coordinates for bottom left corner of the square. 
 }
   \item{gr_prec}{
-%%     ~~Describe \code{gr_prec} here~~
+A vector of the same length as \code{gridref} giving the precision associated with the grid reference. The default \code{gr_prec = NULL} results in the precision being interpreted directly from the grid reference, use this argument if you need to override this intpretation.
 }
   \item{return_projection}{
-%%     ~~Describe \code{return_projection} here~~
+Logical variable determing whether the projection of the grid reference should be returned. The default \code{return_projection = FALSE} will not return the projection. See value section for information on projection values that can be returned
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+The function takes valid UK, Irish or Channel Islands grid references and converts them to eastings and northings (i.e. x,y coordinates) on the respective mapping projections. The grid references accepted by this function are valid OSGB (Ordnance suvery of Great Britain, e.g. SP4209, TN389207), OSNI (Ordnance Survey of Northern Ireland, e.g. D0803, N0138) or UTM (Universal Transverse Mercator, e.g. WV595475, WA569079) grid references. Note that the UTM grid reference can only be used for the Channel Islands and are only in the format as shown by the example above. The function can also accept tetrad or quadrant grid references (e.g. SP40T, SP40NW).
+
+In addition the function can also return the projection associated with each grid reference, this is especially important when dealing collectively with grid references from grid reference types listed above (UK, Irish, Channel Islands) as grid reference from each could results in the same eastings and nortings due to the different origins for each system.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+a \code{data.frame} containing the follow columns:
+\item{EASTING}{The easting from the mapping system origin (in metres)}
+\item{NORTHING}{The norting from the mapping system origin (in metres)}
+optionally an addition column can also be returned (depending on value of \code{return_projection}:
+\item{PROJECTION}{The mapping system for the grid reference. Possible values are \code{OSGB, OSNI or UTM30} for UK, Irish or Channel Island grid references}
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 %%  ~~further notes~~
@@ -48,103 +50,15 @@ gr_let2num(gridref, centre = FALSE, gr_prec = NULL, return_projection = FALSE)
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{gr_num2let}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Create a vector of grid references
+gridrefs <- c("SP4297","WV569079","H49280101","NN29","NT20S","TL97NW")
 
-## The function is currently defined as
-function (gridref, centre = FALSE, gr_prec = NULL, return_projection = FALSE) 
-{
-    spmod = function(x, mod) {
-        ret_obj = x\%\%mod
-        ret_obj[ret_obj == 0] = mod
-        return(ret_obj)
-    }
-    gridref = gsub("[ -]", "", toupper(gridref))
-    len_grvec = length(gridref)
-    if (return_projection) {
-        ret_obj = data.frame(EASTING = rep(NA, len_grvec), NORTHING = rep(NA, 
-            len_grvec), PROJECTION = rep(NA, len_grvec), row.names = NULL)
-    }
-    else {
-        ret_obj = data.frame(EASTING = rep(NA, len_grvec), NORTHING = rep(NA, 
-            len_grvec), row.names = NULL)
-    }
-    cty_inds = which(grepl("^[[:upper:]]{2}[[:digit:]]{2,}$", 
-        gridref) & !grepl("^(WA)|(WV)[[:digit:]]{2,}$", gridref))
-    if (length(cty_inds) > 0) {
-        l1 = match(substr(gridref[cty_inds], 1, 1), LETTERS[-9])
-        l2 = match(substr(gridref[cty_inds], 2, 2), LETTERS[-9])
-        e = (spmod(l1, 5) - 1) * 5
-        n = floor(abs(l1 - 25)/5) * 5
-        e = e + (spmod(l2, 5) - 1)
-        n = n + floor(abs(l2 - 25)/5)
-        e = e - 10
-        n = n - 5
-        gr_nums = substr(gridref[cty_inds], 3, nchar(gridref[cty_inds]))
-        east_num = substr(gr_nums, 1, nchar(gr_nums)/2)
-        north_num = substr(gr_nums, (nchar(gr_nums)/2) + 1, nchar(gr_nums))
-        east_num = gsub(" ", "0", format(east_num, width = 5))
-        north_num = gsub(" ", "0", format(north_num, width = 5))
-        e = paste(e, east_num, sep = "")
-        n = paste(n, north_num, sep = "")
-        ret_obj[cty_inds, c("EASTING", "NORTHING")] = c(as.numeric(e), 
-            as.numeric(n))
-        if (return_projection) {
-            ret_obj[cty_inds, "PROJECTION"] = "OSGB"
-        }
-    }
-    cty_inds = which(grepl("^[[:upper:]]{1}[[:digit:]]{2,}$", 
-        gridref))
-    if (length(cty_inds) > 0) {
-        l2 = match(substr(gridref[cty_inds], 1, 1), LETTERS[-9])
-        e = spmod(l2, 5) - 1
-        n = floor(abs(l2 - 25)/5)
-        gr_nums = substr(gridref[cty_inds], 2, nchar(gridref[cty_inds]))
-        east_num = substr(gr_nums, 1, nchar(gr_nums)/2)
-        north_num = substr(gr_nums, (nchar(gr_nums)/2) + 1, nchar(gr_nums))
-        east_num = gsub(" ", "0", format(east_num, width = 5))
-        north_num = gsub(" ", "0", format(north_num, width = 5))
-        e = paste(e, east_num, sep = "")
-        n = paste(n, north_num, sep = "")
-        ret_obj[cty_inds, c("EASTING", "NORTHING")] = c(as.numeric(e), 
-            as.numeric(n))
-        if (return_projection) {
-            ret_obj[cty_inds, "PROJECTION"] = "OSNI"
-        }
-    }
-    cty_inds = which(grepl("^(WA)|(WV)[[:digit:]]{2,}$", gridref))
-    if (length(cty_inds) > 0) {
-        e = rep(5, length(cty_inds))
-        n = ifelse(grepl("^(WA)[[:digit:]]{2,}$", gridref[cty_inds]), 
-            55, 54)
-        gr_nums = substr(gridref[cty_inds], 3, nchar(gridref[cty_inds]))
-        east_num = substr(gr_nums, 1, nchar(gr_nums)/2)
-        north_num = substr(gr_nums, (nchar(gr_nums)/2) + 1, nchar(gr_nums))
-        east_num = gsub(" ", "0", format(east_num, width = 5))
-        north_num = gsub(" ", "0", format(north_num, width = 5))
-        e = paste(e, east_num, sep = "")
-        n = paste(n, north_num, sep = "")
-        ret_obj[cty_inds, c("EASTING", "NORTHING")] = c(as.numeric(e), 
-            as.numeric(n))
-        if (return_projection) {
-            ret_obj[cty_inds, "PROJECTION"] = "UTM30"
-        }
-    }
-    if (centre) {
-        if (is.null(gr_prec)) {
-            gr_prec = det_gr_precision(gridref)
-        }
-        ret_obj[, c("EASTING", "NORTHING")] = ret_obj[, c("EASTING", 
-            "NORTHING")] + (gr_prec/2)
-    }
-    return(ret_obj)
-  }
+## Convert grid reference to easting and northing in native projection
+gr_let2num(gridrefs)
+
+## Convert grid reference to easting and northing and return projection, but this time for the centre of the grid reference square
+gr_let2num(gridrefs, centre = TRUE, return_projection = TRUE)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

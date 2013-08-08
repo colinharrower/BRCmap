@@ -5,7 +5,7 @@
 Perform Helmert Tranforformation on x,y,z cartesian coordinates
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function performs a Helmert transformation to convert cartesian coordinates between mapping systems using different datum.
 }
 \usage{
 helmert_trans(x, y, z, trans = "OSNItoOSGB", trans_params = helmert_trans_vars, full_output = FALSE)
@@ -13,39 +13,50 @@ helmert_trans(x, y, z, trans = "OSNItoOSGB", trans_params = helmert_trans_vars, 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-%%     ~~Describe \code{x} here~~
+  Numerical vector contain x cartesian coordinates to be converted
 }
   \item{y}{
-%%     ~~Describe \code{y} here~~
+  Numerical vector contain y cartesian coordinates to be converted
 }
   \item{z}{
-%%     ~~Describe \code{z} here~~
+  Numerical vector contain z cartesian coordinates to be converted
 }
   \item{trans}{
-%%     ~~Describe \code{trans} here~~
+  Vector of text stings determining which transformation parameters to use for each grid reference. This should be the \code{row.name} of the row in \code{trans_params} which contains the helmert paramters for the transformation you wish to use for that grid reference. The default \code{trans = "OSNItoOSGB" converts cartesian coordinates from the Irish datum to the British Datum}
 }
   \item{trans_params}{
-%%     ~~Describe \code{trans_params} here~~
+  A \code{data.frame} containing Herlert transformation parameters. The default usings the built in dataset \code{hermert_trans_vars} which contains the parameters need to convert the most common mapping systems using in the UK
 }
   \item{full_output}{
-%%     ~~Describe \code{full_output} here~~
+A logical variable determining whether to return all columns or only to return the new transformed x,y,z coordinates. The default \code{full_output = FALSE} will return only the transformed x,y,z coordinates.
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+In theory this function can be used to peform Helmert transformation as long as you have the herlmert parameters for this transformation. The default set of parameters included in the \code{BRCmap} package included parameters to convert coordiantes between UK, Irish, Channel Islands, and WGS84 datum.
+
+The helert datum transformation is only one step in converting grid reference from one map system to another. The full process involves; 
+\cr 1) Convert original grid reference to eastings and northings, 
+\cr 2) convert easting and northing to latitude and longitude in original datum, 
+\cr 3) convert latitude & longitude to cartesian coordinates in original datum, 
+\cr 4) transform cartesian coordinates form original datum to new datum, 
+\cr 5) convert new cartesian cooridinates to latitude & longitude in new datum, 
+\cr 6) convert new latitude and longitude to eastings and northings, 
+\cr 7) optionally convert new eastings & northings back to grid reference in new mapping system
+
+Therefore to convert between mapping systems you will need to use several function in the \code{BRCmap} package. To do this you can either manually use each function, use one of the pre-written wrapper functions provided in the \code{BRCmap} packge (if one exists for the transformations you require), or write you own custom wrapper function.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+A \code{data.frame} containing the following columns:
+\item{x}{The transformed x cateisian coordinate(s)}
+\item{y}{The transformed y cateisian coordinate(s)}
+\item{z}{The transformed z cateisian coordinate(s)}
 }
 \references{
-%% ~put references to the literature/web site here ~
+Code is translated from Javascript written under open source attribution licence by Chris Veness, and provided on the following website:
+\url{http://www.movable-type.co.uk/scripts/latlong-convert-coords.html}
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 %%  ~~further notes~~
@@ -54,65 +65,11 @@ helmert_trans(x, y, z, trans = "OSNItoOSGB", trans_params = helmert_trans_vars, 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{OSGridReprojection}}, 
+\code{\link{OSGridstoLatLong}}, 
+\code{\link{LatLong_Cartesian}},
+\code{\link{Cartesian_LatLong}},
+\code{\link{LatLongtoOSGrids}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (x, y, z, trans = "OSNItoOSGB", trans_params = helmert_trans_vars, 
-    full_output = FALSE) 
-{
-    len_x = length(x)
-    if (length(y) != len_x | length(z) != len_x) {
-        stop("ERROR: input variables 'x', 'y' and 'z' are of different lengths")
-    }
-    if (!length(trans) \%in\% c(1, len_x)) {
-        stop("ERROR: Length of 'trans' does not match length of input 'x','y' & 'z' values")
-    }
-    trans_list = unique(trans)
-    miss_trans = which(!trans_list \%in\% trans_params$TRANS)
-    if (length(miss_trans) > 0) {
-        stop(paste("ERROR: Transformation requested for which parameters have not been given (", 
-            paste(sQuote(trans_list[miss_trans]), collapse = ","), 
-            ")", sep = ""))
-    }
-    if (full_output) {
-        ret_obj = data.frame(org_x = x, org_y = y, org_z = z, 
-            TRANS = Datum, x = rep(NA, len_x), y = rep(NA, len_x), 
-            y = rep(NA, len_x), stringsAsFactors = FALSE)
-    }
-    else {
-        ret_obj = data.frame(x = rep(NA, len_x), y = rep(NA, 
-            len_x), z = rep(NA, len_x), stringsAsFactors = FALSE)
-    }
-    for (i_trans in 1:length(trans_list)) {
-        if (length(trans) == 1) {
-            dat_inds = 1:len_x
-        }
-        else {
-            dat_inds = which(trans == trans_list[i_trans])
-        }
-        tp = trans_params[trans_params$TRANS == trans_list[i_trans], 
-            ]
-        tp[, c("rx", "ry", "rz")] = (tp[, c("rx", "ry", "rz")]/3600) * 
-            (pi/180)
-        tp[, "s"] = tp$s * 1e-06
-        x_out = x[dat_inds] + (x[dat_inds] * tp$s) - (y[dat_inds] * 
-            tp$rz) + (z[dat_inds] * tp$ry) + tp$tx
-        y_out = (x[dat_inds] * tp$rz) + y[dat_inds] + (y[dat_inds] * 
-            tp$s) - (z[dat_inds] * tp$rx) + tp$ty
-        z_out = (-1 * x[dat_inds] * tp$ry) + (y[dat_inds] * tp$rx) + 
-            z[dat_inds] + (z[dat_inds] * tp$s) + tp$tz
-        ret_obj[dat_inds, c("x", "y", "z")] = data.frame(x = x_out, 
-            y = y_out, z = z_out)
-    }
-    return(ret_obj)
-  }
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+  ## Examples to follow

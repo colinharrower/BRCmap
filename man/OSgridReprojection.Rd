@@ -2,10 +2,10 @@
 \alias{OSgridReprojection}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Reproject UK Eastings & Northings from one projection to another (OSNI, OSGB, UTM30)
+Convert UK, Irish or Channel Islands coordinates to another coordinate system.
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+A function to convert UK, Irish or Channel Islands coordinates (given as easting & northing) to another mapping system.
 }
 \usage{
 OSgridReprojection(Easting, Northing, org_grid = "OSNI", out_grid = "OSGB", full_output = FALSE)
@@ -13,36 +13,35 @@ OSgridReprojection(Easting, Northing, org_grid = "OSNI", out_grid = "OSGB", full
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{Easting}{
-%%     ~~Describe \code{Easting} here~~
+ A vector of easting coordinates to be converted
 }
   \item{Northing}{
-%%     ~~Describe \code{Northing} here~~
+A vector of northing coordinates to be converted
 }
   \item{org_grid}{
-%%     ~~Describe \code{org_grid} here~~
+A code determining the original mapping system. Valid values are; \code{"OSGB", "OSNI","UTM30"}. The default \code{org_grid = "OSNI"} assumes intput coordinates are easting & northing on the Irish Grid
 }
   \item{out_grid}{
-%%     ~~Describe \code{out_grid} here~~
+A code determing the mapping system to which the coordinates are to be converted. As above the valid values are; \code{"OSGB", "OSNI","UTM30"}. The default \code{org_grid = "OSGB"} assumes coordinates returned are to be easting & northing on the British Grid
 }
   \item{full_output}{
-%%     ~~Describe \code{full_output} here~~
+Logical determining whether the output data.frame is to contain the full range of input and output columns or only the new coordinates. The default \code{full_output = FALSE} will return only columns containing the new eastings and northing coordinates.
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+At present the function will only convert between these the UK, Irish, Channel Islands and WGS84 coordinates systems.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+A \code{data.frame} containing the following columns:
+\item{EASTING}{The easting after conversion to the new coordinate system}
+\item{NORTHING}{The northing after conversion to the new coordinate system}
+In addition if \code{full_output = TRUE} then the following columns will also be returned:
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 %%  ~~further notes~~
@@ -51,56 +50,8 @@ OSgridReprojection(Easting, Northing, org_grid = "OSNI", out_grid = "OSGB", full
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{helmert_trans}},
+\code{\link{plotUK_gr}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (Easting, Northing, org_grid = "OSNI", out_grid = "OSGB", 
-    full_output = FALSE) 
-{
-    len_east = length(Easting)
-    if (length(Northing) != len_east) {
-        stop("ERROR: 'Easting' and 'Northing' differ in length")
-    }
-    if (full_output) {
-        ret_obj = data.frame(ORG_EASTING = Easting, ORG_NORTHING = Northing, 
-            ORG_GRID = org_grid, NEW_GRID = out_grid, EASTING = rep(NA, 
-                len_east), NORTHING = rep(NA, len_east), stringsAsFactors = FALSE)
-    }
-    else {
-        ret_obj = data.frame(EASTING = rep(NA, len_east), NORTHING = rep(NA, 
-            len_east), stringsAsFactors = FALSE)
-    }
-    org_latlon = OSGridstoLatLong(Easting, Northing, org_grid)
-    org_cart = LatLong_Cartesian(org_latlon$LATITUDE, org_latlon$LONGITUDE, 
-        gsub("WGS84", "UTM30", org_grid))
-    if (!org_grid \%in\% c("WGS84", "UTM30")) {
-        helm_tran = helmert_trans(x = org_cart$x, y = org_cart$y, 
-            z = org_cart$z, trans = paste(org_grid, "toWGS84", 
-                sep = ""))
-    }
-    else {
-        helm_tran = org_cart
-    }
-    if (!out_grid \%in\% c("WGS84", "UTM30")) {
-        helm_tran = helmert_trans(x = helm_tran$x, y = helm_tran$y, 
-            z = helm_tran$z, trans = paste("WGS84to", out_grid, 
-                sep = ""))
-    }
-    out_latlon = Cartesian_LatLong(helm_tran$x, helm_tran$y, 
-        helm_tran$z, out_grid)
-    out_en = LatLongtoOSGrids(out_latlon$LATITUDE, out_latlon$LONGITUDE, 
-        out_grid)
-    ret_obj[, c("EASTING", "NORTHING")] = data.frame(out_en$EASTING, 
-        out_en$NORTHING)
-    return(ret_obj)
-  }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

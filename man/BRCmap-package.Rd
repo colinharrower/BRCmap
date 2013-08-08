@@ -3,12 +3,10 @@
 \alias{BRCmap}
 \docType{package}
 \title{
-What the package does (short line)
-~~ package title ~~
+BRCmap
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+An R package to facilitate species distribution mapping as used in Species Atlases. At present the package is aimed at British Recording schemes however in theory the package can be expanded to cover other regions.
 }
 \details{
 \tabular{ll}{
@@ -21,20 +19,19 @@ License: \tab What license is it under?\cr
 ~~ An overview of how to use the package, including the most important functions ~~
 }
 \author{
-Who wrote it
+Colin Harrower
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+Maintainer: Colin Harrower <corr@ceh.ac.uk>
+
 }
 \references{
-~~ Literature or other references for background information ~~
+
 }
 \keyword{ package }
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R documentation directory ~~
+
 \seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
+
 }
 \examples{
-~~ simple examples of the most important functions ~~
+## Examples to come later
 }
