@@ -73,3 +73,4 @@ Colin Harrower
 }
 \examples{
   ## Examples to follow
+}
