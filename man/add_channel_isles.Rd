@@ -5,7 +5,7 @@
 An R function To Add the Channel Islands to the existing map
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This functions can be used to add the Channel Islands outline to a existing map as an insert box
 }
 \usage{
 add_channel_isles(CI_outline_gr, insert_origin = c(-180000, 30000), insert_dimen = c(1e+05, 1e+05), ins_border = NULL, ins_col = "white", col = NA, border = NULL, show_gridline = FALSE)
@@ -13,32 +13,32 @@ add_channel_isles(CI_outline_gr, insert_origin = c(-180000, 30000), insert_dimen
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{CI_outline_gr}{
-%%     ~~Describe \code{CI_outline_gr} here~~
+The name of an R object containing the shape file information/polygon information for the outline of the Channel Islands
 }
   \item{insert_origin}{
-%%     ~~Describe \code{insert_origin} here~~
+A integer vector of length 2 giving the x,y position for the origin of the insert box. Default is to put the box to the lower left corner of the default UK map
 }
   \item{insert_dimen}{
-%%     ~~Describe \code{insert_dimen} here~~
+A numerical vector of length 2 givng the dimensions of the insert box. The default is 10km (10,000m) by 10km insert box.
 }
   \item{ins_border}{
-%%     ~~Describe \code{ins_border} here~~
+A value determining the line type used to border the insert box. Default \code{NULL} will use a solid line.
 }
   \item{ins_col}{
-%%     ~~Describe \code{ins_col} here~~
+This argument specifies The background colour of the insert box. Any valid form of specifying colours in R should work here. The default \code{white} means that the insert box will cover any points/lines underneath.
 }
   \item{col}{
-%%     ~~Describe \code{col} here~~
+This argument specifies the colour in which the channel outline will be filled. Any valid form of specifying colours in R should work here. The default \code{NA} means that the outline will contain a transparent fill.
 }
   \item{border}{
-%%     ~~Describe \code{border} here~~
+This argument species the colour of the lines used to plot the outline of the Channel Islands. Any valid form of specifying colours in R should work here. The default \code{NULL} will results in a black outline.
 }
   \item{show_gridline}{
 %%     ~~Describe \code{show_gridline} here~~
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+Generally this funciton will only be used to add the Channel Islands onto the map at a false position in an insert box. If you wish to plot the Channel Islands at it's true position then you should ideally use the standard shape file plotting.
 }
 \value{
 %%  ~Describe the value returned
@@ -63,28 +63,9 @@ add_channel_isles(CI_outline_gr, insert_origin = c(-180000, 30000), insert_dimen
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (CI_outline_gr, insert_origin = c(-180000, 30000), insert_dimen = c(1e+05, 
-    1e+05), ins_border = NULL, ins_col = "white", col = NA, border = NULL, 
-    show_gridline = FALSE) 
-{
-    rect(insert_origin[1], insert_origin[2], insert_origin[1] + 
-        insert_dimen[1], insert_origin[2] + insert_dimen[2], 
-        border = ins_border, col = ins_col)
-    if (show_gridline) {
-        gr_line = CI_insert_gr("WA00", origin = insert_origin)$NORTHING
-        segments(x0 = insert_origin[1], gr_line, insert_origin[1] + 
-            insert_dimen[1], gr_line, col = "grey")
-    }
-    polygon(CI_insert_gr(CI_outline_gr, origin = insert_origin), 
-        col = col, border = border)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Channel Islands }
+\keyword{ Insert box }% __ONLY ONE__ keyword per line

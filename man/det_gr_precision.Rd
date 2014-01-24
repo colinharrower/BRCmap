@@ -5,7 +5,7 @@
 Determine grid reference precision
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Determine the precision of a grid reference
 }
 \usage{
 det_gr_precision(gridref)
@@ -13,24 +13,20 @@ det_gr_precision(gridref)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{gridref}{
-%%     ~~Describe \code{gridref} here~~
+A character vector containing a valid UK, Irish or Channel Islands grid reference
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+The number of digits in a grid reference is generally important as it should indicate the precision of the grid reference. The exception to this is when grid references have been padded with zeros, either to force the grid reference to be a certain length, or when a easting and northing with an unknown precision have been converted to a grid reference.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+The function returns a vector of precision values (in metres) of the same length as \code{gridref}
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 %%  ~~further notes~~
@@ -42,33 +38,7 @@ det_gr_precision(gridref)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (gridref) 
-{
-    gridref = toupper(gridref)
-    prec_out = rep(NA, length(gridref))
-    v_inds = which(grepl("(^[[:upper:]]{1,2}[[:digit:]]{2}([[:upper:]]?|[[:upper:]]{2})$)|(^[[:upper:]]{1,2}[[:digit:]]{2,}$)", 
-        gridref) & nchar(gsub("^(([[:upper:]]{1,2})([[:digit:]]{2,}))(([[:upper:]]?)|([[:upper:]]{2}))$", 
-        "\\3", gridref))\%\%2 == 0)
-    gr_char = gsub("^(([[:upper:]]{1,2})([[:digit:]]{2,}))(([[:upper:]]?)|([[:upper:]]{2}))$", 
-        "\\2", gridref[v_inds])
-    gr_digits = gsub("^(([[:upper:]]{1,2})([[:digit:]]{2,}))(([[:upper:]]?)|([[:upper:]]{2}))$", 
-        "\\3", gridref[v_inds])
-    gr_tet = gsub("^(([[:upper:]]{1,2})([[:digit:]]{2,}))(([[:upper:]]?)|([[:upper:]]{2}))$", 
-        "\\5", gridref[v_inds])
-    gr_quad = gsub("^(([[:upper:]]{1,2})([[:digit:]]{2,}))(([[:upper:]]?)|([[:upper:]]{2}))$", 
-        "\\6", gridref[v_inds])
-    n_pairs = nchar(gr_digits)/2
-    gr_prec = 10^5/10^n_pairs
-    gr_prec[gr_tet \%in\% LETTERS[-15]] = 2000
-    gr_prec[gr_quad \%in\% c("NW", "NE", "SW", "SE")] = 5000
-    prec_out[v_inds] = gr_prec
-    return(prec_out)
-  }
+det_gr_precision("SP40")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -22,10 +22,10 @@ helmert_trans(x, y, z, trans = "OSNItoOSGB", trans_params = helmert_trans_vars, 
   Numerical vector contain z cartesian coordinates to be converted
 }
   \item{trans}{
-  Vector of text stings determining which transformation parameters to use for each grid reference. This should be the \code{row.name} of the row in \code{trans_params} which contains the helmert paramters for the transformation you wish to use for that grid reference. The default \code{trans = "OSNItoOSGB" converts cartesian coordinates from the Irish datum to the British Datum}
+  Vector of text stings determining which transformation parameters to use for each grid reference. This should be the \code{row.name} of the row in \code{trans_params} which contains the helmert paramters for the transformation you wish to use for that grid reference. The default \code{trans = "OSNItoOSGB"} converts cartesian coordinates from the Irish datum to the British Datum
 }
   \item{trans_params}{
-  A \code{data.frame} containing Herlert transformation parameters. The default usings the built in dataset \code{hermert_trans_vars} which contains the parameters need to convert the most common mapping systems using in the UK
+  A \code{data.frame} containing Herlert transformation parameters. The default is to use the built in dataset \code{hermert_trans_vars} which contains the parameters need to convert the most common mapping systems using in the UK
 }
   \item{full_output}{
 A logical variable determining whether to return all columns or only to return the new transformed x,y,z coordinates. The default \code{full_output = FALSE} will return only the transformed x,y,z coordinates.

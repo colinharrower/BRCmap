@@ -5,7 +5,7 @@
 A function to convert cartesian coordinates to latitude and longitude
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function takes cartesian x,y,z coordinates in a specified datum/projection and converts them to latitude and longitude values in the same projection. \bold{NOTE}: as the latitude & longitude returned are in the same projection as the original cartesian coordinates this will not necessarily give latitude & longitude values you might expect (see details below)
 }
 \usage{
 Cartesian_LatLong(x, y, z, Datum = "OSGB", datum_params = datum_vars, full_output = FALSE)
@@ -13,26 +13,26 @@ Cartesian_LatLong(x, y, z, Datum = "OSGB", datum_params = datum_vars, full_outpu
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-%%     ~~Describe \code{x} here~~
+A numerical vector containing the x coordinates to be converted
 }
   \item{y}{
-%%     ~~Describe \code{y} here~~
+A numerical vector containing the y coordinates to be converted
 }
   \item{z}{
-%%     ~~Describe \code{z} here~~
+A numerical vector containing the z coordinates to be converted
 }
   \item{Datum}{
-%%     ~~Describe \code{Datum} here~~
+The datum in which the latitude and longitude values are to be returned. The default \code{Datum = OSGB} returns latitude & longitude values using the OSGB Datum/projection
 }
   \item{datum_params}{
-%%     ~~Describe \code{datum_params} here~~
+A data.frame containing the datum/projection parameters required to perform the calculation. The default \code{datum_param = datum_vars} uses the dataset provided with the \code{BRCmap} package, which already includes the parameters for OSGB, OSNI and UTM30/WGS84 conversions
 }
   \item{full_output}{
-%%     ~~Describe \code{full_output} here~~
+A logical variable determining whether the function should return full output (including input values) or just the new latitude & longitude values
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+It is important to understand that this function converts cartesian coordinates to a latitude & longitude \bold{in the same datum/projection} as the original coordinates. 
 }
 \value{
 %%  ~Describe the value returned
@@ -57,84 +57,7 @@ Cartesian_LatLong(x, y, z, Datum = "OSGB", datum_params = datum_vars, full_outpu
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (x, y, z, Datum = "OSGB", datum_params = datum_vars, 
-    full_output = FALSE) 
-{
-    len_x = length(x)
-    if (length(y) != len_x | length(z) != len_x) {
-        stop("ERROR: input variables 'x', 'y' and 'z' are of different lengths")
-    }
-    if (!length(Datum) \%in\% c(1, len_x)) {
-        stop("ERROR: Length of 'Datum' does not match length of input 'x','y' & 'z' values")
-    }
-    datum_list = unique(Datum)
-    miss_datum = which(!datum_list \%in\% datum_params$Datum)
-    if (length(miss_datum) > 0) {
-        stop(paste("ERROR: Datum present in data for which parameters have not been given (", 
-            paste(sQuote(datum_list[miss_datum]), collapse = ","), 
-            ")", sep = ""))
-    }
-    if (full_output) {
-        ret_obj = data.frame(x = x, y = y, z = z, DATUM = Datum, 
-            LATITUDE = rep(NA, len_x), LONGITUDE = rep(NA, len_x), 
-            HEIGHT = rep(NA, len_x), stringsAsFactors = FALSE)
-    }
-    else {
-        ret_obj = data.frame(LATITUDE = rep(NA, len_x), LONGITUDE = rep(NA, 
-            len_x), stringsAsFactors = FALSE)
-    }
-    prec = 1
-    for (i_datum in 1:length(datum_list)) {
-        if (length(Datum) == 1) {
-            dat_inds = 1:len_x
-        }
-        else {
-            dat_inds = which(Datum == datum_list[i_datum])
-        }
-        par_ind = which(datum_params$Datum == datum_list[i_datum])
-        if (length(par_ind) > 1) {
-            stop(paste("ERROR: More than one match for current Datum (", 
-                sQuote(datum_list[i_datum]), ") found in datum_params data frame", 
-                sep = ""))
-        }
-        a = datum_params$a[par_ind]
-        b = datum_params$b[par_ind]
-        e2 = (a^2 - b^2)/a^2
-        lon = atan(y[dat_inds]/x[dat_inds])
-        p = sqrt(x[dat_inds]^2 + y[dat_inds]^2)
-        lat = atan(z[dat_inds]/(p * (1 - e2)))
-        v = a/sqrt(1 - e2 * sin(lat)^2)
-        lat2 = atan((z[dat_inds] + e2 * v * sin(lat))/p)
-        d_lat = lat - lat2
-        iter_inds = which(d_lat > prec)
-        while (length(iter_inds) > 0) {
-            lat[iter_inds] = lat2[iter_inds]
-            v[iter_inds] = a[dat_inds][iter_inds]/sqrt(1 - e2 * 
-                sin(lat[iter_inds])^2)
-            lat2[iter_inds] = atan((z[dat_inds][iter_inds] + 
-                e2 * v[iter_inds] * sin(lat[iter_inds]))/p[iter_inds])
-            d_lat[iter_inds] = lat[iter_inds] - lat2[iter_inds]
-            iter_inds = which(d_lat > prec)
-        }
-        H = (p/cos(lat)) - v
-        lat = lat * (180/pi)
-        lon = lon * (180/pi)
-        if (full_output) {
-            ret_obj[dat_inds, c("LATITUDE", "LONGITUDE", "HEIGHT")] = data.frame(lat, 
-                lon, H)
-        }
-        else {
-            ret_obj[dat_inds, c("LATITUDE", "LONGITUDE")] = data.frame(lat, 
-                lon)
-        }
-    }
-    return(ret_obj)
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
