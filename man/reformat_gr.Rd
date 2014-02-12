@@ -62,5 +62,4 @@ gr1km = reformat_gr(gridrefs, prec_out = 1000)
 
 ## Reforamt the grid reference to tetrad precision (2000m)
 grtet = reformat_gr(gridrefs, prec_out = 2000)
-
-
+}

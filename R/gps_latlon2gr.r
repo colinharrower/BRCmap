@@ -12,13 +12,17 @@ gps_latlon2gr = function(latitude, longitude, out_projection = "OSGB", return_ty
 		
 	# At some point should set up some ranges to split UK, Irish & Channel Islands grid refs (and do follow stages in loop for different projections)
 		# If doing multiple projections will need to setup output variable before hand!
-		
-	# Perform projection/datum transformation (helmert)
-		helm_tran = helmert_trans(x =org_cart$x, y = org_cart$y, z = org_cart$z, trans = paste("WGS84to", out_projection, sep=""))
 	
-	# Convert to UK lat lon
-		out_latlon = Cartesian_LatLong(helm_tran$x, helm_tran$y, helm_tran$z, out_projection)
-	
+  # Note helmert transformations not needed when out_projection = UTM30
+  if(out_projection != "UTM30"){
+  	# Perform projection/datum transformation (helmert)
+  		helm_tran = helmert_trans(x =org_cart$x, y = org_cart$y, z = org_cart$z, trans = paste("WGS84to", out_projection, sep=""))
+  	# Convert to UK lat lon
+  		out_latlon = Cartesian_LatLong(helm_tran$x, helm_tran$y, helm_tran$z, out_projection)
+  } else {
+    out_latlon = data.frame(LATITUDE = latitude, LONGITUDE = longitude)
+  }
+  
 	# Convert to UK easting and northing
 		out_en = LatLongtoOSGrids(out_latlon$LATITUDE, out_latlon$LONGITUDE, out_projection)
 	

@@ -60,3 +60,4 @@ det_tet_quad(gridrefs)
 
 ## Extract tetrad and quadrant codes from grid references
 det_tet_quad(gridrefs, prec_out = 2000)
+}

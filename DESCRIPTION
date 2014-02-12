@@ -1,11 +1,11 @@
 Package: BRCmap
 Type: Package
 Title: Biological Records Centre Atlas Mapping
-Version: 0.0.2
-Date: 2013-03-28
+Version: 0.0.4
+Date: 2014-02-12
 Author: Colin Harrower <corr@ceh.ac.uk>
 Maintainer: Colin Harrower <corr@ceh.ac.uk>
-Description: This package a range of functions for mapping biological records
+Description: This package contains a range of functions for mapping biological records
 			 data in a format suitable for Atlas mapping in the UK.
 License:
 Depends: maptools

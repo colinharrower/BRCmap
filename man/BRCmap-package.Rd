@@ -3,28 +3,25 @@
 \alias{BRCmap}
 \docType{package}
 \title{
-What the package does (short line)
-~~ package title ~~
+BRC Mapping Package
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+This package provides several tools to help with the mapping of species distributions, particularly with the production of species maps of the sort that are used in distribution Atlases.
 }
 \details{
 \tabular{ll}{
 Package: \tab BRCmap\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2013-03-28\cr
+Version: \tab 0.0.4\cr
+Date: \tab 2014-02-12\cr
 License: \tab What license is it under?\cr
 }
 ~~ An overview of how to use the package, including the most important functions ~~
 }
 \author{
-Who wrote it
+Colin Harrower
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+Maintainer: Colin Harrower <corr@ceh.ac.uk>
 }
 \references{
 ~~ Literature or other references for background information ~~
