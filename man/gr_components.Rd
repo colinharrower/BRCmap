@@ -65,3 +65,4 @@ gr_components(gridrefs)
 
 ## Extract tetrad and quadrant codes from grid references
 gr_components(gridrefs, output_col = c("TETRAD", "QUADRANT"))
+}

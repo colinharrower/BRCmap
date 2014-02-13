@@ -41,7 +41,6 @@ The function will return a data.frame, that depending on the value given to \cod
   }
 If \code{return_type  = "both"} then the data.frame will have all three colums. In contrast if \code{return_type = "gr"} or \code{return_type = "en"} then the returned data.frame will only contain the grid reference column or the eastings & northing columns respectively.
 }
-}
 \references{
 %% ~put references to the literature/web site here ~
 }
