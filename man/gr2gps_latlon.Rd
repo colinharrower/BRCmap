@@ -8,7 +8,7 @@ Convert UK grid references to WGS84 latitude and longitude coordinates
 This function converts grid references using one of the standard projections used within the UK to WGS84 latitude and longitudes.
 }
 \usage{
-gr2gps_latlon(gridref, precision = NULL, projection = NULL, centre = TRUE)
+gr2gps_latlon(gridref, precision = NULL, centre = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,9 +17,6 @@ gr2gps_latlon(gridref, precision = NULL, projection = NULL, centre = TRUE)
   }
   \item{precision}{
   Can be either \code{NULL} or a numerical vector of the same length as \code{gridref} containing the precision of each grid reference. In general this can be determined from the grid reference, which is the case in the default \code{precision = NULL}. This argument will only really be used if for some reason the precision to be used is not the same as the precision of the grid reference.
-  }
-  \item{projection}{
-  A character vector determining the projection in which grid references are supplied. Valid values are \code{"OSGB"", "OSNI"", "UTM30"}. The default \code{projection = NULL} will attempt to determine the projection from the gridreferences themselves.
   }
   \item{centre}{
   A logical value determining whether the longitude & latitude returned should be for lower left corner or centre of the supplied grid square. The default \code{centre = TRUE} will return the coordinates of the centre point
@@ -47,6 +44,7 @@ Colin Harrower
 
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{gps_latlon2gr}}
 }
 \examples{
 ## The following example converts the following OSNI grid reference for the centre of Dublin to WGS 84 latitude & longitude coordinates
