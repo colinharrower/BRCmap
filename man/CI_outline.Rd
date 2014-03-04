@@ -2,27 +2,33 @@
 \alias{CI_outline}
 \docType{data}
 \title{
-A collection of grid references giving the outline of the Channel Islands
+The outline of the Channel Islands
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of the dataset. ~~
+A dataset containing the outline of the Channel Islands for plotting on maps. The outline is stored as a series of grid references that when plotted in order create the outline.
 }
 \usage{data(CI_outline)}
 \format{
-  The format is:
- chr [1:1956] "WV2106776443" "WV2115176574" "WV2119476574" "WV2123776509" "WV2123776444" "WV2119576378" "WV2108876378" "WV2106776443" ...
+  The dataset is a character vector containg the grid references of points along the outline that when plotted using polygon will form the outline of the Channel Islands. The vector includes "" values that are used to seperate the distinct polygons that comprising the Channel Islands outline.
 }
 \details{
-%%  ~~ If necessary, more details than the __description__ above ~~
+In general this dataset will be used through the function \code{add_channel_isles} which add the Channel Islands to the current plot. Note that this dataset will most likely be completely replaced at some point by the version of the Channel Islands included in the UK shapefile supplied as part of the package, however at present having difficulty repositioning shape files so this dataset is needed to create Channel Islands Insert box. 
 }
 \source{
 %%  ~~ reference to a publication or URL from which the data were obtained ~~
 }
 \references{
-%%  ~~ possibly secondary sources and usages ~~
+\code{\link{add_channel_isles}}
 }
 \examples{
-data(CI_outline)
-## maybe str(CI_outline) ; plot(CI_outline) ...
+## Load in data and then produce uk map with Channel Islands insert box
+  # Load in data
+    data(CI_outline)
+    data(UK)
+  # Plot Britain and Ireland outlines (excluding Channel Islands SpatialPolygon object as it will plot in true position)
+    plot_GIS(UK[c("britain","ireland")])
+  # Add insert box with Channel Islands
+    add_channel_isles(CI_outline)
+
 }
 \keyword{datasets}

@@ -5,7 +5,7 @@
 Convert Latitude & Longitude to Cartesian Coordinates
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function converts latitude and longitude coordinates to Cartesian coordinates.
 }
 \usage{
 LatLong_Cartesian(Latitude, Longitude, Datum = "OSGB", datum_params = datum_vars, H = NULL, full_output = FALSE)
@@ -13,39 +13,40 @@ LatLong_Cartesian(Latitude, Longitude, Datum = "OSGB", datum_params = datum_vars
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{Latitude}{
-%%     ~~Describe \code{Latitude} here~~
+A numerical vector containing the latitudes of the coordinates to be converted
 }
   \item{Longitude}{
-%%     ~~Describe \code{Longitude} here~~
+A numerical vector containing the longitudes of the coordinates to be converted
 }
   \item{Datum}{
-%%     ~~Describe \code{Datum} here~~
+A character vector containing codes for the Datum in which the coordinates to be converted. The default value \code{Datum = "OSGB"} is for Ordnance Survey of Great Britain, other possible values are \code{"OSNI"} for the Ordnance Survey of Northern Ireland or \code{"UTM30"} for UTM for Channel Islands.
 }
   \item{datum_params}{
-%%     ~~Describe \code{datum_params} here~~
+The data.frame containing the parameters for datum required in the transformation. The default \code{datum_params = datum_vars} is to use the data.frame provided with BRCmap which contains the parameter required for the three datum commonly used in the UK
 }
   \item{H}{
-%%     ~~Describe \code{H} here~~
+A vector containing the height parameter that will be used in the conversion. The default \code{H = NULL} will use a height of zero and in general it will be best to leave this set to the default.
 }
   \item{full_output}{
-%%     ~~Describe \code{full_output} here~~
+A logical value determining whether to also return the input latitude and longitude values along with the cartesian coordinates or whether to just return the cartesian coordinates. The default \code{full_output = FALSE} will return only the cartesian coordinates.
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+This function does not convert between projections so the datum/projection of the cartesian coordinates will be the same as the Latitude and Longitude coordiantes that were supplied.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+The function returns a data.frame containing the cartesian coordinates and optionally also the original latitude and longitude values if \code{full_output = TRUE}.
+\item{x}{the x cartesian coordinates}
+\item{y}{the y cartesian coordinates}
+\item{z}{the z cartesian coordinates}
+\item{LATITUDE}{(optionally) the original latitude values supplied}
+\item{LONGITUDE}{(optionally) the original longitude values supplied}
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 %%  ~~further notes~~
@@ -57,70 +58,12 @@ LatLong_Cartesian(Latitude, Longitude, Datum = "OSGB", datum_params = datum_vars
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+### Example of converting latitude and longitude to cartesian coordinates
 
-## The function is currently defined as
-function (Latitude, Longitude, Datum = "OSGB", datum_params = datum_vars, 
-    H = NULL, full_output = FALSE) 
-{
-    lat_len = length(Latitude)
-    if (length(Longitude) != lat_len) {
-        stop("ERROR: 'Latitude' & 'Longitude' are of different lengths")
-    }
-    if (!length(Datum) \%in\% c(1, lat_len)) {
-        stop("ERROR: Length of 'Datum' does not match length of Latitude/Longitude values")
-    }
-    datum_list = unique(Datum)
-    miss_datum = which(!datum_list \%in\% datum_params$Datum)
-    if (length(miss_datum) > 0) {
-        stop(paste("ERROR: Datum present in data for which parameters have not been given (", 
-            paste(sQuote(datum_list[miss_datum]), collapse = ","), 
-            ")", sep = ""))
-    }
-    if (full_output) {
-        ret_obj = data.frame(LATITUDE = Latitude, LONGITUDE = Longitude, 
-            DATUM = Datum, x = rep(NA, lat_len), y = rep(NA, 
-                lat_len), z = rep(NA, lat_len), stringsAsFactors = FALSE)
-    }
-    else {
-        ret_obj = data.frame(x = rep(NA, lat_len), y = rep(NA, 
-            lat_len), z = rep(NA, lat_len), stringsAsFactors = FALSE)
-    }
-    for (i_datum in 1:length(datum_list)) {
-        if (length(Datum) == 1) {
-            dat_inds = 1:lat_len
-        }
-        else {
-            dat_inds = which(Datum == datum_list[i_datum])
-        }
-        par_ind = which(datum_params$Datum == datum_list[i_datum])
-        if (length(par_ind) > 1) {
-            stop(paste("ERROR: More than one match for current Datum (", 
-                sQuote(datum_list[i_datum]), ") found in datum_params data frame", 
-                sep = ""))
-        }
-        a = datum_params$a[par_ind]
-        b = datum_params$b[par_ind]
-        if (is.null(H)) {
-            H = 0
-        }
-        else {
-            H = H
-        }
-        lat = Latitude[dat_inds] * (pi/180)
-        lon = Longitude[dat_inds] * (pi/180)
-        e2 = (a^2 - b^2)/a^2
-        v = a/sqrt(1 - e2 * sin(lat)^2)
-        x = (v + H) * cos(lat) * cos(lon)
-        y = (v + H) * cos(lat) * sin(lon)
-        z = (((1 - e2) * v) + H) * sin(lat)
-        ret_obj[dat_inds, c("x", "y", "z")] = data.frame(x, y, 
-            z)
-    }
-    return(ret_obj)
-  }
+# Convert Latitude and Longitude of Grid reference "SP42" in orignal datum/projection to cartesian coordinates
+
+LatLong_Cartesian(53.8544788314868, -1.39183128783271)
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

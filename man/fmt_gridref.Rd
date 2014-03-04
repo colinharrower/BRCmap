@@ -32,7 +32,7 @@ The function returns are character vector containing all the valid grid referenc
 Colin Harrower
 }
 \note{
-This function is probably going to be superseded by \code{gr_components} function which does the same as this and the \code{gr_det_country} function but at present a couple of functions in the package internally make use of this function.
+This function is probably going to be superseded by \code{gr_components} function which effectively does the same as this function but at present a couple of functions in the package still internally make use of this function hence is continued existence.
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

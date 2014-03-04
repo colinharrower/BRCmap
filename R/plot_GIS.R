@@ -10,7 +10,7 @@ function(
 	grid.div = 100000, 
 	grid.col = "grey",  
 	fill.col = NA, 
-	line.col = NULL, 
+	line.col = par("fg"), 
 	bg.col = "white", 
 	box.col = NA, 
 	new.window = TRUE, 

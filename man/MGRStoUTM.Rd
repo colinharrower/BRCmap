@@ -2,10 +2,10 @@
 \alias{MGRStoUTM}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Convert Miltary Grid Reference System to UTM
+Convert Military Grid Reference System to UTM
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function converts Military Grid Reference System (MGRS) grid references to UTM coordinates. In the UK  a modified version of MGRS grid references are often used for the Channel Islands (see details for more information). This function converts MGRS grid references to UTM eastings and northings which can then be dealt with by the other functions in this package.
 }
 \usage{
 MGRStoUTM(gridref, zone = 30, zdl = "U", spos = TRUE)
@@ -13,95 +13,60 @@ MGRStoUTM(gridref, zone = 30, zdl = "U", spos = TRUE)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{gridref}{
-%%     ~~Describe \code{gridref} here~~
+A character vector containing the MGRS grid references to be converted. Note the zone number and letter should not be contained in this grid reference at present.
 }
   \item{zone}{
-%%     ~~Describe \code{zone} here~~
+A numerical value specifying the UTM zone number. Note at present all grid references passed to the function need to be for the same zone and zone letter (which is the case for the Channel Islands).
 }
   \item{zdl}{
-%%     ~~Describe \code{zdl} here~~
+A character string given the zone letter. Note at present all grid references passed to the function need to be for the same zone and zone letter (which is the case for the Channel Islands).
 }
   \item{spos}{
-%%     ~~Describe \code{spos} here~~
+A logical variable that modifies the northing but I can't remember why
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+In the UK a modified version of MGRS grid references are commonly used to identify locations in the Channel Islands. They differ from the standard MGRS grid reference in excluding the zone number & letter from the start of the grid reference. The zone number & letter are most likely excluded as all of the Channel Islands fall within zone 30 U in the Military Grid Reference System.
+
+The modified MGRS grid references look like Ordnance Survey of Great Britain grid references in that they are two characters followed by an even number of digits. They can however be distinguished by the fact that the Channel Islands grid references start with either WA or WV.
+
+For example the grid reference "WV6548" specifies a 1km grid reference in St. Helier. The full MGRS grid references for this location would be 30UWV6548 (or WV6500048000 if not truncating zero digit pairs).
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+The function returns a \code{data.frame} containing the following columns:
+\item{Easting}{The easting values for the coordinates (in metres)}
+\item{Northing}{The northing values for the coordinates (in metres)}
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
-%%  ~~further notes~~
+It should be noted that at present the \code{gr_let2num} function does not use this function to convert Channel Islands grid references to eastings and northings. Instead it uses a simplier process that will only work for those from the Channel Islands. This function should work for any MGRS grid references not just those from the Channel Islands.
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{gr_let2num}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+### Examples of converting MGRS to UTM easting/northing
+## The Channel Islands
+# Using the MGRStoUTM function
+MGRStoUTM("WV6548")
 
-## The function is currently defined as
-function (gridref, zone = 30, zdl = "U", spos = TRUE) 
-{
-    zdl_chr = c("C", "D", "E", "F", "G", "H", "J", "K", "L", 
-        "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X")
-    mgrs_chr = c("A", "B", "C", "D", "E", "F", "G", "H", "J", 
-        "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", 
-        "W", "X", "Y", "Z")
-    for (i in seq(1, along.with = gridref)) {
-        if (zdl == "X") {
-            med_lat = 78 - 1
-        }
-        else {
-            med_lat = which(zdl_chr == zdl) - 1
-        }
-        med_lat = -76 + (8 * med_lat)
-        temp_gridref = gsub(" ", "", toupper(gridref[i]))
-        temp_gridref = gsub("-", "", temp_gridref)
-        l1 = which(mgrs_chr == substr(temp_gridref, 1, 1)) - 
-            1
-        l2 = which(mgrs_chr == substr(temp_gridref, 2, 2)) - 
-            1
-        gr_nums = substr(temp_gridref, 3, nchar(temp_gridref))
-        east_num = substr(gr_nums, 1, nchar(gr_nums)/2)
-        north_num = substr(gr_nums, (nchar(gr_nums)/2) + 1, nchar(gr_nums))
-        d_len = nchar(east_num)
-        if (nchar(north_num) != d_len) {
-            stop("Easting and Northing Digits must be the same length")
-        }
-        E0 = 1 + l1\%\%8
-        N0 = (20 + l2 - ifelse(zone\%\%2 != 0, 0, 5))\%\%20
-        appN = med_lat * 100/90
-        N0 = N0 + round((appN - N0)/20) * 20
-        E = E0 * 1e+05 + as.numeric(east_num) * 10^(5 - d_len)
-        N = N0 * 1e+05 + as.numeric(north_num) * 10^(5 - d_len)
-        if (spos & which(zdl_chr == zdl) <= 11) {
-            N = N + 1e+07
-        }
-        if (i == 1) {
-            ret_obj = data.frame(Easting = E, Northing = N)
-        }
-        else {
-            ret_obj[i, ] = data.frame(Easting = E, Northing = N)
-        }
-        return(ret_obj)
-    }
-  }
+# Using the gr_let2num function
+gr_let2num("WV6548")
+
+
+## Outside of the UK
+# Avery Island, Louisiana (home of Tabasco Sauce)
+# MGRS gridref 15RXP0509
+MGRStoUTM("XP0509",zone = 15,zdl="R")
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

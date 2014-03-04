@@ -48,7 +48,7 @@ variable determining the colour of the grid lines. Argument takes inputs accepte
 variable determining the colour used to fill the gis_data outlines. Default (\code{NA}) results in no fill.
 }
   \item{line.col}{
-variable determining the colour of the line used to plot the gis_data outlines. Default (\code{NULL}) results in par default line colour (usually black)
+variable determining the colour of the line used to plot the gis_data outlines. Default (\code{par("fg")}) results in the par default line colour (usually black)
 }
   \item{bg.col}{
 variable determing the background colour of the plot area. Default = \code{"white"}.
