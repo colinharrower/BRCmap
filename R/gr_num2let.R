@@ -59,7 +59,7 @@ function(easting,northing, OSgrid = "OSGB", keep_precision = TRUE, min_10km = TR
 		# Determine first letter based on 500km easting/northing (-3 at end is to deal with the 500km grid starting at s
 		L500k = (21 - (5*floor(nX500k)) + floor(eX500k))-3
 		
-		# Determine easting and northing within given 500km square (round to 2 decimal places to ensure floor in next step works (issues with HP60 gridref)
+		# Determine easting and northing within given 500km square (round to 5 decimal places to ensure floor in next step works (issues with HP60 gridref)
 		eX100k = round((eX500k - floor(eX500k)) * 5,5)
 		nX100k = round((nX500k - floor(nX500k)) * 5,5)
 		
@@ -74,9 +74,9 @@ function(easting,northing, OSgrid = "OSGB", keep_precision = TRUE, min_10km = TR
 	# Determine gridref of Irish Easting/Northings
 	cty_inds = which(OSgrid == "OSNI")
 	if(length(cty_inds) > 0){
-		# Determine easting and northing from orgin in 100km squares (even though Ireland doesn't use 500km squares
-		eX100k = round(as.numeric(easting[cty_inds])/100000,2)
-		nX100k = round(as.numeric(northing[cty_inds])/100000,2)
+		# Determine easting and northing from origin in 100km squares (even though Ireland doesn't use 500km squares
+		eX100k = round(as.numeric(easting[cty_inds])/100000,5)
+		nX100k = round(as.numeric(northing[cty_inds])/100000,5)
 		
 		# Determine second letter based on 100km easting/northing
 		L100k = 21 - (5*floor(nX100k))  + floor(eX100k)
