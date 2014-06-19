@@ -5,7 +5,7 @@
 Plot UK grid references using categorical variable to colour squares
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Plot grid reference squares onto a map colouring the squares based on the values in a supplied vector. The supplied vector can contain categorical or continuous values (see below for more details).
 }
 \usage{
 plotUK_gr_cats(gridref, att, breaks, legend_pos = "topleft", leg_cex = 0.7, ...)
@@ -13,22 +13,22 @@ plotUK_gr_cats(gridref, att, breaks, legend_pos = "topleft", leg_cex = 0.7, ...)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{gridref}{
-%%     ~~Describe \code{gridref} here~~
+A character vector containing the grid references to be plotted
 }
   \item{att}{
-%%     ~~Describe \code{att} here~~
+A vector containing the information used to seperate the grid references into categories (see below for more details)
 }
   \item{breaks}{
-%%     ~~Describe \code{breaks} here~~
+A numerical vector specifying the breakpoints used to convert the att column to categories if the values in the att column are continuous values. The default \code{breaks = NULL} will assume that values in att are already categorical.
 }
   \item{legend_pos}{
-%%     ~~Describe \code{legend_pos} here~~
+A character string giving the position of the legend. Accepted values are \code{"topleft"}, \code{"topright"},\code{"bottomleft"}, \code{"bottomright"}. The default \code{"topleft"} will put the legened in the topleft hand corner of the plot area with a slight inset.
 }
   \item{leg_cex}{
-%%     ~~Describe \code{leg_cex} here~~
+A numerical value giving the relative sizing of the legend (see \code{\link{par}}). The default \code{0.7} means that the legend text, etc will be slightly smaller than the main plot
 }
   \item{\dots}{
-%%     ~~Describe \code{\dots} here~~
+Any other arguments 
 }
 }
 \details{
@@ -45,7 +45,7 @@ plotUK_gr_cats(gridref, att, breaks, legend_pos = "topleft", leg_cex = 0.7, ...)
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 %%  ~~further notes~~
@@ -57,37 +57,7 @@ plotUK_gr_cats(gridref, att, breaks, legend_pos = "topleft", leg_cex = 0.7, ...)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (gridref, att, breaks, legend_pos = "topleft", leg_cex = 0.7, 
-    ...) 
-{
-    if (length(gridref) != length(att)) {
-        stop("Length of Grid Refs does not match length of Attribute")
-    }
-    att_cols = rev(heat.colors(length(breaks) - 1))
-    for (i in 1:(length(breaks) - 1)) {
-        if (i == length(breaks) - 1) {
-            row_inds = which(att >= breaks[i] & att <= breaks[i + 
-                1])
-        }
-        else {
-            row_inds = which(att >= breaks[i] & att < breaks[i + 
-                1])
-        }
-        if (length(row_inds) > 0) {
-            plotUK_gr(gridref[row_inds], col = att_cols[i], ...)
-        }
-    }
-    if (is.null(legend_pos) == FALSE) {
-        legend(x = legend_pos, legend = paste(breaks[1:(length(breaks) - 
-            1)], "-", breaks[2:length(breaks)]), fill = att_cols, 
-            cex = leg_cex, bg = "white", inset = 0.015)
-    }
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
