@@ -88,7 +88,7 @@ logical, determining whether function should return plot dimensions
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+This function is quite complex as there are lots of argument, however for a basic idea of what the function can do see the examples below.
 }
 \value{
 %%  ~Describe the value returned
@@ -101,7 +101,7 @@ logical, determining whether function should return plot dimensions
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 %%  ~~further notes~~
@@ -113,122 +113,56 @@ logical, determining whether function should return plot dimensions
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## NOTE: Example 5 shows how plot_GIS function can be used to set up a plot of the UK to which additional points,lines,text, etc can then be added using functions such as 'points()', 'lines()', 'segments()', 'polygons()', etc
 
-## The function is currently defined as
-function (gis_data, main = "", xlab = "Easting (km)", ylab = "Northing (km)", 
-    xlim = NULL, ylim = NULL, show.axis = TRUE, show.grid = TRUE, 
-    grid.div = 1e+05, grid.col = "grey", fill.col = NA, line.col = NULL, 
-    bg.col = "white", box.col = NA, new.window = TRUE, no.margin = FALSE, 
-    max.dimen = 13, cex.main = 1.2, cex.lab = 1, cex.axis = 0.8, 
-    blank.plot = FALSE, plot.shape = TRUE, additions = FALSE, 
-    return.dimen = TRUE) 
-{
-    if (is.null(xlim)) {
-        if (is.list(gis_data)) {
-            for (i in 1:length(gis_data)) {
-                temp = attributes(gis_data[[i]])$bbox[1, ]
-                if (i == 1) {
-                  xlim = temp
-                }
-                else {
-                  xlim = c(min(xlim[1], temp[1]), max(xlim[2], 
-                    temp[2]))
-                }
-            }
-        }
-        else {
-            xlim = attributes(gis_data)$bbox[1, ]
-        }
-    }
-    xlim = c(floor(xlim[1]/grid.div) * grid.div, ceiling(xlim[2]/grid.div) * 
-        grid.div)
-    if (is.null(ylim)) {
-        if (is.list(gis_data)) {
-            for (i in 1:length(gis_data)) {
-                temp = attributes(gis_data[[i]])$bbox[2, ]
-                if (i == 1) {
-                  ylim = temp
-                }
-                else {
-                  ylim = c(min(ylim[1], temp[1]), max(ylim[2], 
-                    temp[2]))
-                }
-            }
-        }
-        else {
-            ylim = attributes(gis_data)$bbox[2, ]
-        }
-    }
-    ylim = c(floor(ylim[1]/grid.div) * grid.div, ceiling(ylim[2]/grid.div) * 
-        grid.div)
-    fill_col <- fill.col
-    line_col <- line.col
-    x.rat = abs(xlim[1] - xlim[2])/1e+05
-    y.rat = abs(ylim[1] - ylim[2])/1e+05
-    aspect.ratio = x.rat/y.rat
-    if (aspect.ratio <= 1) {
-        y.part = max.dimen - y.rat
-        x.part = x.rat + (y.part * aspect.ratio)
-        plot.dimen = data.frame(height = max.dimen, width = x.part)
-    }
-    else {
-        aspect.ratio = 1/aspect.ratio
-        x.part = max.dimen - x.rat
-        y.part = y.rat + (x.part * aspect.ratio)
-        plot.dimen = data.frame(height = y.part, width = max.dimen)
-    }
-    if (new.window | dev.cur() == 1) {
-        dev.new(height = plot.dimen$height, width = plot.dimen$width)
-    }
-    if (additions == FALSE) {
-        if (no.margin) {
-            par(mar = c(0, 0, 0, 0))
-        }
-        plot(0, 0, xlim = xlim, ylim = ylim, xaxs = "i", yaxs = "i", 
-            xaxt = "n", yaxt = "n", xlab = "", ylab = "", type = "n", 
-            bty = "n", asp = 1)
-        rect(xlim[1], ylim[1], xlim[2], ylim[2], col = bg.col, 
-            border = NA)
-    }
-    if (blank.plot == FALSE) {
-        if (plot.shape) {
-            if (is.list(gis_data)) {
-                for (i in 1:length(gis_data)) {
-                  plot(gis_data[[i]], add = TRUE, col = fill.col, 
-                    border = line.col)
-                }
-            }
-            else {
-                plot(gis_data, add = TRUE, col = fill.col, border = line.col)
-            }
-        }
-        if (show.grid) {
-            segments(x0 = xlim[1], y0 = seq(ylim[1], ylim[2], 
-                by = grid.div), x1 = xlim[2], col = grid.col)
-            segments(x0 = seq(xlim[1], xlim[2], by = grid.div), 
-                y0 = ylim[1], y1 = ylim[2], col = grid.col)
-        }
-        if (show.axis) {
-            axis(1, at = seq(xlim[1], xlim[2], by = grid.div), 
-                labels = seq(xlim[1]/1000, xlim[2]/1000, by = grid.div/1000), 
-                cex.axis = cex.axis)
-            axis(2, at = seq(ylim[1], ylim[2], by = grid.div), 
-                labels = seq(ylim[1]/1000, ylim[2]/1000, by = grid.div/1000), 
-                cex.axis = cex.axis)
-        }
-        title(main = main, xlab = xlab, ylab = ylab, cex.main = cex.main, 
-            cex.lab = cex.lab)
-        if (is.na(box.col) == FALSE) {
-            box(col = box.col)
-        }
-    }
-    if (return.dimen) {
-        invisible(plot.dimen)
-    }
-  }
+# Load shapefile data for UK (dataset in BRCmap package)
+  data(UK)
+
+# Example 1 - Standar plot_GIS plot using all defaults (except for the main plot title which has been set to "UK")
+  plot_GIS(UK, main = "UK") # plot with all defaults, except for the main plot title which is set to UK  
+
+# Example 2 - Plot Scotland only with grid using 10km divisons and colour plot background and fill landmass
+  plot_GIS(UK$britain, main = "Scotland", xlim = c(0,500000), ylim = c(600000,1000000), grid.div = 10000, fill.col = "lightgreen", bg.col = "lightblue")
+
+# Example 3 - Plot Shetland Isles using fill colour and coloured plot area overlaid with 10km grid
+  plot_GIS(UK$britain, main = "Shetland", xlim = c(400000,500000), ylim = c(1100000,1250000), grid.div = 10000, fill.col = "lightgreen", bg.col = "lightblue") # Plot shetland overlaid with grid using 10km divisons
+
+# Example 4 - Plot England without fill, background colour, or gridlines
+  plot_GIS(UK$britain, main = "England", xlim = c(100000,700000), ylim = c(0,700000), show.grid = FALSE)
+
+# Example 5 - Plot UK as map (i.e. without axis, grid, labels, margin etc)
+  plot_GIS(UK, xlab="", ylab="", show.axis = FALSE, show.grid = FALSE, fill.col = "lightgreen", no.margin = TRUE)
+
+# Example 6 - Plot UK (excluding shetland) with fill colour and background colour but no grid then add points and labels highlighting the locations of the capital cities
+  plot_GIS(UK, main="UK Capital Cities", ylim = c(0, 1100000), show.grid = FALSE, fill.col = "lightgreen", bg.col = "lightblue")
+  
+  # Create vectors of x and y values for main cities
+  city.x = c(532000, 327000, 317000, 118000, 157000)
+  city.y = c(181000, 672000, 175000, 385000, 529000)
+
+  # Add points for cities
+    points(city.x,city.y,pch=16, col="red")
+    
+  # Label points
+    text(city.x[1:2], city.y[1:2], labels = c("London", "Edinburgh"), col="black", pos=1)
+    text(city.x[3], city.y[3], labels = "Cardiff", col="black", pos=3)
+    text(city.x[4:5], city.y[4:5], labels = c("Dublin", "Belfast"), col="black", pos=2)
+
+# Example 7 - Plot Forth Estuary (this plot highlights that in plot.GIS the real xlim and ylim for the plot are determined by taking user specified values and rounding		 to the nearest grid division allowing given coordinates to be plotted)
+
+  # NOTE: in example red dashed box represents area specified by user using xlim and ylim attributes and plots highlights that plot xlim and ylim have been rounded to nearest 10km that contains the user specified axis limits
+  
+  plot_GIS(UK, main = "Forth Estuary - Scotland", xlim=c(281797,374931), ylim = c(657948,713754), grid.div = 10000, fill.col = "lightgreen", bg.col = "lightblue")
+  
+  # Add box to plot to highlight area
+    rect(281797,657948,374931,713754, border ="red", lty=2)
+    
+  # Add point to map
+    points(x = 327000, y = 672000, col="red", pch=16, cex = 1.7)
+    
+  # Label point
+    text(x = 327000, y = 672000, labels = "Edinburgh", pos = 1)
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -1,11 +1,10 @@
 plotUK_gr_cats <-
-function(gridref, att, breaks = NULL, legend_pos = "topleft", leg_cex = 0.7, ...){
+function(gridref, att, breaks = NULL, legend_pos = "topleft", leg_cex = 0.7, att_col = NULL, ...){
 	# Check gridref is same length as att
 	if(length(gridref) != length(att)){
 		stop("Length of Grid Refs does not match length of Attribute")
 	}
 	
-	# Get colours from heat.colours
 	if(is.null(breaks)){
 		# If breaks not specified then assume att column is factor or should be treated as factor
 		if(class(att) == "factor"){
@@ -19,7 +18,19 @@ function(gridref, att, breaks = NULL, legend_pos = "topleft", leg_cex = 0.7, ...
 				warning("WARNIGN: No breaks specified - treating att column as factor/categorical")
 			}
 		}
-		att_cols = rev(heat.colors(length(att_cats)))
+		
+		# If att_col is null then set to use heat.colours otherwise use values supplied
+		if(is.null(att_col)){
+			# Get colours from heat.colours
+				att_cols = rev(heat.colors(length(att_cats)))
+		} else {
+			# Check that att_cols is same length as breaks -1 if not stop
+			if(length(att_col) != length(att_cats)){
+				stop("length of att_cols needs to be same as number of categories in atts")
+			} else {
+				att_cols = att_col
+			}
+		}
 		
 		# Loop through categories and plot
 		for(i in 1:(length(att_cats))){
@@ -35,8 +46,18 @@ function(gridref, att, breaks = NULL, legend_pos = "topleft", leg_cex = 0.7, ...
 		}
 		
 	} else {
-		# Get colours from heat.colours
-		att_cols = rev(heat.colors(length(breaks)-1))
+		# If att_col is null then set to use heat.colours otherwise use values supplied
+		if(is.null(att_cols)){
+			# Get colours from heat.colours
+				att_cols = rev(heat.colors(length(breaks)-1))
+		} else {
+			# Check that att_cols is same length as breaks -1 if not stop
+			if(length(att_col) != length(breaks)-1){
+				stop("length of att_cols needs to be 1 less than length of breaks")
+			} else {
+				att_cols = att_col
+			}
+		}
 		
 		# Loop through breaks (exluding last value) and find gridrefs where att >= breaks[i] but < breaks[i+1]
 		for(i in 1:(length(breaks)-1)){

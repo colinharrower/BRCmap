@@ -8,7 +8,7 @@ Plot UK grid references using categorical variable to colour squares
 Plot grid reference squares onto a map colouring the squares based on the values in a supplied vector. The supplied vector can contain categorical or continuous values (see below for more details).
 }
 \usage{
-plotUK_gr_cats(gridref, att, breaks, legend_pos = "topleft", leg_cex = 0.7, ...)
+plotUK_gr_cats(gridref, att, breaks = NULL, legend_pos = "topleft", leg_cex = 0.7, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,6 +26,9 @@ A character string giving the position of the legend. Accepted values are \code{
 }
   \item{leg_cex}{
 A numerical value giving the relative sizing of the legend (see \code{\link{par}}). The default \code{0.7} means that the legend text, etc will be slightly smaller than the main plot
+}
+\item{att_col}{
+A vector giving colour values to be used for colouring the squares based on the attribute vector. Note if specified the number of values in att_col needs to match the number of category in, or derived from, the attribute vector. The default \code{NULL} will use the default colour scheme, which is a reversed version of R's \code{\link{heat.colors}} pallete (values going from light yellow to dark red).
 }
   \item{\dots}{
 Any other arguments 
