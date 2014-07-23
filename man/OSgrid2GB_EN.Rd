@@ -44,6 +44,7 @@ Colin Harrower
 
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{gr_let2num}}
 }
 \examples{
 
