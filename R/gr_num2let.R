@@ -58,10 +58,12 @@ function(easting,northing, OSgrid = "OSGB", keep_precision = TRUE, min_10km = TR
 		
 		# Determine first letter based on 500km easting/northing (-3 at end is to deal with the 500km grid starting at s
 		L500k = (21 - (5*floor(nX500k)) + floor(eX500k))-3
-			# Check for letter indices out with the expected values (1 to 25) if they are then replaces with NA
+			# Check for letter indices out with the expected values (1 to 25), if such values exist then remove the indices for these rows from cty_inds and corresponding values from eX500k and nX500k
 			rm_inds  = which(L500k <= 0 | L500k > 25)
 			if(length(rm_inds) > 0){
-				L500k[rm_inds] = NA
+				cty_inds = cty_inds[-rm_inds]
+				eX500k = eX500k[-rm_inds]
+				nX500k = nX500k[-rm_inds]
 			}
 		
 		# Determine easting and northing within given 500km square (round to 5 decimal places to ensure floor in next step works (issues with HP60 gridref)

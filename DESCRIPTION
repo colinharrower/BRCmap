@@ -7,5 +7,5 @@ Author: Colin Harrower <corr@ceh.ac.uk>
 Maintainer: Colin Harrower <corr@ceh.ac.uk>
 Description: This package contains a range of functions for mapping biological records
 			 data in a format suitable for Atlas mapping in the UK.
-License:
+License: GPL-3
 Depends: maptools
