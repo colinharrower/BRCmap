@@ -31,37 +31,47 @@ A vector of two values giving the x & y cooridinates for the origin of the Chann
 A legacy argument that will be removed in the next update.
 }
 \item{...}{
-Any other arguments that will be passed to the points function used to add the points to the map. Examples of typical arguments that you may want to pass through are \code{pch, col, cex}.
+Any other arguments that will be passed to the \code{points} function used to add the points to the map. Examples of typical arguments that you may want to pass through are \code{pch, col, cex}.
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+This function converts UK grid references strings (i.e. "SP4386") to x, y (eastings and northing) values and then uses the base \code{points} fuction to add points at these coordinates to an existing plot. The coordinate system used in the Ordnace Survey of Great Britain (OSGB), grid reference from Ireland (OSNI) or the Channel Islands are reprojected onto the British grid.
+
+This function is essentially a wrapper that sequentially uses several other functions in this package to convert and reproject grid references where necesary.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+By default this function does not return anything, but if the output from the function is assigned it will return the x,y values (eastings & northings on OSGB) of the grid references via the \code{invisible} function.
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
-%%  ~~further notes~~
+It is important to note that the points added are not scaled relative to the precision of the grid reference but are simply the default points sizes in R.
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{plotUK_gr}}, \code{\link{plotUK_gr_cats}}
 }
 \examples{
+## Example of using plotUK_gr_points function to add a couple of dots to an existing map
 
-
+  # Load UK data
+    data(UK)
+    
+  # Plot UK outline
+    plot_GIS(UK, new.window = FALSE)
+    
+  # Create a vector of grid references to be added
+    gridrefs <- c("SP4297","WV569079","H49280101","NN29","NT20S","TL97NW")
+    
+  # Add points to map
+    plotUK_gr_points(gridrefs, col="red", pch = 16)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

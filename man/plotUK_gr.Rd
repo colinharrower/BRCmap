@@ -5,36 +5,39 @@
 Plot UK grid references
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function will plot valid UK grid references onto an exisiting map
 }
 \usage{
-plotUK_gr(gridref, gr_prec = 10000, ci_insert = TRUE, ci_origin = c(-180000, 30000), unit_conv = NULL, ...)
+plotUK_gr(gridref, gr_prec = NULL, ci_insert = FALSE, ci_origin = c(-180000, 30000), unit_conv = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{gridref}{
-%%     ~~Describe \code{gridref} here~~
+A character vector containing the grid references to added to the map 
 }
   \item{gr_prec}{
-%%     ~~Describe \code{gr_prec} here~~
+A numerical value or numerical vector (of the same length as \code{gridref}) giving the precision of the grid references in \code{gridref}. The default \code{gr_prec = NULL} will determine the precision from the grid reference.
 }
   \item{ci_insert}{
-%%     ~~Describe \code{ci_insert} here~~
+A logical value determining whether CI values are being plotted in a insert box or in their true position. The default \code{ci_insert = FALSE} will plot the grid references in their true position.
 }
   \item{ci_origin}{
-%%     ~~Describe \code{ci_origin} here~~
+A numerical vector containg the x,y values of the false CI origin if using an insert box
 }
   \item{unit_conv}{
-%%     ~~Describe \code{unit_conv} here~~
+A numerical value determining the unit conversion if the units for the map to which the points are being added is not metres. In most situation this argument will not be needed.
 }
   \item{\dots}{
-%%     ~~Describe \code{\dots} here~~
+Other arguments which are passed to the \code{\link{polygon}} function used to plot the grid references. Examples of arguments you may wish to pass are \code{col} or \code{border} to change the fill or border columns of the polygons representing the grid refences.
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+As mentioned in the description this function will added grid references as square polygons to an existing map. It will not create map and will therefore produce an error if there is no existing plot.
+
+It should be noted that if plotting at the UK level it is probably best to to try and avoid plotting grid references smaller than 10km as this make the points quite hard to see. More precise grid reference can be plotted however if the area to be mapped is more restricted and therefore the area more magnified. 
 }
 \value{
+The function can return a data.frame containing the x,y values (easting & northing in OSGB) of the lower left corner of grid references if the output is assigned to an object. If not assigned no output, other than the plotting will be produced
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -45,7 +48,7 @@ plotUK_gr(gridref, gr_prec = 10000, ci_insert = TRUE, ci_origin = c(-180000, 300
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 %%  ~~further notes~~
@@ -55,58 +58,23 @@ plotUK_gr(gridref, gr_prec = 10000, ci_insert = TRUE, ci_origin = c(-180000, 300
 
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{plotUK_gr_cats}}, \code{\link{plotUK_gr_points}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## Example of using plotUK_gr_points function to add a couple of dots to an existing map
 
-## The function is currently defined as
-function (gridref, gr_prec = 10000, ci_insert = TRUE, ci_origin = c(-180000, 
-    30000), unit_conv = NULL, ...) 
-{
-    gridref = unique(gridref)
-    gr_len = length(gridref)
-    if (is.null(gr_prec)) {
-        gr_prec = det_gr_precision(gridref)
-    }
-    gr_poly = data.frame(EASTING = rep(NA, gr_len * 5), NORTHING = rep(NA, 
-        gr_len * 5))
-    gr_poly[seq(1, by = 5, length.out = gr_len), ] = gr_let2num(gridref)
-    gr_poly[seq(2, by = 5, length.out = gr_len), ] = gr_poly[seq(1, 
-        by = 5, length.out = gr_len), ] + data.frame(rep(0, gr_len), 
-        rep(gr_prec, gr_len))
-    gr_poly[seq(3, by = 5, length.out = gr_len), ] = gr_poly[seq(1, 
-        by = 5, length.out = gr_len), ] + data.frame(rep(gr_prec, 
-        gr_len), rep(gr_prec, gr_len))
-    gr_poly[seq(4, by = 5, length.out = gr_len), ] = gr_poly[seq(1, 
-        by = 5, length.out = gr_len), ] + data.frame(rep(gr_prec, 
-        gr_len), rep(0, gr_len))
-    ir_inds = which(grepl("(^[[:upper:]]{1}[[:digit:]]{2}([[:upper:]]?|[[:upper:]]{2})$)|(^[[:upper:]]{1}[[:digit:]]{2,}$)", 
-        rep(gridref, each = 5)) & !is.na(gr_poly$EASTING))
-    if (length(ir_inds) > 0) {
-        gr_poly[ir_inds, ] = OSgridReprojection(gr_poly$EASTING[ir_inds], 
-            gr_poly$NORTHING[ir_inds], org_grid = "OSNI", out_grid = "OSGB")
-    }
-    ci_inds = which(grepl("(^(WA|WV)[[:digit:]]{2}([[:upper:]]?|[[:upper:]]{2})$)|(^(WA|WV)[[:digit:]]{2,}$)", 
-        rep(gridref, each = 5)) & !is.na(gr_poly$EASTING))
-    if (length(ci_inds) > 0) {
-        if (ci_insert) {
-            gr_poly[ci_inds, ] = CI_insert_en(gr_poly$EASTING[ci_inds], 
-                gr_poly$NORTHING[ci_inds])
-        }
-        else {
-            gr_poly[ci_inds, ] = OSgridReprojection(gr_poly$EASTING[ci_inds], 
-                gr_poly$NORTHING[ci_inds], org_grid = "UTM30", 
-                out_grid = "OSGB")
-        }
-    }
-    if (!is.null(unit_conv)) {
-        gr_poly = gr_poly * unit_conv
-    }
-    polygon(gr_poly$EASTING, gr_poly$NORTHING, ...)
-    invisible(data.frame(GRIDREF = rep(gridref, each = 5), gr_poly))
-  }
+  # Create a vector of grid references to be plotted
+    gridrefs <- c("SP49","WV57","H40","NN29","NT20","TL97")
+  
+  # Load UK data
+    data(UK)
+  
+  # Plot UK outline
+    plot_GIS(UK, new.window = FALSE)
+  
+  # Add these grid references to an exisiting plot
+    plotUK_gr(gridrefs, col="darkgreen")
+  
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

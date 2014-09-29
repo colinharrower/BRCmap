@@ -31,7 +31,7 @@ A numerical value giving the relative sizing of the legend (see \code{\link{par}
 A vector giving colour values to be used for colouring the squares based on the attribute vector. Note if specified the number of values in att_col needs to match the number of category in, or derived from, the attribute vector. The default \code{NULL} will use the default colour scheme, which is a reversed version of R's \code{\link{heat.colors}} pallete (values going from light yellow to dark red).
 }
   \item{\dots}{
-Any other arguments 
+Any other arguments that are passed to the \code{polygon} function used to actually plot the grid references
 }
 }
 \details{
