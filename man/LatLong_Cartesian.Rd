@@ -8,7 +8,8 @@ Convert Latitude & Longitude to Cartesian Coordinates
 This function converts latitude and longitude coordinates to Cartesian coordinates.
 }
 \usage{
-LatLong_Cartesian(Latitude, Longitude, Datum = "OSGB", datum_params = datum_vars, H = NULL, full_output = FALSE)
+LatLong_Cartesian(Latitude, Longitude, Datum = "OSGB", 
+datum_params = NULL, H = NULL, full_output = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,7 +23,7 @@ A numerical vector containing the longitudes of the coordinates to be converted
 A character vector containing codes for the Datum in which the coordinates to be converted. The default value \code{Datum = "OSGB"} is for Ordnance Survey of Great Britain, other possible values are \code{"OSNI"} for the Ordnance Survey of Northern Ireland or \code{"UTM30"} for UTM for Channel Islands.
 }
   \item{datum_params}{
-The data.frame containing the parameters for datum required in the transformation. The default \code{datum_params = datum_vars} is to use the data.frame provided with BRCmap which contains the parameter required for the three datum commonly used in the UK
+The data.frame containing the parameters for datum required in the transformation. The default \code{datum_params = NULL} will load and use the dataset \code{dataum_vars} provided with BRCmap, which contains the parameter required for the three datum commonly used in the UK, if not already loaded into the current session.
 }
   \item{H}{
 A vector containing the height parameter that will be used in the conversion. The default \code{H = NULL} will use a height of zero and in general it will be best to leave this set to the default.
@@ -58,9 +59,10 @@ Colin Harrower
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-### Example of converting latitude and longitude to cartesian coordinates
+## Example of converting latitude and longitude to cartesian coordinates
 
-# Convert Latitude and Longitude of Grid reference "SP42" in orignal datum/projection to cartesian coordinates
+# Convert Latitude and Longitude of Grid reference "SP42"
+# in orignal datum/projection to cartesian coordinates
 
 LatLong_Cartesian(53.8544788314868, -1.39183128783271)
 

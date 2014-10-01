@@ -47,13 +47,21 @@ Colin Harrower
 \code{\link{gps_latlon2gr}}
 }
 \examples{
-## The following example converts the following OSNI grid reference for the centre of Dublin to WGS 84 latitude & longitude coordinates
+## The following example converts the following OSNI grid reference for the 
+## centre of Dublin to WGS 84 latitude & longitude coordinates
+
 gr2gps_latlon("O1590434801")
 
-## This example takes the grid reference for the Centre of Ecology & Hydrology Wallingford and converts it to WGS 84 latitude & longitude coordinates
+## This example takes the grid reference for the Centre of Ecology & 
+## Hydrology Wallingford and converts it to WGS 84 latitude & longitude 
+## coordinates
+
 gr2gps_latlon("SU6169589648")
 
-## This example takes the grid reference for the Durrell Wildlife Park in Jersey, Channal Islands and converts it WGS 84 latitude & longitude coordinates
+## This example takes the grid reference for the Durrell Wildlife Park in 
+## Jersey, Channal Islands and converts it WGS 84 latitude & longitude 
+## coordinates
+
 gr2gps_latlon("WV6743653296")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

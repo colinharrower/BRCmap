@@ -25,7 +25,7 @@ In general this dataset will be used through the function \code{add_channel_isle
   # Load in data
     data(CI_outline)
     data(UK)
-  # Plot Britain and Ireland outlines (excluding Channel Islands SpatialPolygon object as it will plot in true position)
+  # Plot Britain and Ireland outlines (exc. Channel Islands)
     plot_GIS(UK[c("britain","ireland")])
   # Add insert box with Channel Islands
     add_channel_isles(CI_outline)

@@ -25,8 +25,7 @@ This list contains the data required to plot the outline of the UK. The data con
 %%  ~~ reference to a publication or URL from which the data were obtained ~~
 }
 \seealso{
-\code\link{GB_LOWRES}
-}
+\code{\link{GB_LOWRES}}
 }
 \references{
 %%  ~~ possibly secondary sources and usages ~~

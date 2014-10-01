@@ -8,7 +8,8 @@ Convert Eastings & Northings to Latitude & Longitude
 Converts Easting & Northings to latitude & longitude coordinates in the original projection. See details for warning regarding the latitude & longitude values returned by this function
 }
 \usage{
-OSGridstoLatLong(Easting, Northing, Datum = "OSGB", datum_params = datum_vars, full_output = FALSE)
+OSGridstoLatLong(Easting, Northing, Datum = "OSGB", 
+datum_params = NULL, full_output = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,7 +23,7 @@ A numerical vector containing the northing values for the coordinates to be conv
 A character value or vector detailing which grid system the easting and northing belong to. The values in this argument are used to determine the conversion parameters required to convert the easting and northings to latitude and longitude values. Permitted values are \code{OSGB}, \code{OSNI}, \code{UTM30}. The default \code{Datum = OSGB} assumes that the easting and northing values are for the Ordnance Survey of Great Britain.
 }
   \item{datum_params}{
-A data.frame containing the parameters required to convert the current mapping system to eastings & northings.This argument is supplied so that if the easting & northing points are not in one of the three predefined mapping systems (OSGB, OSNI, UTM30) but you know that parameters required to do the transformation you can supply them directly (see details for more information).
+A data.frame containing the parameters required to convert the current mapping system to eastings & northings. The default (\code{datum_params = NULL}) will load & use the supplied datasets datum_vars, which contains the parameters needed for coversions within the UK. This argument is supplied so that if the easting & northing points are not in one of the three predefined mapping systems (OSGB, OSNI, UTM30) but you know that parameters required to do the transformation you can supply them directly (see details for more information).
 }
   \item{full_output}{
 A logical variable determining whether the output is a data.frame containing the latitude and longitude values or whether it also contains columns containing the original easting and northing values. The default \code{full_output = FALSE}
@@ -61,7 +62,7 @@ Colin Harrower
 
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
-\code{\link{LatLongtoOSgrids}},
+\code{\link{LatLongtoOSGrids}},
 \code{\link{gr2gps_latlon}}
 }
 \examples{

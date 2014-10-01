@@ -40,12 +40,14 @@ This function is probably going to be superseded by \code{gr_components} functio
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-## This example will use the function to determine the datum precision of a vector of grid references
+### This example will use the function to determine the datum precision of a 
+### vector of grid references
 
-# Create a vector of random grid references, including one broken grid reference (with one missing digit)
+## Create a vector of random grid references, including one broken grid 
+## reference (with one missing digit)
   test_grs = c("SP42","N2329","WV6753","SK38","NT3002","N34T","H38NE")
   
-# Now determine precision/datum
+## Now determine precision/datum
   gr_det_country(test_grs)
 
 }

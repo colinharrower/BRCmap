@@ -52,14 +52,19 @@ Colin Harrower
 }
 \examples{
 ## Create a vector of grid references
+
 gridrefs <- c("SP4297","WV569079","H49280101","NN29","NT20S","TL97NW")
 
 ## Reformat these grid references to 10km precision
+
 gr10km = reformat_gr(gridrefs)
 
-## Reformat the grid references to 1km precision (note the NA values for the 10km grid reference which couldn't be formated to required precision)
+## Reformat the grid references to 1km precision (note the NA values for the
+## 10km grid reference which couldn't be formated to required precision)
+
 gr1km = reformat_gr(gridrefs, prec_out = 1000)
 
 ## Reforamt the grid reference to tetrad precision (2000m)
+
 grtet = reformat_gr(gridrefs, prec_out = 2000)
 }

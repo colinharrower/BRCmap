@@ -42,10 +42,14 @@ This function is probably going to be superseded by \code{gr_components} functio
   \code{\link{gr_det_country}}
 }
 \examples{
-## This example will check the following grid references and remove entries that are in a non-valid format. Note it will also remove spaces and hyphens in the grid references if present.
+## This example will check the following grid references and remove entries 
+##that are in a non-valid format. 
+##Note it will also remove spaces and hyphens in the grid references if present.
 
-  # Create a vector of random grid references, including one non-valid grid reference 
-  test_grs = c("SP42", "N2329", "WV6753", "SOJ458", "SK3-8-", "NT 30 02", "N34T", "H38NE")
+  ## Create a vector of random grid references
+  ## including one non-valid grid reference 
+  test_grs = c("SP42", "N2329", "WV6753", "SOJ458", "SK3-8-", "NT 30 02",
+  "N34T", "H38NE")
   
   # Now check these grid references
   fmt_gridref(test_grs)

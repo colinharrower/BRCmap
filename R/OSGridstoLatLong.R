@@ -2,12 +2,7 @@ OSGridstoLatLong <-
 function(Easting, Northing, Datum = "OSGB", datum_params = NULL, full_output = FALSE) {
 	# If datum_params is null then defaults data.frame included with package will be used
 		if(is.null(datum_params)){
-			# Determine if datum variables data.frame is already loaded from package
-			if(!exists("datum_vars")){
-				# If not load from package
-					data(datum_vars)
-			}
-			# Set datum_params to datum_vars
+			# Set datum_params to datum_vars (supplied with package)
 				datum_params = datum_vars
 		}
 

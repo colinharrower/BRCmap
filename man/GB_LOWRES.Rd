@@ -24,8 +24,7 @@ This dataset contains a lower resolution outline for the UK than the one contain
 %%  ~~ reference to a publication or URL from which the data were obtained ~~
 }
 \seealso{
-\code\link{UK}
-}
+\code{\link{UK}}
 }
 \references{
 %%  ~~ possibly secondary sources and usages ~~

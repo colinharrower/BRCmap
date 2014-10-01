@@ -15,7 +15,7 @@ OSgrid2GB_EN(gridref, centre = TRUE, gr_prec = NULL)
   \item{gridref}{
 A character vector containing the grid references to be converted
 }
-\item{Centre}{
+\item{centre}{
 A logical variable determining whether the coordinates returned are for the grid centre or the bottom left corner. The default \code{centre = TRUE} will return the coordinates for the grid reference centre.
 }
 \item{gr_prec}{

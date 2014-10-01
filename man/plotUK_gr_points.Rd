@@ -8,7 +8,8 @@ Add points to a map using grid references
 A function to take a list of grid references, convert them to eastings & nortings on the British grid and then add standard R plotting points at the coordinates
 }
 \usage{
-plotUK_gr_points(gridref, centre = TRUE, gr_prec = NULL, ci_insert = FALSE, ci_origin = c(-180000,30000), unit_conv = NULL, ...)
+plotUK_gr_points(gridref, centre = TRUE, gr_prec = NULL, 
+ci_insert = FALSE, ci_origin = c(-180000,30000), unit_conv = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

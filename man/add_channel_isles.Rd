@@ -8,7 +8,9 @@ An R function To Add the Channel Islands to the existing map
 This functions can be used to add the Channel Islands outline to a existing map as an insert box
 }
 \usage{
-add_channel_isles(CI_outline_gr, insert_origin = c(-180000, 30000), insert_dimen = c(1e+05, 1e+05), ins_border = NULL, ins_col = "white", col = NA, border = NULL, show_gridline = FALSE)
+add_channel_isles(CI_outline_gr, insert_origin = c(-180000, 30000),
+insert_dimen = c(1e+05, 1e+05), ins_border = NULL, ins_col = "white",
+col = NA, border = NULL, show_gridline = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -8,7 +8,8 @@ Convert UK, Irish or Channel Islands coordinates to another coordinate system.
 A function to convert UK, Irish or Channel Islands coordinates (given as easting & northing) to another mapping system.
 }
 \usage{
-OSgridReprojection(Easting, Northing, org_grid = "OSNI", out_grid = "OSGB", full_output = FALSE)
+OSgridReprojection(Easting, Northing, org_grid = "OSNI", 
+out_grid = "OSGB", full_output = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

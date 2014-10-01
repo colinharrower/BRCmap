@@ -2,11 +2,7 @@ helmert_trans <-
 function(x, y, z, trans = "OSNItoOSGB", trans_params = NULL, full_output = FALSE){
 	# If trans_params is null then check where helmert_trans_vars data.frame has been loaded from package
 		if(is.null(trans_params)){
-			# If it doesn't exist then load
-			if(!exists("helmert_trans_vars")){
-				data(helmert_trans_vars)
-			}
-			# set trans_params = helmert_trans_vars
+			# set trans_params = helmert_trans_vars (supplied with package)
 			trans_params = helmert_trans_vars
 		}
 

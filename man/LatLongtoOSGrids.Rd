@@ -8,7 +8,8 @@ Convert Latitude & Longitude coordinates to eastings and northings
 This function converts latitude and longitude coordinates to easting and northing values. Note the function does not convert between datum/projections (see details for more information).
 }
 \usage{
-LatLongtoOSGrids(Latitude, Longitude, Datum = "OSGB", datum_params = datum_vars, full_output = FALSE)
+LatLongtoOSGrids(Latitude, Longitude, Datum = "OSGB", 
+datum_params = NULL, full_output = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,7 +23,7 @@ A numerical vector containing the longitude values to be converted
 A character vector containing codes specifying which datum/projection the coordinates are in
 }
   \item{datum_params}{
-A data.frame containing the parameters required for the conversion
+A data.frame containing the parameters required for the conversion. The default \code{datum_params = NULL} will load and use the datasets \code{datum_vars}, which is supplied with the package.
 }
   \item{full_output}{
 A logical value determining whether to also return the original input latitude and longitude values
@@ -60,7 +61,8 @@ Colin Harrower
 \code{\link{OSGridstoLatLong}}
 }
 \examples{
-## Example to convert a latitude and longitude into eastings and northings in the same datum/projection
+## Example to convert a latitude and longitude to eastings and northings
+## Note that the projection will not be tranformed
 
 LatLongtoOSGrids(53.854478831, -1.391831, "OSGB")
 

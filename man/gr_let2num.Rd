@@ -54,11 +54,15 @@ Colin Harrower
 }
 \examples{
 ## Create a vector of grid references
+
 gridrefs <- c("SP4297","WV569079","H49280101","NN29","NT20S","TL97NW")
 
 ## Convert grid reference to easting and northing in native projection
+
 gr_let2num(gridrefs)
 
-## Convert grid reference to easting and northing and return projection, but this time for the centre of the grid reference square
+## Convert grid reference to easting and northing and return projection,
+## but this time for the centre of the grid reference square
+
 gr_let2num(gridrefs, centre = TRUE, return_projection = TRUE)
 }

@@ -8,7 +8,8 @@ Plot UK grid references
 This function will plot valid UK grid references onto an exisiting map
 }
 \usage{
-plotUK_gr(gridref, gr_prec = NULL, ci_insert = FALSE, ci_origin = c(-180000, 30000), unit_conv = NULL, ...)
+plotUK_gr(gridref, gr_prec = NULL, ci_insert = FALSE, 
+ci_origin = c(-180000, 30000), unit_conv = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

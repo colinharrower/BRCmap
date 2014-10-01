@@ -57,19 +57,26 @@ If \code{return_type  = "both"} then the data.frame will have all three colums. 
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-## This example will return the grid reference and eastings & northings for the Centre for Ecology & Hydrology using the Ordnance Survey of Great Britain projection (OSGB)
+## This example will return the grid reference and eastings & northings
+## for the Centre for Ecology & Hydrology using the Ordnance Survey of 
+## Great Britain projection (OSGB)
 
   gps_latlon2gr(51.602309,-1.110601)
 
-## This example will return only the grid reference for the Radcliffe Camera in Oxford
+## This example will return only the grid reference for the 
+## Radcliffe Camera in Oxford
 
   gps_latlon2gr(51.753737,-1.254197, return_type = "gr")
 
-## This example will return the grid reference and easting & northing for the Durrell Wildlife Park in Jersey, Channel Islands using the Miltary Grid Reference System (based on UTM30)
+## This example will return the grid reference and easting & northing for
+## the Durrell Wildlife Park in Jersey, Channel Islands using the Miltary
+## Grid Reference System (based on UTM30)
 
   gps_latlon2gr(49.228733,-2.073758, out_projection = "UTM30")
 
-## This example will return the grid reference and easting & northing for the centre of Dublin, Ireland using the Ordnance Survey of Northern Ireland projection ("OSNI")
+## This example will return the grid reference and easting & northing for
+## the centre of Dublin, Ireland using the Ordnance Survey of Northern
+## Ireland projection ("OSNI")
 
   gps_latlon2gr(53.350970, -6.260192, out_projection = "OSNI")
 }
