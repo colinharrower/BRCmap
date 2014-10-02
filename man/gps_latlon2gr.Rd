@@ -39,13 +39,13 @@ The function will return a data.frame, that depending on the value given to \cod
   \item{NORTHING}{
   The northing in metres (in the specified projection) that corespond with the latitude and longitude values given in the arguments
   }
-If \code{return_type  = "both"} then the data.frame will have all three colums. In contrast if \code{return_type = "gr"} or \code{return_type = "en"} then the returned data.frame will only contain the grid reference column or the eastings & northing columns respectively.
+If \code{return_type  = "both"} then the data.frame returned will contain all colums detailed above. If the value supplied to the argument \code{return_type} is \code{"gr"} or \code{"en"} then the returned data.frame will contain only the grid reference column or the eastings & northing columns respectively.
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 %%  ~~further notes~~
@@ -83,5 +83,6 @@ If \code{return_type  = "both"} then the data.frame will have all three colums. 
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Grid reference }
+\keyword{ Reprojection }
+\keyword{ Latitude & Longitude }

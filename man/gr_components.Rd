@@ -16,7 +16,7 @@ gr_components(gridref, output_col = NULL)
   Valid UK, Irish or Channel islands grid references 
 }
   \item{output_col}{
-  The name(s) of the output column(s) containg the components you wish to have returned (see details). The default, when \code{output_col = NULL}, is to return all of the components. Valid values are: \code{VALID_GR, PRECISION, CHARS, DIGITS, DIGITS_EAST, DIGITS_NORTH, TETRAD, QUADRANT}
+  The name(s) of the output column(s) containg the components you wish to have returned (see details). The default, when \code{output_col = NULL}, is to return all of the components. Valid values are: \code{VALID_GR}, \code{PRECISION}, \code{CHARS}, \code{DIGITS}, \code{DIGITS_EAST}, \code{DIGITS_NORTH}, \code{TETRAD}, \code{QUADRANT}
 }
 }
 \details{
@@ -66,3 +66,5 @@ gr_components(gridrefs)
 ## Extract tetrad and quadrant codes from grid references
 gr_components(gridrefs, output_col = c("TETRAD", "QUADRANT"))
 }
+\keyword{ Grid reference }
+\keyword{ Precision }

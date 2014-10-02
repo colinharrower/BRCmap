@@ -69,5 +69,6 @@ LatLongtoOSGrids(53.854478831, -1.391831, "OSGB")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Coordinate conversion }
+\keyword{ Latitude & Longitude }
+\keyword{ Easting & Northing }

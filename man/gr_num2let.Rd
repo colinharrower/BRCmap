@@ -8,7 +8,8 @@ Convert Eastings & Northings to Grid References
 A function to convert UK, Irish or Channel Islands easting and northing coordinates to grid references.
 }
 \usage{
-gr_num2let(easting, northing, OSgrid = "OSGB", keep_precision = TRUE, min_10km = TRUE)
+gr_num2let(easting, northing, OSgrid = "OSGB", keep_precision = TRUE, 
+min_10km = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -50,4 +51,20 @@ Colin Harrower
 \code{\link{gr_let2num}}
 }
 \examples{
+## Example showing how to convert eastings & northing to grid references
+
+# Setup a vector of grid reference to convert to easting & northing
+gridrefs <- c("SP4297","WV569079","H49280101","NN29","NT20S","TL97NW")
+
+# Convert grid reference to easting and northing in native projection
+gr_en = gr_let2num(gridrefs, return_projection = TRUE)
+
+# Convert eastings & northings back to grid references
+new_gr = gr_num2let(gr_en$EASTING, gr_en$NORTHING, gr_en$PROJECTION)
+
+# As above but triming unneeded precision of returned grid references
+new_gr_tr = gr_num2let(gr_en$EASTING, gr_en$NORTHING, gr_en$PROJECTION,)
 }
+\keyword{ Grid reference }
+\keyword{ Easting & Northing }
+\keyword{ Coordinate conversion }

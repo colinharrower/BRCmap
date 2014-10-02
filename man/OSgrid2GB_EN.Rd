@@ -5,7 +5,7 @@
 Function to convert British grid references to eastings & northings on the GB ordnance survey system
 }
 \description{
-This function will convert British grid references (OSGB, OSNI, UTM30) to eastings & Northings on the Ordnance Survey for Great Britain projection. In the case of Irish & Channel Islands grid references they will be reprojected to place them onto the GB ordnance survey system to allow comparisons, simple distance measures or plotting onto maps in the GB projection. GB grid reference are simply converted to their native projection.
+This function will convert British grid references (OSGB, OSNI, UTM30) to eastings & northings on the Ordnance Survey for Great Britain projection. In the case of Irish & Channel Islands grid references they will be reprojected to place them onto the GB ordnance survey system to allow comparisons, simple distance measures or plotting onto maps in the GB projection. GB grid reference are simply converted to their native projection.
 }
 \usage{
 OSgrid2GB_EN(gridref, centre = TRUE, gr_prec = NULL)
@@ -47,9 +47,20 @@ Colin Harrower
 \code{\link{gr_let2num}}
 }
 \examples{
+## Example converting a range of UK grid references (OSGB, OSNI, & UTM30)
+## to eastings & northings on the OSGB grid
+
+# Create a vector of grid refs to be converted to OSGB easting & northing
+gridrefs <- c("SP49","NO58","WV55","H47","NN29","WV55","WA50","NT20","TL97"
+,"NH33","SE25","SN22","SH87","SO00","N20","M85","T01","SX59","NY78")
+
+# Convert the gridrefs to OSGB eastings & northings
+OSgrid2GB_EN(gridrefs)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Grid reference }
+\keyword{ Reprojection }
+\keyword{ Easting & Northing }
+\keyword{ Coordinate conversion }

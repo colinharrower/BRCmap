@@ -47,9 +47,21 @@ Although this function is designed for Channel Islands coordinates it could pote
 \code{\link{CI_insert_gr}}
 }
 \examples{
+## Example of how to convert a Channel Islands easting & northing to an 
+## easting & northing based on a new false origin to allow plotting 
+## inside a insert box
 
+# First get the 'true' easting & northing for a CI grid references
+  true_en = gr_let2num("WV55")
+  
+# Now convert the true easting & northing to false position
+  ins_en = CI_insert_en(true_en$EASTING, true_en$NORTHING)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Channel Islands }
+\keyword{ Mapping }
+\keyword{ Easting & Northing }
+\keyword{ Coordinate conversion }
+\keyword{ Insert box }
+% __ONLY ONE__ keyword per line

@@ -68,3 +68,6 @@ gr1km = reformat_gr(gridrefs, prec_out = 1000)
 
 grtet = reformat_gr(gridrefs, prec_out = 2000)
 }
+\keyword{ Grid reference }
+\keyword{ Coordinate conversion }
+\keyword{ Precision }

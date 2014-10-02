@@ -31,7 +31,7 @@ The coordinates of the false origin relative to which the supplied grid referenc
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 Although this function is designed for Channel Islands grid references it could potentially be used to reposition other coordinates for the purpose of a insert box.
@@ -44,9 +44,17 @@ Although this function is designed for Channel Islands grid references it could 
 \code{\link{CI_insert_en}}
 }
 \examples{
+## Example of how to convert a Channel Islands grid references to an easting 
+## & northing based on a new false origin to allow plotting inside a insert 
+##box
 
+# Convert a Channel Island gridref to false easting & northing
+  ins_en = CI_insert_gr("WV55")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Channel Islands }
+\keyword{ Mapping }
+\keyword{ Grid reference }
+\keyword{ Coordinate conversion }
+\keyword{ Insert box }

@@ -53,7 +53,7 @@ Generally this funciton will only be used to add the Channel Islands onto the ma
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Colin Harrower
 }
 \note{
 %%  ~~further notes~~
@@ -65,9 +65,33 @@ Generally this funciton will only be used to add the Channel Islands onto the ma
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+## Example of how to add the Channel Isles to an insert box
+
+# Load UK data
+data(UK)
+
+# Load seperate CI outline
+data(CI_outline)
+
+# Plot UK outline (excluding the CI element in its true position)
+plot_GIS(UK[1:2], new.window = FALSE, show.grid = FALSE, show.axis = FALSE,
+xlab = "", ylab = "")
+
+# add Channel Isles to insert box (default position below Ireland)
+add_channel_isles(CI_outline)
+
+# Demonstrate how to added squares to plot (inc insert box)
+# Setup list of grid references to add inc CI grid references
+gridrefs <- c("SP49","NO58","WV55","H47","NN29","WV55","WA50","NT20","TL97",
+"NH33","SE25","SN22","SH87","SO00","N20","M85","T01","SX59","NY78")
+
+# Add squares to map
+plotUK_gr(gridrefs, ci_insert = TRUE, col="red")
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ Channel Islands }
-\keyword{ Insert box }% __ONLY ONE__ keyword per line
+\keyword{ Insert box }
+\keyword{ Mapping }
+% __ONLY ONE__ keyword per line

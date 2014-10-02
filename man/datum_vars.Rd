@@ -34,3 +34,6 @@ As mentioned above this dataset is used by various functions in the package to f
 
 }
 \keyword{datasets}
+\keyword{ Coordinate conversion }
+\keyword{ Cartesian Coordinates }
+\keyword{ Latitude & Longitude }

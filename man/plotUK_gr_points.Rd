@@ -76,5 +76,6 @@ It is important to note that the points added are not scaled relative to the pre
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Mapping }
+\keyword{ Grid reference }
+\keyword{ Channel Islands }

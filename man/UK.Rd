@@ -37,3 +37,4 @@ This list contains the data required to plot the outline of the UK. The data con
   plot_GIS(UK)
 }
 \keyword{datasets}
+\keyword{ Mapping }

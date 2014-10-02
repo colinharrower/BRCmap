@@ -8,7 +8,8 @@ A function to convert cartesian coordinates to latitude and longitude
 This function takes cartesian x,y,z coordinates in a specified datum/projection and converts them to latitude and longitude values in the same projection. \bold{NOTE}: as the latitude & longitude returned are in the same projection as the original cartesian coordinates this will not necessarily give latitude & longitude values you might expect (see details below)
 }
 \usage{
-Cartesian_LatLong(x, y, z, Datum = "OSGB", datum_params = NULL, full_output = FALSE)
+Cartesian_LatLong(x, y, z, Datum = "OSGB", datum_params = NULL,
+full_output = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -58,9 +59,24 @@ Colin Harrower
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+### This example shows how to convert a couple of cartesian coordinates to 
+### latitude & longitude coordinates in the same projection
+
+## The coordinates here are the cartesian coordinates for OSGB 
+## grid references SU616896 & SP515063 
+
+# Create the Cartesian coordinates to be converted
+gr_cc = data.frame(x = c(3968681.81894049, 3955285.80128869),
+  y = c(-76929.2022506898, -86570.7952208216), 
+  z = c(4975012.74354023, 4985441.54998215))
+
+# Now convert the Cartesian coordinates to Latitude & Longitude
+gr_ll = Cartesian_LatLong(gr_cc$x, gr_cc$y, gr_cc$z, Datum = "OSGB")
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Coordinate conversion }
+\keyword{ Cartesian Coordinates }
+\keyword{ Latitude & Longitude }
+% __ONLY ONE__ keyword per line

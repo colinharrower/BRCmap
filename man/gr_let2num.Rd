@@ -35,7 +35,7 @@ a \code{data.frame} containing the follow columns:
 \item{EASTING}{The easting from the mapping system origin (in metres)}
 \item{NORTHING}{The norting from the mapping system origin (in metres)}
 optionally an addition column can also be returned (depending on value of \code{return_projection}:
-\item{PROJECTION}{The mapping system for the grid reference. Possible values are \code{OSGB, OSNI or UTM30} for UK, Irish or Channel Island grid references}
+\item{PROJECTION}{The mapping system for the grid reference. Possible values are \code{OSGB}, \code{OSNI} or \code{UTM30} for UK, Irish or Channel Island grid references respectively}
 }
 \references{
 %% ~put references to the literature/web site here ~
@@ -66,3 +66,6 @@ gr_let2num(gridrefs)
 
 gr_let2num(gridrefs, centre = TRUE, return_projection = TRUE)
 }
+\keyword{ Grid reference }
+\keyword{ Easting & Northing }
+\keyword{ Coordinate conversion }

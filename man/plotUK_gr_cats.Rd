@@ -61,9 +61,49 @@ Colin Harrower
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+## Example of using plotUK_gr_cats function to plot a map of uk then
+## add grid squares colouring by geographic region
+
+# Load UK data
+data(UK)
+
+# Plot UK outline
+plot_GIS(UK, new.window = FALSE, show.grid = FALSE, show.axis = FALSE, 
+xlab = "", ylab = "")
+
+# Create a vector of grid references to be added
+gridrefs <- c("SP49","NO58","WV55","H47","NN29","WV55","WA50","NT20",
+"TL97","NH33","SE25","SN22","SH87","SO00","N20","M85","T01","SX59","NY78")
+
+# Create a vector of regions associated with the countries
+gr_reg = c("England","Scotland","Channel Isles","Ireland","Scotland",
+"Channel Isles","Channel Isles","Scotland","England","Scotland","England",
+"Wales","Wales","Wales","Ireland","Ireland","Ireland","England","England")
+
+# Add squares to map colouring by region
+plotUK_gr_cats(gridrefs, gr_reg, att_col = rainbow(5))
+
+
+## Example of using plotUK_gr_cats function to plot a map of uk then
+## add grid squares colouring by some numerical vector (such as counts) 
+## broken down into categories
+
+# Plot UK outline
+plot_GIS(UK, new.window = FALSE, show.grid = FALSE, show.axis = FALSE, xlab = "", ylab = "")
+
+# Create a vector of grid references to be added
+gridrefs <- c("SP49","NO58","WV50","H47","NN29","WV55","WA50","NT20",
+"TL97","NH33","SE25","SN22","SH87","SO00","N20","M85","T01","SX59","NY78")
+
+# Create a vector of regions associated with the countries
+gr_vals = rpois(length(gridrefs),10)
+
+# Add squares to map colouring by region
+plotUK_gr_cats(gridrefs, gr_vals, breaks = c(0,5,10,15,20))
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Mapping }
+\keyword{ Grid reference }
+\keyword{ Channel Islands }

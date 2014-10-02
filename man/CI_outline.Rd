@@ -32,3 +32,5 @@ In general this dataset will be used through the function \code{add_channel_isle
 
 }
 \keyword{datasets}
+\keyword{ Channel Islands }
+\keyword{ Mapping }

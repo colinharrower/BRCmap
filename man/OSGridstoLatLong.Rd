@@ -66,9 +66,21 @@ Colin Harrower
 \code{\link{gr2gps_latlon}}
 }
 \examples{
+## Example converting a range of eastings & northings from OSGB, OSNI,
+## & UTM30 to latitude & longitude values in the original projection
 
+# Vector of grid refs that will be converted
+gridrefs <- c("SP49","NO58","WV55","H47","NN29","WV55","WA50","NT20","TL97"
+,"NH33","SE25","SN22","SH87","SO00","N20","M85","T01","SX59","NY78")
+
+# First convert to native eatings & northings
+gr_en = gr_let2num(gridrefs, return_projection = TRUE)
+
+# Convert the native eastings & northings native latitute & longitude
+OSGridstoLatLong(gr_en$EASTING, gr_en$NORTHING,Datum = gr_en$PROJECTION)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Easting & Northing }
+\keyword{ Latitude & Longitude }
+\keyword{ Coordinate conversion }

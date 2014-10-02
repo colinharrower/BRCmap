@@ -2,23 +2,17 @@
 \alias{GB_LOWRES}
 \docType{data}
 \title{
-List of Spatial Polygons containing the GB outline
+A Spatial Polygons object containing the GB outline
 }
 \description{
-This list contains the data required to plot the outline of the GB. The data contained in the list is in a SpatialPolygons format (see \code{sp} package). The polygons in this datasets are at a much lower resolution that the polygons in UK dataset. Note this low resolution version does not include Ireland or the Channel Islands.
+This object contains the data required to plot the outline of the GB. The data contained in the object is in a SpatialPolygons format (see \code{sp} package). 
 }
 \usage{data(GB_LOWRES)}
 \format{
- The list contains three \code{SpatialPolygons} objects:
-
-\code{britain} a \code{SpatialPolygons} object containing the polygons required to draw the british outline.
-
-\code{ireland} a \code{SpatialPolygons} object containing the polygons required to draw the Irish outline.
-
-\code{ci} a \code{SpatialPolygons} object containing the polygons required to draw the Channel Islands outline.
+ A mentioned above the object is a spatial polygons class object, see documentation for \code{sp} package for more details on this object class.
 }
 \details{
-This dataset contains a lower resolution outline for the UK than the one contained within the \code{UK} dataset.
+The polygons in this datasets are at a much lower resolution that the polygons for the GB provided in \code{UK} dataset. NOTE this low resolution version is only GB and does not include Ireland or the Channel Islands.
 }
 \source{
 %%  ~~ reference to a publication or URL from which the data were obtained ~~
@@ -31,8 +25,12 @@ This dataset contains a lower resolution outline for the UK than the one contain
 }
 \examples{
 # Load outline data into R
-  data(UK)
+
+  data(GB-LOWRES)
+  
 # Plot outline data
-  plot_GIS(UK)
+
+  plot_GIS(GB_LOWRES)
 }
 \keyword{datasets}
+\keyword{ Mapping }

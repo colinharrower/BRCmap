@@ -8,7 +8,8 @@ Perform Helmert Tranforformation on x,y,z cartesian coordinates
 This function performs a Helmert transformation to convert cartesian coordinates between mapping systems using different datum.
 }
 \usage{
-helmert_trans(x, y, z, trans = "OSNItoOSGB", trans_params = NULL, full_output = FALSE)
+helmert_trans(x, y, z, trans = "OSNItoOSGB", trans_params = NULL, 
+full_output = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,7 +26,7 @@ helmert_trans(x, y, z, trans = "OSNItoOSGB", trans_params = NULL, full_output = 
   Vector of text stings determining which transformation parameters to use for each grid reference. This should be the \code{row.name} of the row in \code{trans_params} which contains the helmert paramters for the transformation you wish to use for that grid reference. The default \code{trans = "OSNItoOSGB"} converts cartesian coordinates from the Irish datum to the British Datum
 }
   \item{trans_params}{
-  A \code{data.frame} containing Herlert transformation parameters. The default \code{trans_params = NULL} will load & use the built in dataset \code{hermert_trans_vars} which contains the parameters need to convert the most common mapping systems using in the UK
+  A \code{data.frame} containing Herlert transformation parameters. The default \cr(\code{trans_params=NULL}) will load & use the built in dataset \code{hermert_trans_vars} which contains the parameters need to convert the most common mapping systems using in the UK
 }
   \item{full_output}{
 A logical variable determining whether to return all columns or only to return the new transformed x,y,z coordinates. The default \code{full_output = FALSE} will return only the transformed x,y,z coordinates.
@@ -53,7 +54,10 @@ A \code{data.frame} containing the following columns:
 }
 \references{
 Code is translated from Javascript written under open source attribution licence by Chris Veness, and provided on the following website:
-\url{http://www.movable-type.co.uk/scripts/latlong-convert-coords.html}
+\cr\url{http://www.movable-type.co.uk/scripts/latlong-convert-coords.html}
+
+For more information on Helmert tranformation:
+\cr\url{http://en.wikipedia.org/wiki/Helmert_transformation}
 }
 \author{
 Colin Harrower
@@ -67,10 +71,24 @@ Colin Harrower
 \seealso{
 \code{\link{OSgridReprojection}}, 
 \code{\link{OSGridstoLatLong}}, 
-\code{\link{LatLong_Cartesian}},
-\code{\link{Cartesian_LatLong}},
+\code{\link{LatLong_Cartesian}}, 
+\cr\code{\link{Cartesian_LatLong}}, 
 \code{\link{LatLongtoOSGrids}}
 }
 \examples{
-  ## Examples to follow
+### This example shows how to apply a helmert tranformation to
+### Cartesian coordinates to convert projection
+
+## The coordinates here are the cartesian coordinates for OSGB 
+## grid references SU616896 & SP515063 
+
+# Create the Cartesian coordinates to be converted
+gr_cc = data.frame(x = c(3968681.81894049, 3955285.80128869),
+  y = c(-76929.2022506898, -86570.7952208216), 
+  z = c(4975012.74354023, 4985441.54998215))
+  
+# Transform these coordinates from OSGB projection to OSNI
+cc_tran = helmert_trans(gr_cc$x, gr_cc$y, gr_cc$z, trans = rep("OSGBtoOSNI",2))
 }
+\keyword{ Reprojection }
+\keyword{ Cartesian Coordinates }
