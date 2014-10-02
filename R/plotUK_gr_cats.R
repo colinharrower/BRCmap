@@ -47,7 +47,7 @@ function(gridref, att, breaks = NULL, legend_pos = "topleft", leg_cex = 0.7, att
 		
 	} else {
 		# If att_col is null then set to use heat.colours otherwise use values supplied
-		if(is.null(att_cols)){
+		if(is.null(att_col)){
 			# Get colours from heat.colours
 				att_cols = rev(heat.colors(length(breaks)-1))
 		} else {
