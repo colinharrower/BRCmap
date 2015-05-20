@@ -19,14 +19,9 @@ function(easting,northing, OSgrid = "OSGB", keep_precision = TRUE, min_10km = TR
 	# Setup variable to store gridrefs
 		ret_obj = rep(NA, length(easting))
 
-	# Convert easting/northing to strings (to avoid sci notation problems)
-		easting = format(easting, scientific = FALSE, trim = TRUE)
-		northing = format(northing, scientific = FALSE, trim = TRUE)
-	
-	# if easting or northing is "0" then change to "00000" (this is to ensure that keep precision works predictably for these type of grid refs
-		easting[easting == "0"] = "00000"
-		northing[northing == "0"] = "00000"
-		
+	# Convert easting/northing to strings and make sure strings are at least 5 chars or if not left pad with zeros
+		easting = sprintf("%05d",easting)
+		northing = sprintf("%05d",northing)	
 		
 	# Extract component of easting/northing that will remain as digits
 		dig_east = substr(easting,(nchar(easting)-5)+1,nchar(easting))
