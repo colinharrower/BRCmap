@@ -22,31 +22,31 @@ gps_latlon2UTM = function(lat, lon){
 			# Determine MGRS lat band for current latitude
 				lat_band = MGRS_lat_bands[floor(lat/8 + 10)+1]
 		# Deal with Norway/Svalbard exceptions
-			if(zone == 31 & lat_band = "V" & lon >= 3){
+			if(zone == 31 & lat_band == "V" & lon >= 3){
 				zone = zone + 1
 				lon_cm = lon_cm + (6 * (pi/180))
 			}
-			if(zone == 32 & lat_band = "X" & lon < 9){
+			if(zone == 32 & lat_band == "X" & lon < 9){
 				zone = zone - 1
 				lon_cm = lon_cm - (6 * (pi/180))
 			}
-			if(zone == 32 & lat_band = "X" & lon >= 9){
+			if(zone == 32 & lat_band == "X" & lon >= 9){
 				zone = zone + 1
 				lon_cm = lon_cm + (6 * (pi/180))
 			}
-			if(zone == 34 & lat_band = "X" & lon < 21){
+			if(zone == 34 & lat_band == "X" & lon < 21){
 				zone = zone - 1
 				lon_cm = lon_cm - (6 * (pi/180))
 			}
-			if(zone == 34 & lat_band = "X" & lon >= 21){
+			if(zone == 34 & lat_band == "X" & lon >= 21){
 				zone = zone + 1
 				lon_cm = lon_cm + (6 * (pi/180))
 			}
-			if(zone == 36 & lat_band = "X" & lon < 33){
+			if(zone == 36 & lat_band == "X" & lon < 33){
 				zone = zone - 1
 				lon_cm = lon_cm - (6 * (pi/180))
 			}
-			if(zone == 36 & lat_band = "X" & lon >= 33 ){
+			if(zone == 36 & lat_band == "X" & lon >= 33 ){
 				zone = zone + 1
 				lon_cm = lon_cm + (6 * (pi/180))
 			}
@@ -58,7 +58,7 @@ gps_latlon2UTM = function(lat, lon){
 			
 		# define Parameters for WGS84 ellipsoid
 			a = 6378137
-			b = 6356752.314245,
+			b = 6356752.314245
 			f = 1/298.257223563
 			k0 = 0.9996 # UTM scale on central meridian
 			
@@ -100,7 +100,7 @@ gps_latlon2UTM = function(lat, lon){
 			}
 			eta = eta_prime
 			for(j in 1:6){
-				eta = eta + alpah[j] * cos(2*j*xi_prime) * sinh(2*j*eta_prime)
+				eta = eta + alpha[j] * cos(2*j*xi_prime) * sinh(2*j*eta_prime)
 			}
 			
 			x = k0 * A * eta
@@ -123,7 +123,7 @@ gps_latlon2UTM = function(lat, lon){
 			
 		# Scale (Karney 2011 eq 25)
 			sin_phi = sin(phi)
-			k_prime = sqrt(1 - e*e*sin_phi*sin_phi) * sqrt(1 + v_tau*v_tau) / sqrt(tau_prime * tau_prime + cos_lambda*cos_lambda)
+			k_prime = sqrt(1 - e*e*sin_phi*sin_phi) * sqrt(1 + v_tau*v_tau) / sqrt(tau_prime*tau_prime + cos_lambda*cos_lambda)
 			k_pp = A / a * sqrt(p_prime*p_prime + q_prime*q_prime)
 			
 			k = k0 * k_prime * k_pp
