@@ -140,3 +140,6 @@ gps_latlon2UTM = function(lat, lon){
 				
 		# Build output string
 			ret_obj = sprintf("%i%s% .3f% .3f",zone, lat_band, x, y)
+		# Return output string
+			return(ret_obj)
+}
