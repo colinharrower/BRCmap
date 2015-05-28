@@ -35,7 +35,7 @@ function(gridref, zone = 30, zdl = "U", spos = TRUE){
 		# Modify E0 and N0 to get E and N
 			E = E0 * 100000 + as.numeric(east_num) * 10^(5-d_len)
 			N = N0 * 100000 + as.numeric(north_num) * 10^(5-d_len)
-		# If spos is TRUE and ZDL <= N then grid in Southern Hemisphere and Northing to be corrected to be possitive (by ading 10 Million)
+		# If spos is TRUE and ZDL <= N then grid in Southern Hemisphere and Northing to be corrected to be positive (by adding 10 Million)
 			if(spos & which(zdl_chr == zdl) <= 11){
 				N = N + 10000000
 			}
