@@ -2,9 +2,11 @@
 # This script is provided on moveable type website (http://www.movable-type.co.uk/scripts/latlong-utm-mgrs.html) under MIT licence for
 # free use and adaptation.
 # It is Based on Karney 2011 ‘Transverse Mercator with an accuracy of a few nanometers’, building on 
-# Krüger 1912 ‘Konforme Abbildung des Erdellipsoids in der Ebene’.          
+# Krüger 1912 ‘Konforme Abbildung des Erdellipsoids in der Ebene’.     
+
+# Also used webpage by Steven Dutch (http://www.uwgb.edu/dutchs/usefuldata/utmformulas.htm) to aid with checking code
  
-gps_latlon2UTM = function(lat, lon){
+gps_latlon2utm = function(lat, lon){
 	if(! lat >= -80 & lat <= 84){
 		stop("Supplied value outside of UTM limits")
 	}
@@ -14,7 +16,7 @@ gps_latlon2UTM = function(lat, lon){
 	# Determine the UTM zone
 		zone = floor((lon + 180)/6) + 1
 	# Determine the longitude of central meridian
-		lon_cm = ( ((zone - 1)*6) - 180 + 3 ) * (pi/180)
+		lon_cm = ((zone - 1)*6 - 180 + 3) * (pi/180)
 	# Determine MGRS lat grid
 		# Grid zones are 8 degrees tall; 0 degrees north is offset 10 into latitude bands array
 			# Define MGRS latitude bands
@@ -51,9 +53,9 @@ gps_latlon2UTM = function(lat, lon){
 				lon_cm = lon_cm + (6 * (pi/180))
 			}
 			
-		# Latitude from equator
+		# Latitude from equator (radians)
 			phi = lat * (pi/180)
-		# Longitude from central meridian
+		# Longitude from central meridian (radians)
 			lambda = (lon * (pi/180)) - lon_cm
 			
 		# define Parameters for WGS84 ellipsoid
@@ -76,15 +78,17 @@ gps_latlon2UTM = function(lat, lon){
 			cos_lambda = cos(lambda)
 			sin_lambda = sin(lambda)
 			tan_lambda = tan(lambda)
-}		# Tau
-			v_tau = tan(phi)
-			sigma = sinh(e*atanh((e*v_tau)/sqrt(1+v_tau*v_tau)))
+		# Tau
+			v_tau = tan(phi) # equation 8
+			sigma = sinh(e*atanh((e*v_tau)/sqrt(1+v_tau^2)))  # equation 9
 			
-			tau_prime = v_tau * sqrt(1+sigma*sigma) - sigma*sqrt(1+v_tau*v_tau)
-			xi_prime = atan2(tau_prime, cos_lambda)
-			eta_prime = asinh(sin_lambda / sqrt(tau_prime*tau_prime + cos_lambda*cos_lambda))
+			tau_prime = v_tau * sqrt(1+sigma^2) - sigma*sqrt(1+v_tau^2) # equation 7
 			
-			A = a/(1+n) * (1 + 1/4*n2 + 1/64*n4 + 1/256*n6) # 2piA is the circumference of a meridian
+			xi_prime = atan2(tau_prime, cos_lambda) # Equation 10a
+			eta_prime = asinh(sin_lambda / sqrt(tau_prime^2 + cos_lambda^2)) # Equation 10b
+			
+			A = ( a/(1+n) ) * (1 + 1/4*n2 + 1/64*n4 + 1/256*n6) # 2piA is the circumference of a meridian - equation 14
+			
 			alpha = c(
 				0,
 				1/2*n - 2/3*n2 + 5/16*n3 + 41/180*n4 - 127/288*n5 + 7891/37800*n6,
@@ -93,40 +97,54 @@ gps_latlon2UTM = function(lat, lon){
 				49561/161280*n4 - 179/168*n5 + 6601661/7257600*n6,
 				34729/80640*n5 - 3418889/1995840*n6,
 				212378941/319334400*n6
-			)
-			xi = xi_prime
-			for(j in 1:6){
-				xi = xi + alpha[j] * sin(2*j*xi_prime) * cosh(2*j*eta_prime)
-			}
-			eta = eta_prime
-			for(j in 1:6){
-				eta = eta + alpha[j] * cos(2*j*xi_prime) * sinh(2*j*eta_prime)
-			}
+			) # Equation 12
+			j = 0:(length(alpha)-1)
 			
-			x = k0 * A * eta
-			y = k0 * A * xi
+			# Commenting out below section to try formula 11a from paper
+			#xi = xi_prime
+			#for(j in 2:7){
+			#	xi = xi + alpha[j] * sin(2*j*xi_prime) * cosh(2*j*eta_prime)
+			#}
+			
+			xi  = xi_prime + sum(alpha * sin(2*j*xi_prime)*cosh(2*j*eta_prime)) # equation 11a
+			
+			# Commenting out below section to try formula 11b 
+			#eta = eta_prime
+			#for(j in 2:7){
+			#	eta = eta + alpha[j] * cos(2*j*xi_prime) * sinh(2*j*eta_prime)
+			#}
+			
+			eta = eta_prime + sum(alpha*cos(2*j*xi_prime)*sinh(2*j*eta_prime)) # equation 11b
+			
+			x = k0 * A * eta # equation 13a
+			y = k0 * A * xi # equation 13b
 		
 		# Convergence (Karney 2011 eq 23, 24)
-			p_prime = 1
-			for(j in 1:6){
-				p_prime = p_prime + 2*j*alpha[j] * cos(2*j*xi_prime) * cosh(2*j*eta_prime)
-			}
-			q_prime = 0
-			for(j in 1:6){
-				q_prime = q_prime + 2*j*alpha[j] * sin(2*j*xi_prime) * sinh(2*j*eta_prime)
-			}
+			#p_prime = 1
+			#for(j in 2:7){
+			#	p_prime = p_prime + 2*j*alpha[j] * cos(2*j*xi_prime) * cosh(2*j*eta_prime)
+			#}
 			
-			nu_prime = atan(tau_prime / sqrt(1 + tau_prime*tau_prime) * tan_lambda)
-			nu_pp = atan2(q_prime,p_prime)
+			p_prime = 1 + sum(2*j*alpha*cos(2*j*xi_prime)*cosh(2*j*eta_prime)) # equation 23 a
 			
-			nu = nu_prime + nu_pp
+			#q_prime = 0
+			#for(j in 2:7){
+			#	q_prime = q_prime + 2*j*alpha[j] * sin(2*j*xi_prime) * sinh(2*j*eta_prime)
+			#}
+			
+			q_prime = sum(2*j*alpha*sin(2*j*xi_prime)*sinh(2*j*eta_prime)) # equation 23 b
+			
+			nu_prime = atan( (tau_prime / sqrt(1 + tau_prime^2)) * tan_lambda) # equation 24a
+			nu_pp = atan2(q_prime,p_prime) # equation 24b
+			
+			nu = nu_prime + nu_pp # equation 24
 			
 		# Scale (Karney 2011 eq 25)
 			sin_phi = sin(phi)
-			k_prime = sqrt(1 - e*e*sin_phi*sin_phi) * sqrt(1 + v_tau*v_tau) / sqrt(tau_prime*tau_prime + cos_lambda*cos_lambda)
-			k_pp = A / a * sqrt(p_prime*p_prime + q_prime*q_prime)
+			k_prime = sqrt(1 - e^2*sin(phi)^2) * sqrt(1 + v_tau^2) / sqrt(tau_prime^2 + cos(lambda)^2) # equation 25a
+			k_pp = (A / a) * sqrt(p_prime^2 + q_prime^2) # equation 25b
 			
-			k = k0 * k_prime * k_pp
+			k = k0 * k_prime * k_pp # equation 25
 			
 		# Shift x/y to false origins
 			x = x + false_e # Make x relative to false easting
