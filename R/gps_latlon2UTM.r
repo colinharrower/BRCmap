@@ -7,9 +7,25 @@
 # Also used webpage by Steven Dutch (http://www.uwgb.edu/dutchs/usefuldata/utmformulas.htm) to aid with checking code
  
 gps_latlon2utm = function(lat, lon){
-	if(! lat >= -80 & lat <= 84){
-		stop("Supplied value outside of UTM limits")
+	# Error checking
+	if(length(lat) != length(lon)){
+		stop("ERROR: Latitude & longitude vectors are different lengths")
 	}
+	
+	# Setup object to store output
+		ret_obj = rep(NA, length(lat))
+	
+	# Find if there are any bad lat values
+		bad_inds = which(lat < -80 | lat > 84 | lon < -180 | lon > 180)
+		if(length(bad_inds) > 0){
+			warning("One or more of the supplied latitude longitude values were outside UTM limits")
+			
+			# Remove bad values pairs from series
+				lat = lat[-bad_inds]
+				lon = lon[-bad_inds]
+		}
+		
+	# Set false easting & northing
 	false_e = 500e3
 	false_n = 10000e3
 	
@@ -24,31 +40,38 @@ gps_latlon2utm = function(lat, lon){
 			# Determine MGRS lat band for current latitude
 				lat_band = MGRS_lat_bands[floor(lat/8 + 10)+1]
 		# Deal with Norway/Svalbard exceptions
-			if(zone == 31 & lat_band == "V" & lon >= 3){
+			inds = which(zone == 31 & lat_band == "V" & lon >= 3)
+			if(length(inds) > 0){
 				zone = zone + 1
 				lon_cm = lon_cm + (6 * (pi/180))
 			}
-			if(zone == 32 & lat_band == "X" & lon < 9){
+			inds = which(zone == 32 & lat_band == "X" & lon < 9)
+			if(length(inds) > 0){
 				zone = zone - 1
 				lon_cm = lon_cm - (6 * (pi/180))
 			}
-			if(zone == 32 & lat_band == "X" & lon >= 9){
+			inds = which(zone == 32 & lat_band == "X" & lon >= 9)
+			if(length(inds) > 0){
 				zone = zone + 1
 				lon_cm = lon_cm + (6 * (pi/180))
 			}
-			if(zone == 34 & lat_band == "X" & lon < 21){
+			inds = which(zone == 34 & lat_band == "X" & lon < 21)
+			if(length(inds) > 0){
 				zone = zone - 1
 				lon_cm = lon_cm - (6 * (pi/180))
 			}
-			if(zone == 34 & lat_band == "X" & lon >= 21){
+			inds = which(zone == 34 & lat_band == "X" & lon >= 21)
+			if(length(inds) > 0){
 				zone = zone + 1
 				lon_cm = lon_cm + (6 * (pi/180))
 			}
-			if(zone == 36 & lat_band == "X" & lon < 33){
+			inds = which(zone == 36 & lat_band == "X" & lon < 33)
+			if(length(inds) > 0){
 				zone = zone - 1
 				lon_cm = lon_cm - (6 * (pi/180))
 			}
-			if(zone == 36 & lat_band == "X" & lon >= 33 ){
+			inds = which(zone == 36 & lat_band == "X" & lon >= 33)
+			if(length(inds) > 0){
 				zone = zone + 1
 				lon_cm = lon_cm + (6 * (pi/180))
 			}
@@ -100,21 +123,19 @@ gps_latlon2utm = function(lat, lon){
 			) # Equation 12
 			j = 0:(length(alpha)-1)
 			
-			# Commenting out below section to try formula 11a from paper
-			#xi = xi_prime
-			#for(j in 2:7){
-			#	xi = xi + alpha[j] * sin(2*j*xi_prime) * cosh(2*j*eta_prime)
-			#}
 			
-			xi  = xi_prime + sum(alpha * sin(2*j*xi_prime)*cosh(2*j*eta_prime)) # equation 11a
+			n_lats = length(lat) # Determine number of latitude values
+			n_alph = length(alpha)
 			
-			# Commenting out below section to try formula 11b 
-			#eta = eta_prime
-			#for(j in 2:7){
-			#	eta = eta + alpha[j] * cos(2*j*xi_prime) * sinh(2*j*eta_prime)
-			#}
+			# When working with a vector of lat lon values need to repeat alpha and j by number of lat_lon values and then repeat each lat, lon pair 7 times (n_alph) so that the form vectors of the same length and correctly perform all 7 sub calculations for each lat lon which are then summed for each lat lon
+			xi = xi_prime + rowSums(matrix(rep(alpha,n_lats) * sin(2*rep(j,n_lats)*rep(xi_prime,each = n_alph)) * cosh(2*rep(j,n_lats)*rep(eta_prime,each = n_alph)), nrow = n_lats, ncol = n_alph, byrow = TRUE)) # Vectorised form of equation 11 a
 			
-			eta = eta_prime + sum(alpha*cos(2*j*xi_prime)*sinh(2*j*eta_prime)) # equation 11b
+			#xi  = xi_prime + sum(alpha * sin(2*j*xi_prime)*cosh(2*j*eta_prime)) # equation 11a NOTE original unvectorised version
+			
+			
+			eta = eta_prime + rowSums(matrix(rep(alpha,n_lats) * cos(2*rep(j,n_lats)*rep(xi_prime,each = n_alph)) * sinh(2*rep(j,n_lats)*rep(eta_prime,each = n_alph)), nrow = n_lats, ncol = n_alph, byrow = TRUE)) # Vectorised form of equation 11 b
+			
+			#eta = eta_prime + sum(alpha*cos(2*j*xi_prime)*sinh(2*j*eta_prime)) # equation 11b NOTE original un-vectorised version
 			
 			x = k0 * A * eta # equation 13a
 			y = k0 * A * xi # equation 13b
@@ -125,14 +146,18 @@ gps_latlon2utm = function(lat, lon){
 			#	p_prime = p_prime + 2*j*alpha[j] * cos(2*j*xi_prime) * cosh(2*j*eta_prime)
 			#}
 			
-			p_prime = 1 + sum(2*j*alpha*cos(2*j*xi_prime)*cosh(2*j*eta_prime)) # equation 23 a
+			# Vectorised version of equation 23 a (see explanation above xi)
+			p_prime = 1 + rowSums(matrix(2*rep(j,n_lats)*rep(alpha,n_lats)*cos(2*rep(j,n_lats)*rep(xi_prime,each = n_alph))*cosh(2*rep(j,n_lats)*rep(eta_prime,each = n_alph)), nrow = n_lats, ncol = n_alph, byrow = TRUE))
+			#p_prime = 1 + sum(2*j*alpha*cos(2*j*xi_prime)*cosh(2*j*eta_prime)) # equation 23 a NOTE original un-vectorised version
 			
 			#q_prime = 0
 			#for(j in 2:7){
 			#	q_prime = q_prime + 2*j*alpha[j] * sin(2*j*xi_prime) * sinh(2*j*eta_prime)
 			#}
 			
-			q_prime = sum(2*j*alpha*sin(2*j*xi_prime)*sinh(2*j*eta_prime)) # equation 23 b
+			# Vectorised version of equation 23b
+			q_prime = rowSums(matrix(2*rep(j,n_lats)*rep(alpha,n_lats)*sin(2*rep(j,n_lats)*rep(xi_prime,each = n_alph))*sinh(2*rep(j,n_lats)*rep(eta_prime,each = n_alph)), nrow = n_lats, ncol = n_alph, byrow = TRUE))
+			#q_prime = sum(2*j*alpha*sin(2*j*xi_prime)*sinh(2*j*eta_prime)) # equation 23 b NOTE original unvectorised version
 			
 			nu_prime = atan( (tau_prime / sqrt(1 + tau_prime^2)) * tan_lambda) # equation 24a
 			nu_pp = atan2(q_prime,p_prime) # equation 24b
@@ -148,8 +173,9 @@ gps_latlon2utm = function(lat, lon){
 			
 		# Shift x/y to false origins
 			x = x + false_e # Make x relative to false easting
-			if(y < 0){
-				y = y + false_n # Make y in southern hemisphere relative to false northing
+			inds = which(y < 0)
+			if(length(inds) > 0){
+				y[inds] = y[inds] + false_n # Make y in southern hemisphere relative to false northing
 			}
 			
 			# Convert to character, round to reasonable precision and pad to have 5 digits prior to decimal point
@@ -157,7 +183,12 @@ gps_latlon2utm = function(lat, lon){
 				#y = sprintf("%5.0f",y)
 				
 		# Build output string
-			ret_obj = sprintf("%i%s% .3f% .3f",zone, lat_band, x, y)
+			utm_str = sprintf("%i%s% .3f% .3f",zone, lat_band, x, y)
+			if(length(bad_inds) > 0){
+				ret_obj[-bad_inds] = utm_str
+			} else {
+				ret_obj = utm_str
+			}
 		# Return output string
 			return(ret_obj)
 }
