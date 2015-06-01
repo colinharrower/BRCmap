@@ -13,19 +13,22 @@ utm2mgrs = function(utm_str, output_type = "full_gr"){
 		lets_n100km = c(LETTERS[-c(9,15, 23:26)], LETTERS[c(6:8,10:14,16:22,1:5)])
 	
 	# Check UTM string matches expected pattern
-	bad_inds = which(!grepl("^([[:digit:]]{1,2})[ ]?([[:alpha:]]{1})[ ]?([[:digit:]]*([.][[:digit:]]*)?)[ ,]{1,2}(([[:digit:]]*([.][[:digit:]]*)?))$",utm_str))
-	if(length(bad_inds) > 0){
+	good_inds = which(grepl("^([[:digit:]]{1,2})[ ]?([[:alpha:]]{1})[ ]?([[:digit:]]*([.][[:digit:]]*)?)[ ,]{1,2}(([[:digit:]]*([.][[:digit:]]*)?))$",utm_str))
+	if(length(good_inds) == 0){
+		stop("None of the supplied strings were recognised as UTM coordinates")
+	} else if(length(good_inds) != length(utm_str)){
 		warning("One or more of the supplied strings were not recognised as UTM coordinates")
+		utm_str = utm_str[good_inds]
 	}
 
 	# Split UTM str into components
-		zone[-bad_inds] = gsub("^([[:digit:]]{1,2})[ ]?([[:alpha:]]{1})[ ]?([[:digit:]]*([.][[:digit:]]*)?)[ ,]{1,2}(([[:digit:]]*([.][[:digit:]]*)?))$","\\1", utm_str[-bad_inds])
-		band[-bad_inds] = gsub("^([[:digit:]]{1,2})[ ]?([[:alpha:]]{1})[ ]?([[:digit:]]*([.][[:digit:]]*)?)[ ,]{1,2}(([[:digit:]]*([.][[:digit:]]*)?))$","\\2", utm_str[-bad_inds])
-		easting[-bad_inds] = gsub("^([[:digit:]]{1,2})[ ]?([[:alpha:]]{1})[ ]?([[:digit:]]*([.][[:digit:]]*)?)[ ,]{1,2}(([[:digit:]]*([.][[:digit:]]*)?))$","\\3", utm_str[-bad_inds])
-		northing[-bad_inds] = gsub("^([[:digit:]]{1,2})[ ]?([[:alpha:]]{1})[ ]?([[:digit:]]*([.][[:digit:]]*)?)[ ,]{1,2}(([[:digit:]]*([.][[:digit:]]*)?))$","\\5", utm_str[-bad_inds])
+		zone[good_inds] = gsub("^([[:digit:]]{1,2})[ ]?([[:alpha:]]{1})[ ]?([[:digit:]]*([.][[:digit:]]*)?)[ ,]{1,2}(([[:digit:]]*([.][[:digit:]]*)?))$","\\1", utm_str[good_inds])
+		band[good_inds] = gsub("^([[:digit:]]{1,2})[ ]?([[:alpha:]]{1})[ ]?([[:digit:]]*([.][[:digit:]]*)?)[ ,]{1,2}(([[:digit:]]*([.][[:digit:]]*)?))$","\\2", utm_str[good_inds])
+		easting[good_inds] = gsub("^([[:digit:]]{1,2})[ ]?([[:alpha:]]{1})[ ]?([[:digit:]]*([.][[:digit:]]*)?)[ ,]{1,2}(([[:digit:]]*([.][[:digit:]]*)?))$","\\3", utm_str[good_inds])
+		northing[good_inds] = gsub("^([[:digit:]]{1,2})[ ]?([[:alpha:]]{1})[ ]?([[:digit:]]*([.][[:digit:]]*)?)[ ,]{1,2}(([[:digit:]]*([.][[:digit:]]*)?))$","\\5", utm_str[good_inds])
 		
 		# Determine decimal precision of easting & northing values
-			no_dec[-bad_inds] = pmax(nchar(gsub("^([[:digit:]]+)([.]([[:digit:]]*))?$", "\\3", easting[-bad_inds])), nchar(gsub("^([[:digit:]]+)([.]([[:digit:]]*))?$", "\\3", northing[-bad_inds])))	
+			no_dec[good_inds] = pmax(nchar(gsub("^([[:digit:]]+)([.]([[:digit:]]*))?$", "\\3", easting[good_inds])), nchar(gsub("^([[:digit:]]+)([.]([[:digit:]]*))?$", "\\3", northing[good_inds])))	
 	
 	# Converting easting & northing to numeric vector
 		easting = as.numeric(easting)
@@ -44,13 +47,19 @@ utm2mgrs = function(utm_str, output_type = "full_gr"){
 	# Create output string
 	if(tolower(output_type) == "full_gr"){
 		ret_obj = sprintf("%s%s%s%s%05.0f%05.0f",zone,band,l_e,l_n,floor(east_100km),floor(north_100km))
-		ret_obj[bad_inds] = NA
+		if(length(good_inds) < length(zone)){
+			ret_obj[-good_inds] = NA
+		}
 	} else if(tolower(output_type) == "split_gr"){
 		ret_obj = data.frame(GZD = paste(zone,band,sep=""), GRIDREF = sprintf("%s%s%05.0f%05.0f",l_e,l_n,floor(east_100km),floor(north_100km)))
-		ret_obj[bad_inds,] = c(NA,NA)
+		if(length(good_inds) < length(zone)){
+			ret_obj[-good_inds,] = c(NA,NA)
+		}
 	} else if(tolower(output_type) == "atomised"){
 		ret_obj = data.frame(ZONE = zone, BAND = band, SQ100KM_ID = paste(l_e,l_n, sep=""), EASTING = round(east_100km,no_dec), NORTHING = round(north_100km, no_dec))
-		ret_obj$SQ100KM_ID[bad_inds] = NA
+		if(length(good_inds) < length(zone)){
+			ret_obj$SQ100KM_ID[-good_inds] = NA
+		}
 	} else {
 		stop("Unknown output type: valid options are 'full_gr', 'split_gr', or 'atomised'")
 	}
