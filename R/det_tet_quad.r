@@ -66,14 +66,26 @@ det_tet_quad <- function(
 			tet_codes = LETTERS[-15]
 		# Get tetrad code for each gridref of suitable precision
 			tets = tet_codes[(code_e%/%2)*5 + (code_n%/%2)+1]
-			out_obj[gr_inds,"TETRAD_GR"] = paste(sq10[gr_inds],tets, sep="")
+			out_obj[gr_inds,"TETRAD_GR"] = paste0(sq10[gr_inds],tets)
+			
+		# Find cases where a MGRS zone was present and out_obj$TETRAD_GR is not null
+			inds = which(!is.na(gr_comps$ZONE) & !is.na(out_obj$TETRAD_GR))
+			if(length(inds) > 0){
+				out_obj$TETRAD_GR[inds] = paste0(gr_comps$ZONE[inds],out_obj$TETRAD_GR[inds])
+			}
 		
 	# Determine quadrant codes from easting and northing digits
 		# Build vector of quadrant codes (in correct order)
 			quad_codes = c("SW","NW","SE","NE")
 		# Get tetrad code for each gridref of suitable precision
 			quads = quad_codes[(code_e%/%5)*2 + (code_n%/%5)+1]
-			out_obj[gr_inds,"QUADRANT_GR"] = paste(sq10[gr_inds],quads, sep="")
+			out_obj[gr_inds,"QUADRANT_GR"] = paste0(sq10[gr_inds],quads)
+			
+		# Find cases where a MGRS zone was present and out_obj$QUADRANT_GR is not null
+			inds = which(!is.na(gr_comps$ZONE) & !is.na(out_obj$QUADRANT_GR))
+			if(length(inds) > 0){
+				out_obj$QUADRANT_GR[inds] = paste0(gr_comps$ZONE[inds],out_obj$QUADRANT_GR[inds])
+			}
 			
 	} 
 	

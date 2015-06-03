@@ -28,8 +28,16 @@ reformat_gr <- function(
 				north_digit = substr(gr_comps$DIGITS_NORTH[i_ref], 1, dig_req)
 			
 			# Combine new components to create grid ref of required precision and insert inot gr_out
-				gr_out[i_ref] = paste(gr_comps$CHARS[i_ref],east_digit, north_digit, sep="")
+				gr_out[i_ref] = paste0(gr_comps$CHARS[i_ref],east_digit, north_digit)
 		}
+		
+		# Find cases where a MGRS zone was present and gr_out is not null
+			inds = which(!is.na(gr_comps$ZONE) & !is.na(gr_out))
+			if(length(inds) > 0){
+				gr_out[inds] = paste0(gr_comps$ZONE[inds],gr_out[inds])
+			}
+		
+		# Determine which 
 	} else if (prec_out %in% c(2000,5000)){
 		# Use det_tet_quad to reformat_gr
 		gr_out = det_tet_quad(gridref, precision =precision,  prec_out = prec_out)
