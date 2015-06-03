@@ -8,13 +8,12 @@ det_gr_precision <- function(
 		prec_out = rep(NA,length(gridref))
 	
 	# Find valid gridrefs
-		v_inds = which(grepl("(^[[:upper:]]{1,2}[[:digit:]]{2}([[:upper:]]?|[[:upper:]]{2})$)|(^[[:upper:]]{1,2}[[:digit:]]{2,}$)", gridref) & nchar(gsub("^(([[:upper:]]{1,2})([[:digit:]]{2,}))(([[:upper:]]?)|([[:upper:]]{2}))$", "\\3", gridref)) %% 2 == 0)
+		v_inds = which(grepl("^([[:digit:]]{1,2}[[:upper:]]{1})?[[:upper:]]{1,2}[[:digit:]]{2,}([[:upper:]]?|[[:upper:]]{2})?$", gridref) & nchar(gsub("^([[:digit:]]{1,2}[[:upper:]]{1})?([[:upper:]]{1,2})([[:digit:]]{2,})([[:upper:]]?|[[:upper:]]{2})?$", "\\3", gridref)) %% 2 == 0)
 		
-	# Split into components
-		gr_char = gsub("^(([[:upper:]]{1,2})([[:digit:]]{2,}))(([[:upper:]]?)|([[:upper:]]{2}))$", "\\2", gridref[v_inds])
-		gr_digits = gsub("^(([[:upper:]]{1,2})([[:digit:]]{2,}))(([[:upper:]]?)|([[:upper:]]{2}))$", "\\3", gridref[v_inds])
-		gr_tet = gsub("^(([[:upper:]]{1,2})([[:digit:]]{2,}))(([[:upper:]]?)|([[:upper:]]{2}))$", "\\5", gridref[v_inds])
-		gr_quad = gsub("^(([[:upper:]]{1,2})([[:digit:]]{2,}))(([[:upper:]]?)|([[:upper:]]{2}))$", "\\6", gridref[v_inds])
+	# Split into required components
+		gr_digits = gsub("^([[:digit:]]{1,2}[[:upper:]]{1})?([[:upper:]]{1,2})([[:digit:]]{2,})(([[:upper:]]{1})|([[:upper:]]{2}))?", "\\3", gridref[v_inds])
+		gr_tet = gsub("^([[:digit:]]{1,2}[[:upper:]]{1})?([[:upper:]]{1,2})([[:digit:]]{2,})(([[:upper:]]{1})|([[:upper:]]{2}))?", "\\5", gridref[v_inds])
+		gr_quad = gsub("^([[:digit:]]{1,2}[[:upper:]]{1})?([[:upper:]]{1,2})([[:digit:]]{2,})(([[:upper:]]{1})|([[:upper:]]{2}))?", "\\6", gridref[v_inds])
 	
 	# Determine number of digits pairs
 		n_pairs = nchar(gr_digits)/2
