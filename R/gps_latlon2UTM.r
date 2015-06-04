@@ -42,38 +42,38 @@ gps_latlon2utm = function(lat, lon){
 		# Deal with Norway/Svalbard exceptions
 			inds = which(zone == 31 & lat_band == "V" & lon >= 3)
 			if(length(inds) > 0){
-				zone = zone + 1
-				lon_cm = lon_cm + (6 * (pi/180))
+				zone[inds] = zone[inds] + 1
+				lon_cm[inds] = lon_cm[inds] + (6 * (pi/180))
 			}
 			inds = which(zone == 32 & lat_band == "X" & lon < 9)
 			if(length(inds) > 0){
-				zone = zone - 1
-				lon_cm = lon_cm - (6 * (pi/180))
+				zone[inds] = zone[inds] - 1
+				lon_cm[inds] = lon_cm[inds] - (6 * (pi/180))
 			}
 			inds = which(zone == 32 & lat_band == "X" & lon >= 9)
 			if(length(inds) > 0){
-				zone = zone + 1
-				lon_cm = lon_cm + (6 * (pi/180))
+				zone[inds] = zone[inds] + 1
+				lon_cm[inds] = lon_cm[inds] + (6 * (pi/180))
 			}
 			inds = which(zone == 34 & lat_band == "X" & lon < 21)
 			if(length(inds) > 0){
-				zone = zone - 1
-				lon_cm = lon_cm - (6 * (pi/180))
+				zone[inds] = zone[inds] - 1
+				lon_cm[inds] = lon_cm[inds] - (6 * (pi/180))
 			}
 			inds = which(zone == 34 & lat_band == "X" & lon >= 21)
 			if(length(inds) > 0){
-				zone = zone + 1
-				lon_cm = lon_cm + (6 * (pi/180))
+				zone[inds] = zone[inds] + 1
+				lon_cm[inds] = lon_cm[inds] + (6 * (pi/180))
 			}
 			inds = which(zone == 36 & lat_band == "X" & lon < 33)
 			if(length(inds) > 0){
-				zone = zone - 1
-				lon_cm = lon_cm - (6 * (pi/180))
+				zone[inds] = zone[inds] - 1
+				lon_cm[inds] = lon_cm[inds] - (6 * (pi/180))
 			}
 			inds = which(zone == 36 & lat_band == "X" & lon >= 33)
 			if(length(inds) > 0){
-				zone = zone + 1
-				lon_cm = lon_cm + (6 * (pi/180))
+				zone[inds] = zone[inds] + 1
+				lon_cm[inds] = lon_cm[inds] + (6 * (pi/180))
 			}
 			
 		# Latitude from equator (radians)
