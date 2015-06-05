@@ -1,4 +1,4 @@
-mgrs2utm = function(mgrs, centre = TRUE){
+mgrs2utm = function(mgrs, centre = FALSE){
 	# Convert mgrs to uppercase
 		mgrs = toupper(mgrs)
 	#Define MGRS latitude bands
@@ -38,8 +38,8 @@ mgrs2utm = function(mgrs, centre = TRUE){
 		northing = as.numeric(gsub(" ","0", format(temp$DIGITS_NORTH, width = 5)))
 		
 		# Determine easting specified by e100km
-			int_e = match(l_e,lets_e100km) - ((as.numeric(zone) - 1) %% 3)*8
-			int_n = match(l_n, lets_n100km[(((as.numeric(zone) - 1) %% 2)*20+2):40])
+			int_e = match(l_e,lets_e100km) - ((as.numeric(zone[good_inds]) - 1) %% 3)*8
+			int_n = match(l_n, lets_n100km[(((as.numeric(zone[good_inds]) - 1) %% 2)*20+2):40])
 			
 		# Determine median latitude from latitude
 			med_lat = MGRS_lat_bands[band] - 1
@@ -93,12 +93,12 @@ mgrs2utm = function(mgrs, centre = TRUE){
 			
 		# If centre is true then need to also modify by 1/2 of precision to get centres
 		if(centre){
-			easting[good_inds] = easting[good_inds] + 0.5*temp$PRECISION
-			northing[good_inds] = northing[good_inds] + 0.5*temp$PRECISION
+			easting[good_inds] = easting[good_inds] + floor(0.5*temp$PRECISION)
+			northing[good_inds] = northing[good_inds] + floor(0.5*temp$PRECISION)
 		}
 		
 		# Now create utm strings
-		utm_str[good_inds] = sprintf("%s%s %i %i",zone, band, easting, northing)
+		utm_str[good_inds] = sprintf("%s%s %.0f %.0f",zone, band, easting, northing)
 		
 	# Return utm_str
 	return(utm_str)
