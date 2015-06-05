@@ -4,7 +4,7 @@
 			gridref = toupper(gridref)
 			
 		# Set up variable to store output
-			gr_comps = data.frame(GRIDREF = gridref, VALID_GR = NA, PRECISION = NA, CHARS = NA, DIGITS = NA, DIGITS_EAST = NA, DIGITS_NORTH = NA, TETRAD = NA, QUADRANT = NA, ZONE = NA)
+			gr_comps = data.frame(GRIDREF = gridref, VALID_GR = NA, PRECISION = NA, CHARS = NA, DIGITS = NA, DIGITS_EAST = NA, DIGITS_NORTH = NA, TETRAD = NA, QUADRANT = NA, ZONE = NA, BAND = NA)
 			
 		# Check values for output_col if supplied
 		if(!is.null(output_col)){	
@@ -60,7 +60,8 @@
 				}
 				
 			# Zone (for MGRS gridrefs only)
-			gr_comps[v_inds, "ZONE"] = gsub("^$",NA, gsub("^(([[:digit:]]{1,2}[[:upper:]]{1})?(([[:upper:]]{1,2})([[:digit:]]{2,})))(([[:upper:]]?)|([[:upper:]]{2}))?$", "\\2", gr_comps$VALID_GR[v_inds])) # First gsub used to replace blank strings (i.e. where no zone found in str) with NA values
+			gr_comps[v_inds, "ZONE"] = gsub("^$",NA, gsub("^((([[:digit:]]{1,2})([[:upper:]]{1}))?(([[:upper:]]{1,2})([[:digit:]]{2,})))(([[:upper:]]?)|([[:upper:]]{2}))?$", "\\3", gr_comps$VALID_GR[v_inds])) # First gsub used to replace blank strings (i.e. where no zone found in str) with NA values
+			gr_comps[v_inds, "BAND"] = gsub("^$",NA, gsub("^((([[:digit:]]{1,2})([[:upper:]]{1}))?(([[:upper:]]{1,2})([[:digit:]]{2,})))(([[:upper:]]?)|([[:upper:]]{2}))?$", "\\4", gr_comps$VALID_GR[v_inds])) # First gsub used to replace blank strings (i.e. where no zone found in str) with NA values
 		}	
 
 		
