@@ -77,7 +77,7 @@ function(gridref, centre = FALSE, gr_prec = NULL, return_projection = FALSE){
 		if(length(cty_inds) > 0){
 			# Determine initial easting/northing based on letters
 				e = rep(5, length(cty_inds))
-				n = ifelse(grepl('^(WA)[[:digit:]]{2,}$',gr_comps$VALID_GR[cty_inds]),55,54)
+				n = ifelse(grepl('^(WA)[[:digit:]]{2,}([[:upper:]]{1,2})?$',gr_comps$VALID_GR[cty_inds]),55,54)
 			# Extend so easting and northing digits so that nchars of east_num/north_num = 5 right padded with zeros
 				east_num = gsub(" ","0", format(gr_comps$DIGITS_EAST[cty_inds], width = 5))
 				north_num = gsub(" ","0", format(gr_comps$DIGITS_NORTH[cty_inds], width = 5))
