@@ -1,5 +1,10 @@
-utm2gps_latlon = function(utm_str){
-
+utm2gps_latlon = function(utm_str, precision = NULL){
+	# Check that if precision supplied then it is a single value or the same length as utm_str
+	if(!is.null(precision)){
+		if(length(precision) != 1 & length(precision) != length(utm_str)){
+			stop("incorrect precision length, precision need to be a single value or a vector of the same length as utm_str")
+		}
+	}
 	# Set false easting & northing
 		false_e = 500e3
 		false_n = 10000e3
@@ -141,11 +146,26 @@ utm2gps_latlon = function(utm_str){
 		# Offset for current zone
 			lambda0 = ((as.numeric(zone) - 1)*6 - 180 + 3) * (pi/180)
 		# Adjust lambda to be relative to global system from zone
-			lambda = lambda + lambda0 
+			lambda = lambda + lambda0
+			
+	# If precision is null then we assume all full 1m precision or finer (based on no of decimal places on easting & northing values)
+		# Define list of precisions given by lat lon values with increasing number of decimal places (from 0 dp to 12 dp) 
+			prec_list = 100000/10^(0:12) 
+		if(is.null(precision)){
+			# Assuming all utm give easting & northing in metres, modify precision for any where easting/northing had decimal places
+			precision = 1/10^no_dec
+		} else {
+			# Modify supplied precision by no_dec if any decimal values found (should generally be both supplied)
+				precision = precision/10^no_dec
+			
+		}
+	
+		# Determine number of decimal places to which lat lon values should be rounded
+			r_dig = match(precision, prec_list)
 			
 	# Round to reasonable precision
-		lat[good_inds] = round(phi * (180/pi), 11)
-		lon[good_inds] = round(lambda * (180/pi), 11)
+		lat[good_inds] = round(phi * (180/pi), r_dig)
+		lon[good_inds] = round(lambda * (180/pi), r_dig)
 		conv[good_inds] = round(nu * (180/pi), 9)
 		v_scale[good_inds] = round(k,12)
 	
