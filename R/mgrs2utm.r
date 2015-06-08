@@ -1,4 +1,4 @@
-mgrs2utm = function(mgrs, centre = FALSE){
+mgrs2utm = function(mgrs, centre = FALSE, return_precision = FALSE){
 	# Convert mgrs to uppercase
 		mgrs = toupper(mgrs)
 	#Define MGRS latitude bands
@@ -6,7 +6,8 @@ mgrs2utm = function(mgrs, centre = FALSE){
 		names(MGRS_lat_bands) = c("C","D","E","F","G","H","J","K","L","M","N","P","Q","R","S","T","U","V","W","X")
 	# Define letters for e100km & n100km
 		lets_e100km = LETTERS[-c(9,15)]
-		lets_n100km = c(LETTERS[-c(9,15, 23:26)], LETTERS[c(6:8,10:14,16:22,1:5)])
+		lets_n100km_odd = LETTERS[-c(9,15, 23:26)]
+		lets_n100km_even = LETTERS[c(6:8,10:14,16:22,1:5)]
 		
 	# Setup variables to hold components
 		zone = rep(NA, length(mgrs))
@@ -30,7 +31,7 @@ mgrs2utm = function(mgrs, centre = FALSE){
 
 	# Split MGRS grid ref into components
 		temp = gr_components(mgrs[good_inds])
-		zone[good_inds] = temp$ZONE
+		zone[good_inds] = as.numeric(temp$ZONE)
 		band[good_inds] = temp$BAND
 		l_e = substr(temp$CHARS,1,1)
 		l_n = substr(temp$CHARS,2,2)
@@ -38,8 +39,19 @@ mgrs2utm = function(mgrs, centre = FALSE){
 		northing = as.numeric(gsub(" ","0", format(temp$DIGITS_NORTH, width = 5)))
 		
 		# Determine easting specified by e100km
-			int_e = match(l_e,lets_e100km) - ((as.numeric(zone[good_inds]) - 1) %% 3)*8
-			int_n = match(l_n, lets_n100km[(((as.numeric(zone[good_inds]) - 1) %% 2)*20+2):40])
+			int_e = match(l_e,lets_e100km) - ((zone[good_inds] - 1) %% 3)*8
+		# Determine northing specified by n100km
+			int_n = rep(NA, length(good_inds))
+			# If zone is odd then use lets starting at A else use lets starting at F
+			inds = which(zone[good_inds] %% 2 == 0)
+			if(length(inds) > 0){
+				int_n[inds] = match(l_n, lets_n100km_even)-1
+			}
+			inds = which(zone[good_inds] %% 2 != 0)
+			if(length(inds) > 0){
+				int_n[inds] = match(l_n, lets_n100km_odd)-1
+			}
+			#int_n = match(l_n, lets_n100km[(((as.numeric(zone[good_inds]) - 1) %% 2)*2+2):40])
 			
 		# Determine median latitude from latitude
 			med_lat = MGRS_lat_bands[band] - 1
@@ -98,8 +110,16 @@ mgrs2utm = function(mgrs, centre = FALSE){
 		}
 		
 		# Now create utm strings
-		utm_str[good_inds] = sprintf("%s%s %.0f %.0f",zone, band, easting, northing)
+			utm_str[good_inds] = sprintf("%i%s %.0f %.0f",zone, band, easting, northing)
+		
+		# Add precision if return_precision == TRUE
+		if(return_precision){
+			precision[good_inds] = temp$PRECISION
+			ret_obj = data.frame(UTM = utm_str, PRECISION = precision)
+		} else {
+			ret_obj = utm_str
+		}
 		
 	# Return utm_str
-	return(utm_str)
+	return(ret_obj)
 }
