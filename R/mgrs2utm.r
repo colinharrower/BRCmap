@@ -45,11 +45,11 @@ mgrs2utm = function(mgrs, centre = FALSE, return_precision = FALSE){
 			# If zone is odd then use lets starting at A else use lets starting at F
 			inds = which(zone[good_inds] %% 2 == 0)
 			if(length(inds) > 0){
-				int_n[inds] = match(l_n, lets_n100km_even)-1
+				int_n[inds] = match(l_n[inds], lets_n100km_even)-1
 			}
 			inds = which(zone[good_inds] %% 2 != 0)
 			if(length(inds) > 0){
-				int_n[inds] = match(l_n, lets_n100km_odd)-1
+				int_n[inds] = match(l_n[inds], lets_n100km_odd)-1
 			}
 			#int_n = match(l_n, lets_n100km[(((as.numeric(zone[good_inds]) - 1) %% 2)*2+2):40])
 			
@@ -102,6 +102,12 @@ mgrs2utm = function(mgrs, centre = FALSE, return_precision = FALSE){
 		# Now bring all the parts together to figure out UTM northing & eastings
 			easting[good_inds] = int_e * 1e5 + easting
 			northing[good_inds] = int_n * 1e5 + northing
+		
+		# Grid references in the Sourthern Hemisphere will need the northing modified to be relative to a false northing
+			inds = which(MGRS_lat_bands[band] < 11)
+			if(length(inds) > 0){
+				northing[inds] = northing[inds] + 10000000
+			}
 			
 		# If centre is true then need to also modify by 1/2 of precision to get centres
 		if(centre){
