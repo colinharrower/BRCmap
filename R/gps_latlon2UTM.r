@@ -6,14 +6,18 @@
 
 # Also used webpage by Steven Dutch (http://www.uwgb.edu/dutchs/usefuldata/utmformulas.htm) to aid with checking code
  
-gps_latlon2utm = function(lat, lon){
+gps_latlon2utm = function(lat, lon, to_metre = FALSE, out_string = TRUE){
 	# Error checking
 	if(length(lat) != length(lon)){
 		stop("ERROR: Latitude & longitude vectors are different lengths")
 	}
 	
 	# Setup object to store output
+	if(out_string){
 		ret_obj = rep(NA, length(lat))
+	} else {
+		ret_obj = data.frame(ZONE = rep(NA, length(lat)), HEMISPHERE = NA, BAND = NA, EASTING = NA, NORTHING = NA)
+	}
 	
 	# Find if there are any bad lat values
 		bad_inds = which(lat < -80 | lat > 84 | lon < -180 | lon > 180)
@@ -178,16 +182,30 @@ gps_latlon2utm = function(lat, lon){
 				y[inds] = y[inds] + false_n # Make y in southern hemisphere relative to false northing
 			}
 			
-			# Convert to character, round to reasonable precision and pad to have 5 digits prior to decimal point
-				#x = sprintf("%5.0f",x)
-				#y = sprintf("%5.0f",y)
+			# If to_metre is true then floor x & y values to integer
+			if(to_metre){
+				x = floor(x)
+				y = floor(y)
+			}
 				
 		# Build output string
-			utm_str = sprintf("%i%s% .3f% .3f",zone, lat_band, x, y)
-			if(length(bad_inds) > 0){
-				ret_obj[-bad_inds] = utm_str
+			if(to_metre){
+				utm_str = sprintf("%i%s %i %i",zone, lat_band, x, y)
 			} else {
-				ret_obj = utm_str
+				utm_str = sprintf("%i%s %.3f %.3f",zone, lat_band, x, y)
+			}
+			if(length(bad_inds) > 0){
+				if(output_str){
+					ret_obj[-bad_inds] = utm_str
+				} else {
+					ret_obj[-bad_inds,] = data.frame(ZONE = zone, HEMISPHERE = ifelse(lat >= 0, "NORTH", "SOUTH"), BAND = lat_band, EASTING = x, NORTHING = y)
+				}	
+			} else {
+				if(out_string){
+					ret_obj = utm_str
+				} else {
+					ret_obj = data.frame(ZONE = zone, HEMISPHERE = ifelse(lat >= 0, "NORTH", "SOUTH"), BAND = lat_band, EASTING = x, NORTHING = y)
+				}
 			}
 		# Return output string
 			return(ret_obj)
