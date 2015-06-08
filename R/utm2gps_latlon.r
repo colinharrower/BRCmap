@@ -155,6 +155,9 @@ utm2gps_latlon = function(utm_str, precision = NULL){
 			# Assuming all utm give easting & northing in metres, modify precision for any where easting/northing had decimal places
 			precision = 1/10^no_dec
 		} else {
+			# If any precision values are 2000 or 5000 then replace with 1000
+				inds = which(precision %in% c(2000,5000))
+				precision[inds] = 1000
 			# Modify supplied precision by no_dec if any decimal values found (should generally be both supplied)
 				precision = precision/10^no_dec
 			
