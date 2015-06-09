@@ -76,22 +76,6 @@ mgrs2utm = function(mgrs, centre = FALSE, return_precision = FALSE){
 			# Modify n100km based on final value of n2m
 			n100km = n100km + n2m
 			
-			
-		# # Determine median latitude from latitude
-			# med_lat = MGRS_lat_bands[band] - 1
-			# names(med_lat) = NULL
-			# inds = which(band == "X")
-			# if(length(inds) > 0){
-				# med_lat[inds] = 77
-			# }
-			# med_lat = -76 + (8 * med_lat)
-			
-		# # Determine approximate median northing of ZDL (100km)
-			# appN = med_lat*100/90
-		
-		# # Now modify int_n by med_lat
-			# int_n = int_n + round((appN - int_n)/20)*20
-			
 		
 		# Any mgrs with a tetrad code will need modified
 		inds = good_inds[which(!is.na(temp$TETRAD))]
@@ -127,11 +111,6 @@ mgrs2utm = function(mgrs, centre = FALSE, return_precision = FALSE){
 			easting[good_inds] = e100km + easting
 			northing[good_inds] = n100km + northing
 		
-		# Grid references in the Sourthern Hemisphere will need the northing modified to be relative to a false northing
-			#inds = which(MGRS_lat_bands[band] < 11)
-			#if(length(inds) > 0){
-			#	northing[inds] = northing[inds] + 10000000
-			#}
 			
 		# If centre is true then need to also modify by 1/2 of precision to get centres
 		if(centre){
