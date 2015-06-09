@@ -51,22 +51,46 @@ mgrs2utm = function(mgrs, centre = FALSE, return_precision = FALSE){
 			if(length(inds) > 0){
 				int_n[inds] = match(l_n[inds], lets_n100km_odd)-1
 			}
+			
 			#int_n = match(l_n, lets_n100km[(((as.numeric(zone[good_inds]) - 1) %% 2)*2+2):40])
 			
-		# Determine median latitude from latitude
-			med_lat = MGRS_lat_bands[band] - 1
-			names(med_lat) = NULL
-			inds = which(band == "X")
-			if(length(inds) > 0){
-				med_lat[inds] = 77
-			}
-			med_lat = -76 + (8 * med_lat)
+		# Determine easting & northing of 100km square
+			e100km = int_e * 1e5
+			n100km = int_n * 1e5
 			
-		# Determine approximate median northing of ZDL (100km)
-			appN = med_lat*100/90
+		# get latitude of bottom of band
+			latband = ((MGRS_lat_bands[band] - 1) - 10)*8
+			
+		# 100km grid square row letters repeat every 2000 km north, add enough 2000km blocks to get into required band
+			# Get northing for bottom of latitude band
+				#nband = gps_latlon2utm(latband, rep(0,length(latband)), out_string = FALSE)$NORTHING
+				lon_mid = -180 + (int_e *6) + 3 # Had to calculate longitude midpoint for zone and add that to the line estimating northing of bottom of the latitude band as bands not even across longitude
+				nband = gps_latlon2utm(latband, lon_mid, out_string = FALSE)$NORTHING
+			# Set intial value for northing of 2,000km blocks
+				n2m = rep(0,length(good_inds))
+			# Look for grid refs where the northing has not yet met the northing of the band
+			while(any(n2m + n100km + northing < nband)){
+				inds = which(n2m + n100km + northing < nband)
+				n2m[inds] = n2m[inds] + 2000000
+			}
+			# Modify n100km based on final value of n2m
+			n100km = n100km + n2m
+			
+			
+		# # Determine median latitude from latitude
+			# med_lat = MGRS_lat_bands[band] - 1
+			# names(med_lat) = NULL
+			# inds = which(band == "X")
+			# if(length(inds) > 0){
+				# med_lat[inds] = 77
+			# }
+			# med_lat = -76 + (8 * med_lat)
+			
+		# # Determine approximate median northing of ZDL (100km)
+			# appN = med_lat*100/90
 		
-		# Now modify int_n by med_lat
-			int_n = int_n + round((appN - int_n)/20)*20
+		# # Now modify int_n by med_lat
+			# int_n = int_n + round((appN - int_n)/20)*20
 			
 		
 		# Any mgrs with a tetrad code will need modified
@@ -100,14 +124,14 @@ mgrs2utm = function(mgrs, centre = FALSE, return_precision = FALSE){
 		
 		
 		# Now bring all the parts together to figure out UTM northing & eastings
-			easting[good_inds] = int_e * 1e5 + easting
-			northing[good_inds] = int_n * 1e5 + northing
+			easting[good_inds] = e100km + easting
+			northing[good_inds] = n100km + northing
 		
 		# Grid references in the Sourthern Hemisphere will need the northing modified to be relative to a false northing
-			inds = which(MGRS_lat_bands[band] < 11)
-			if(length(inds) > 0){
-				northing[inds] = northing[inds] + 10000000
-			}
+			#inds = which(MGRS_lat_bands[band] < 11)
+			#if(length(inds) > 0){
+			#	northing[inds] = northing[inds] + 10000000
+			#}
 			
 		# If centre is true then need to also modify by 1/2 of precision to get centres
 		if(centre){
