@@ -195,7 +195,7 @@ gps_latlon2utm = function(lat, lon, to_metre = FALSE, out_string = TRUE){
 				utm_str = sprintf("%i%s %.3f %.3f",zone, lat_band, x, y)
 			}
 			if(length(bad_inds) > 0){
-				if(output_str){
+				if(out_string){
 					ret_obj[-bad_inds] = utm_str
 				} else {
 					ret_obj[-bad_inds,] = data.frame(ZONE = zone, HEMISPHERE = ifelse(lat >= 0, "NORTH", "SOUTH"), BAND = lat_band, EASTING = x, NORTHING = y)
