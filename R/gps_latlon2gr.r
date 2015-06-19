@@ -1,4 +1,4 @@
-gps_latlon2gr = function(latitude, longitude, out_projection = "OSGB", return_type = "both"){
+gps_latlon2gr = function(latitude, longitude, out_projection = "OSGB", return_type = "gr"){
 	# Determine number of coordinates
 		n_coords = length(latitude)
 		# Check lengths are the same if not stop
@@ -35,7 +35,7 @@ gps_latlon2gr = function(latitude, longitude, out_projection = "OSGB", return_ty
 	} else if(return_type == "en"){
 		out_obj = data.frame(EASTING = out_en$EASTING, NORTHING = out_en$NORTHING, stringsAsFactors = FALSE)
 	} else if(return_type == "gr"){
-		out_obj = data.frame(GRIDREF = out_gr, stringsAsFactors = FALSE)
+		out_obj = out_gr # Return a vector rather than a 1 column data.frame
 	} else {
 		stop("ERROR - Unknown return type (valid entries are \"both\", \"en\", \"gr\")")
 	}
