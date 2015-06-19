@@ -31,7 +31,7 @@
 					gr_comps[v_inds, "DIGITS_EAST"] = substr(gr_comps$DIGITS[v_inds], 1, len_digit/2)
 					gr_comps[v_inds, "DIGITS_NORTH"] = substr(gr_comps$DIGITS[v_inds], (len_digit/2)+1, len_digit)
 				# Determine precision based on digits
-					gr_comps[v_inds,"PRECISION"] = 10^5 / 10^(len_digit[v_inds]/2)
+					gr_comps[v_inds,"PRECISION"] = 10^5 / 10^(len_digit/2)
 			# Tetrad
 			gr_comps[v_inds,"TETRAD"] = gsub("^(([[:digit:]]{1,2}[[:upper:]]{1})?(([[:upper:]]{1,2})([[:digit:]]{2})))(([[:upper:]]?)|([[:upper:]]{2}))?$", "\\7", gr_comps$VALID_GR[v_inds])
 				# Find non-valid values in gr_tet and replace with NA

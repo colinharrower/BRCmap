@@ -15,13 +15,19 @@ function(easting,northing, OSgrid = "OSGB", keep_precision = TRUE, min_10km = TR
 	if(length(OSgrid) == 1){
 		OSgrid = rep(OSgrid, length(easting))
 	}
+	
+	# Where easting | northing are NA then set OSgrid to NA
+		na_inds = which(is.na(easting) | is.na(northing))
+		if(length(na_inds) > 0){
+			OSgrid[na_inds] = NA
+		}
 
 	# Setup variable to store gridrefs
 		ret_obj = rep(NA, length(easting))
 
 	# Convert easting/northing to strings and make sure strings are at least 5 chars or if not left pad with zeros
-		easting = sprintf("%05d",easting)
-		northing = sprintf("%05d",northing)	
+		easting = sprintf("%05i",as.integer(easting))
+		northing = sprintf("%05i",as.integer(northing))
 		
 	# Extract component of easting/northing that will remain as digits
 		dig_east = substr(easting,(nchar(easting)-5)+1,nchar(easting))
