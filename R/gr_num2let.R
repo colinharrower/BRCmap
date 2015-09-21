@@ -5,10 +5,19 @@ function(easting,northing, OSgrid = "OSGB", keep_precision = TRUE, min_10km = TR
 		stop("Length of Easting & Northing Vectors do not match")
 	}
 	
-	# Check OSgrid is valid
-	inv_grid = which(!OSgrid %in% c("OSGB","OSNI","UTM30"))
+	# Check OSgrid is valid or NA
+	inv_grid = which(!OSgrid %in% c("OSGB","OSNI","UTM30",NA))
 	if(length(inv_grid) > 0){
 		stop(paste("Invalid Grid type (",OSgrid[inv_grid],")", sep=""))
+	}
+	
+	# Where OSgrid is NA then check that easting & northing are also NA
+	inv_grid = which(is.na(OSgrid) & !is.na(easting) & !is.na(northing))
+	if(length(inv_grid) > 0){
+    # Print warning to the screen and set eastings & northings to NA
+	    warning("OSgrid contained NA value(s) corresponding to non-NA easting/northing values, an NA will be returned in these cases")
+	    easting[inv_grid] = NA
+	    northing[inv_grid] = NA
 	}
 	
 	#If OSgrid is length 1 then expand to be same length as easting/northing
