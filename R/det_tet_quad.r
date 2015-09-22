@@ -121,12 +121,31 @@ det_tet_quad <- function(
 			
 	}		
 	
-	# Return output object based on prec_out value
-	if(is.null(prec_out)){
-		return(out_obj)
-	} else if(prec_out == 2000){
-		return(out_obj$TETRAD_GR)
-	} else if(prec_out == 5000){
-		return(out_obj$QUADRANT_GR)
-	}
+	# Build final output based on value(s) in prec_out
+		if(is.null(prec_out)){
+		  final_out = out_obj
+		} else if (length(prec_out) == 1 & length(gridref) > 1) {
+		  if(prec_out == 2000){
+		    final_out = out_obj$TETRAD_GR
+		  }
+		  if(prec_out == 5000){
+		    final_out = out_obj$QUADRANT_GR  
+		  }
+		} else {
+		  # If there are more than 1 prec out then select the corresponding tetrad/quadrants
+		  # Set all to NA first
+		    final_out = rep(NA, nrow(out_obj))
+		  # Find all entries where the output precision is to be tetrad and update them
+		  inds = which(prec_out == 2000)
+		  if(length(inds) > 0){
+		    final_out[inds] = out_obj$TETRAD_GR[inds]  
+		  }
+		  # Find all entries where the output precision is to be quadrant and update them
+		  inds = which(prec_out == 5000)
+		  if(length(inds) > 0){
+		    final_out[inds] = out_obj$TETRAD_GR[inds]  
+		  }
+		}
+  # Return final output
+		return(final_out)
 }
