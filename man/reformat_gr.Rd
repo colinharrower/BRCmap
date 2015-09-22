@@ -8,7 +8,7 @@ Reformat Grid References
 Reformat UK, Irish or Channel Islands grid references from one precision to another precision
 }
 \usage{
-reformat_gr(gridref, prec_out = 10000, precision = NULL)
+reformat_gr(gridref, prec_out = 10000, precision = NULL, pad_gr = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -16,21 +16,22 @@ reformat_gr(gridref, prec_out = 10000, precision = NULL)
   A vector of valid UK, Irish or Channel Islands Grid References (see details).
 }
   \item{prec_out}{
-  A value giving the required precision of the Grid References to be returned (in meters). The default is to return 10km Grid References (10000m). Valid values of \code{prec_out} are: 100000,10000,5000, 2000, 1000,100, 10, 1.
+  A numerical value or vector of values giving the required precision of the Grid References to be returned (in meters). The default is to return 10km Grid References (10000m). Valid values of \code{prec_out} are: 100000,10000,5000, 2000, 1000,100, 10, 1.
 }
   \item{precision}{
   A value, or vector of same length as \code{gridref}, detailing the precision of the Grid Reference(s) supplied in \code{gridref}.
+}
+  \item{pad_gr}{
+  A logical variable determining whether the grid references are to be 'padded' when the value in \code{prec_out} is higher precision than the actual precision of the grid reference. The default \code{prec_out = FALSE} is to not allow padding of grid reference instead returning \code{NA} where the grid references are lower than the requested precision(s).
 }
 }
 \details{
 Grid references will be reformated to the required precision as long as their precision is higher than or equal to the precision required. For instance a 1km grid reference can be reformated to return a 10km grid reference but not to return a 100m grid reference. In cases where a grid reference cannot be reformated to the required precision then an NA will be returned for those grid references.
 
-The grid references accepted by this function are valid OSGB (Ordnance suvery of Great Britain, e.g. SP4209, TN389207), OSNI (Ordnance Survey of Northern Ireland, e.g. D0803, N0138) or UTM (Universal Transverse Mercator, e.g. WV595475, WA569079) grid references. Note that the UTM grid reference can only be used for the Channel Islands and are only in the format as shown by the example above. The function can also accept tetrad or quadrant grid references (e.g. SP40T, SP40NW)
-
-
+The grid references accepted by this function are valid OSGB (Ordnance suvery of Great Britain, e.g. SP4209, TN389207), OSNI (Ordnance Survey of Northern Ireland, e.g. D0803, N0138) or UTM (Universal Transverse Mercator, e.g. WV595475, WA569079) grid references. Note that the UTM grid reference can only be used for the Channel Islands and are only in the format as shown by the example above. The function can also accept tetrad or quadrant grid references (e.g. SP40T, SP40NW).
 }
 \value{
-A vector of the same length as \code{gridref} containing the reformated grid reference 
+A vector of the same length as \code{gridref} containing the reformated grid references 
 }
 \references{
 For more information on grid references see:\cr
