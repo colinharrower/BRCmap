@@ -65,7 +65,7 @@ reformat_gr <- function(
   i_ref = which(comb_prec <= prec_out & prec_out %in% c(2000,5000))
   if(length(i_ref) > 0){
 		# Use det_tet_quad to reformat_gr
-		gr_out[i_ref] = det_tet_quad(gridref, precision =precision,  prec_out = prec_out)
+		gr_out[i_ref] = det_tet_quad(gridref[i_ref], precision =precision,  prec_out = prec_out[i_ref])
   }
   
   # Where prec_out > comb_prec and pad_gr is true then pad the grid ref
