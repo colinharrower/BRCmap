@@ -8,7 +8,7 @@ Convert WGS84 latitude and longitude coordinates to UK grid references
 This function converts WGS84 latitude and longitudes to valid UK grid references using one of the standard projections used within the UK.
 }
 \usage{
-gps_latlon2gr(latitude, longitude, out_projection = "OSGB", return_type = "both")
+gps_latlon2gr(latitude, longitude, out_projection = "OSGB", return_type = "gr")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
