@@ -3,7 +3,7 @@ gps_latlon2gr = function(latitude, longitude, out_projection = "OSGB", return_ty
 		n_coords = length(latitude)
 		# Check lengths are the same if not stop
 		if(n_coords != length(longitude)){
-			stop("ERROR - Lenghts of latitude and longitude do not match")
+			stop("ERROR - Lengths of latitude and longitude do not match")
 		}
 		
 
