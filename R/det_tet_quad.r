@@ -143,7 +143,7 @@ det_tet_quad <- function(
 		  # Find all entries where the output precision is to be quadrant and update them
 		  inds = which(prec_out == 5000)
 		  if(length(inds) > 0){
-		    final_out[inds] = out_obj$TETRAD_GR[inds]  
+		    final_out[inds] = out_obj$QUADRANT_GR[inds]  
 		  }
 		}
   # Return final output
