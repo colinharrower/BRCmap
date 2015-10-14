@@ -9,6 +9,18 @@ gr2sp_poly = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, out_proj
 		}
 	} 
 	
+	# If gr_atts is supplied then check that the length/nrows matches gridref
+		if(!is.null(gr_atts)){
+			# if gr_atts is a vector then convert to a 1 column data.frame
+			if(is.vector(gr_atts)){
+				gr_atts = data.frame(gr_atts)
+			}
+			# Check the lengths
+			if(length(gridref) != nrow(gr_atts)){
+				stop("Supplied attributes info (gr_atts) does not match the length of the grid ref vector")
+			}
+		}
+	
 	# Find any non-valid grid refs and replace with NA
 		gridref = fmt_gridref(gridref)
 	
