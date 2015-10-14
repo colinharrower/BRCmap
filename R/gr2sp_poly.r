@@ -99,7 +99,7 @@ gr2sp_poly = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, out_proj
 		# Convert SpatialPolygons to SpatialPolygonsDateFrame
 			sp_df = data.frame(GRIDREF = gridref[inds])
 			if(!is.null(gr_atts)){
-				sp_df[,names(atts)] = atts  # TODO: Need to check that length of atts and gridrefs match at start of script
+				sp_df[,names(gr_atts)] = gr_atts[inds,]  # TODO: Need to check that length of atts and gridrefs match at start of script
 			}
 			row.names(sp_df) = gr_ids
 			sp_polydf = SpatialPolygonsDataFrame(sp_spol, data = sp_df)
