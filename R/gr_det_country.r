@@ -9,7 +9,7 @@ gr_det_country = function(gridref){
 	cty_out[grepl("^[[:upper:]]{1}[[:digit:]]{2,}([[:upper:]]?|[[:upper:]]{2})?$",gridref)] = "OSNI"
 	
 	# Find Channel Islands Gridrefs
-	cty_out[grepl("^(WA)|(WV)[[:digit:]]{2}([[:upper:]]?|[[:upper:]]{2})?$)",gridref)] = "UTM30"
+	cty_out[grepl("^(WA)|(WV)[[:digit:]]{2,}([[:upper:]]?|[[:upper:]]{2})?$",gridref)] = "UTM30"
 	
 	# Find MGRS grid reference types
 	cty_out[grepl("^[[:digit:]]{1,2}[[:upper:]]{1}[[:upper:]]{1,2}[[:digit:]]{2,}([[:upper:]]?|[[:upper:]]{2})?$", gridref)] = "MGRS"
