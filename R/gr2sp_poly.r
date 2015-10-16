@@ -38,7 +38,7 @@ gr2sp_poly = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, out_proj
 		gr_tp = unique(gr_proj)	
 		
 		# Determine which gr_tp has the most records
-		if(is.null(out_proj4)){
+		if(is.null(out_proj4) & length(gr_tp) > 1 & !sep_proj_layers){
 			cnt_tp = tapply(gr_proj, gr_proj, length)
 			max_tp = names(cnt_tp)[which.max(cnt_tp)]
 			if(max_tp == "OSGB"){
@@ -116,9 +116,12 @@ gr2sp_poly = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, out_proj
 			row.names(sp_df) = gr_ids
 			sp_polydf = SpatialPolygonsDataFrame(sp_spol, data = sp_df)
 			rm(sp_df, sp_spol)	
-		# Test whether current projection set matches output project if not reproject
-		if(all(checkCRSArgs(tp_proj4)[[1]] & checkCRSArgs(out_proj4)[[1]]) & checkCRSArgs(tp_proj4)[[2]] != checkCRSArgs(out_proj4)[[2]]){
-			sp_polydf = spTransform(sp_polydf, CRS(out_proj4))
+		# Test whether out_proj4 is not NULL (i.e. it was supplied or either sep_proj_layers = FALSE or there is only 1 grid ref type present)		
+		if(!is.null(out_proj4)){
+			# Test whether current projection set matches output project if not reproject
+			if(all(checkCRSArgs(tp_proj4)[[1]] & checkCRSArgs(out_proj4)[[1]]) & checkCRSArgs(tp_proj4)[[2]] != checkCRSArgs(out_proj4)[[2]]){
+				sp_polydf = spTransform(sp_polydf, CRS(out_proj4))
+			}
 		}
 		
 		# Add current spatial polygons data frame to output object
