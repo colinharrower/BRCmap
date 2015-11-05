@@ -98,6 +98,14 @@ function(easting,northing, OSgrid = "OSGB", keep_precision = TRUE, min_10km = TR
 		
 		# Determine second letter based on 100km easting/northing
 		L100k = 21 - (5*floor(nX100k))  + floor(eX100k)
+		# Check for letter indices out with the expected values (1 to 25), if such values exist then remove the indices for these rows from cty_inds and corresponding values from eX500k,nX500k and L500k
+			rm_inds  = which(L100k <= 0 | L100k > 25)
+			if(length(rm_inds) > 0){
+				cty_inds = cty_inds[-rm_inds]
+				eX100k = eX100k[-rm_inds]
+				nX100k = nX100k[-rm_inds]
+				L100k = L100k[-rm_inds]
+			}
 		ret_obj[cty_inds] = paste(LETTERS[-9][L100k], dig_east[cty_inds], dig_north[cty_inds], sep="")
 	}
 	
