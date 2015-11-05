@@ -12,8 +12,8 @@ An R package to facilitate species distribution mapping as used in Species Distr
 \tabular{ll}{
 Package: \tab BRCmap\cr
 Type: \tab Package\cr
-Version: \tab 0.10.2\cr
-Date: \tab 2014-06-02\cr
+Version: \tab 0.10.3\cr
+Date: \tab 2015-11-05\cr
 License: \tab GPL-3\cr
 }
 ~~ An overview of how to use the package, including the most important functions ~~

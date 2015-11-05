@@ -8,7 +8,7 @@ Determine Neighbouring 10km squares
 Determine the neighbouring 10km grid references around a series of focal 10km grid squares.
 }
 \usage{
-neigth_smooth(gridref, smooth_radius = 1, square_list = NULL, sq_dimen = 10000, output_type = "neigh_only")
+neigh_smooth(gridref, smooth_radius = 1, square_list = NULL, sq_dimen = 10000, output_type = "neigh_only")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
