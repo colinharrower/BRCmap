@@ -1,5 +1,5 @@
-\name{neigth_smooth}
-\alias{neigth_smooth}
+\name{neigh_smooth}
+\alias{neigh_smooth}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Determine Neighbouring 10km squares
