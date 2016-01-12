@@ -7,8 +7,9 @@ reformat_gr <- function(
 	# Setup output object to store reformated grid refs
 		gr_out = rep(NA, length(gridref))
 		
-	# If precision is a single value and not a recognised precision then stop
-	if(length(prec_out) == 1 & !prec_out %in% c(100000,10000,5000,2000,1000,100,10,1)){
+	# If precision is a single value and not a recognised precision then stop (need to check length first then inside if statment check value to prevent errors when checking a vector of length > 1)
+	if(length(prec_out) == 1)
+		if(!prec_out %in% c(100000,10000,5000,2000,1000,100,10,1)){
 	  stop("Value supplied in prec_out is not a valid output precision")
 	}
   # If precision is not a single value then check it is same length as gridref and that all values are recognised precisions
