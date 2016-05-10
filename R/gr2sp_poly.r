@@ -35,7 +35,7 @@ gr2sp_poly = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, out_proj
 		
 	# Process grid refs and create determine corner coordinates in native eastings & northings 
 	# Determine number of grid ref types in dataset
-		gr_tp = unique(gr_proj)	
+		gr_tp = unique(na.omit(gr_proj))
 		
 		# Determine which gr_tp has the most records
 		if(is.null(out_proj4) & length(gr_tp) > 1 & !sep_proj_layers){

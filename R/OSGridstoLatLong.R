@@ -17,7 +17,7 @@ function(Easting, Northing, Datum = "OSGB", datum_params = NULL, full_output = F
 		if(!length(Datum) %in% c(1,east_len)){
 			stop("ERROR: Length of 'Datum' does not match length of Easting/Northing values")
 		}
-		datum_list = unique(Datum)
+		datum_list = unique(na.omit(Datum))
 		# Check all Datum are in datum_params data frame
 		miss_datum = which(!datum_list %in% datum_params$Datum)
 		if(length(miss_datum) > 0){

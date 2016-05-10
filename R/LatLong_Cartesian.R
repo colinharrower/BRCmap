@@ -17,7 +17,7 @@ function(Latitude, Longitude, Datum = "OSGB", datum_params = NULL, H = NULL, ful
 		if(!length(Datum) %in% c(1,lat_len)){
 			stop("ERROR: Length of 'Datum' does not match length of Latitude/Longitude values")
 		}
-		datum_list = unique(Datum)
+		datum_list = unique(na.omit(Datum))
 		# Check all Datum are in datum_params data frame
 		miss_datum = which(!datum_list %in% datum_params$Datum)
 		if(length(miss_datum) > 0){

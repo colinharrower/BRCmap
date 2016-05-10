@@ -11,7 +11,8 @@ gr2gps_latlon = function(gridref, precision = NULL, centre = TRUE){
 		out_latlon = OSGridstoLatLong(org_en$EASTING, org_en$NORTHING, org_en$PROJECTION)
 	
 	# Determine indices of gridrefs that are not UTM30 (which will need transformed)
-		i_trans = which(!org_en$PROJECTION %in% c("UTM30","WGS84"))
+	# NOTE also need to stop transformations being attempted for records with NA in projection hence the NA in the search vector
+		i_trans = which(!org_en$PROJECTION %in% c("UTM30","WGS84", NA))
 	# If any gridrefs which need reprojection are found the do so
   if(length(i_trans) > 0){
   	# Determine Cartesian (Original projection)
