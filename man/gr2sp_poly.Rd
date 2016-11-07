@@ -51,7 +51,7 @@ Colin Harrower
 \code{\link{CRS}}, \code{\link{SpatialPolygonDataFrame}}
 }
 \examples{
-## Example of using gr2sp_poly function to convert grid references to SpatialPolygonDataFrame objects and then add this points to a plot
+## Example of using gr2sp_poly function to convert grid references to SpatialPolygonDataFrame objects and then add this polygons to a plot
 
   # Create a vector of grid references to be plotted
     gridrefs <- c("SP49","WV57","H40","NN29","NT20","TL97")
