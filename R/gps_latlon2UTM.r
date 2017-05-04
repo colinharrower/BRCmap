@@ -6,7 +6,7 @@
 
 # Also used webpage by Steven Dutch (http://www.uwgb.edu/dutchs/usefuldata/utmformulas.htm) to aid with checking code
  
-gps_latlon2utm = function(lat, lon, to_metre = FALSE, out_string = TRUE){
+gps_latlon2utm = function(lat, lon, to_metre = TRUE, out_string = TRUE){
 	# Error checking
 	if(length(lat) != length(lon)){
 		stop("ERROR: Latitude & longitude vectors are different lengths")
@@ -184,8 +184,8 @@ gps_latlon2utm = function(lat, lon, to_metre = FALSE, out_string = TRUE){
 			
 			# If to_metre is true then floor x & y values to integer
 			if(to_metre){
-				x = floor(round(x,3))
-				y = floor(round(y,3))
+				x = round(round(x,3))
+				y = round(round(y,3))
 			}
 				
 		# Build output string

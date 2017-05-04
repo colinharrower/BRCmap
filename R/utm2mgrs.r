@@ -1,3 +1,82 @@
+#' @title Convert UTM to Miltary Grid Reference System (MGRS)
+#' @description Takes one or more UTM coordinates and converts them to Miltary
+#'   Grid Reference System (MGRS) grid references
+#' 
+#' @param utm_str A character vector containing the UTM coordinates. Note UTM
+#'   coordinates must include MGRS band (see details for more information)
+#' @param output_type A character vector specifiying the desired option for the
+#'   output format. Valid options are \code{"full_gr"}, \code{"split_gr"}, or
+#'   \code{"atomised"} with \code{full_gr} being the default. See the Value
+#'   section for more information on these options
+#' 
+#' @details The UTM character strings accepted by this function need to include
+#'   the MGRS band and be in the format \code{ZoneBand Easting Northing} e.g.
+#'   \code{30U 630855 5718493}. These aren't technically true UTM coordinates as
+#'   bands aren't part of UTM but MGRS bands are sometimes used in relation to
+#'   UTM in place of the traditional hemisphere code (\code{N} or \code{S}). The
+#'   \href{https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system}{UTM
+#'   wikipedia page} has more details. The functions in BRC map that output UTM
+#'   coordinates should output the UTM strings in the required format, including
+#'   the MGRS band.
+#'   
+#'   The Miltary Grid Reference System (MGRS) is a geocoordinate system used by
+#'   NATO militaries. It is a system that covers the entire globe. A MMGRS grid
+#'   reference is composed of several components; a grid zone designation,
+#'   100,000 metre (100km) square indentifer, and a numerical location
+#'   specifying the location in that 100km square. An example MGRS grid
+#'   reference is 30UXC3085518493 where the grid zone is 30U, XC is the 100km
+#'   square and the coordiantes 3085518493 refer to a point 30855m east and
+#'   18493m west of the origin of that 100km square.
+#'   
+#'   The grid zones are areas where the 6 degree wide UTM longitudinal zones are
+#'   intersected by latitudinal bands that are 8 degrees tall. These grid zones
+#'   are desingated by concatinating the UTM zone number with the band letter. 
+#'   The UTM zone numbers range from 1 to 60 while the band use letters running
+#'   alphabetically from C in the South to X in the North (but excluding I and
+#'   O), for example grid zone 30U which contains a large part of the UK. The 
+#'   are within the grid zones are divided up into 100km squares (100km x
+#'   100km), where the corners of the squares have UTM coordinates that are
+#'   muitples of 100,000m. These squares are indentified within each zone via a 
+#'   column letter (A-Z, excluding I and O) and a row letter (A-V, excluding I
+#'   and O). For example the 100km square XC within grid zone 30U covers Oxford,
+#'   UK. The exact way these row and column letters are layed out across the
+#'   grid zones is relatively complex but if you are interested then the 
+#'   \href{https://en.wikipedia.org/wiki/Military_Grid_Reference_System}{MGRS
+#'   wikipedia page} contains more information. The numerical location given
+#'   after the 100km square reference a point by giving the deviation east and
+#'   north from the origin (lower left corner) of the square.
+#'   
+#'   The code for this function is modified version of javascript code created
+#'   by Chris Vernes and published on his website 
+#'   \href{http://www.movable-type.co.uk/scripts/latlong-utm-mgrs.html}{Moveable
+#'   Type Scripts} under MIT licence for free use and adaption ( (c) Chris
+#'   Veness 2014-2015 / MIT Licence). According to his websites Chris's code is
+#'   based on Karney 2011 "Transverse Mercator with an accuracy of a few
+#'   nanometers".
+#'
+#' @return This function can return either a character vector or a data.frame 
+#'   depending on the value given to the \code{output_type} argument. In the 
+#'   default case (\code{output_type = "full_gr"} a character vector is returned
+#'   wwhere the each values contains a full MGRS grid references. When 
+#'   \code{output_type = "split_gr"} the MGRS grid references are returned as a
+#'   \code{data.frame} with the first column (GZD) containing the grid zone 
+#'   designation and the second column (GRIDREF) containing the 100km grid 
+#'   reference. The final output type \code{"atomised"} fully breaks down the 
+#'   MGRS grid reference into its compoent parts and returns a data.frame with 
+#'   columns for the Zone, Band, 100km square identifier, Easting and Northing.
+#' @export
+#' 
+#' @author Colin Harrower
+#'
+#' @seealso \code{\link{mgrs2utm}}, \code{\link{gps_latlon2utm}}
+#' @examples 
+#' ## Example converting a UTM grid reference to MGRS
+#'    utm2mgrs("30U 630855 5718493")
+#'    
+#' ## Example converting UTM to MGRS but this time outputing the MGRS as an
+#' ## atomised compnonents in a data.frame
+#'    utm2mgrs("30U 630855 5718493", output_type="atomised")
+#'    
 utm2mgrs = function(utm_str, output_type = "full_gr"){
 	# Setup object to store output
 		zone = rep(NA, length(utm_str))
