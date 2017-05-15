@@ -62,7 +62,7 @@ draw_polygon = function(x,y, r, n, rot = 0, ...){
   # Determine angles required to make polygon with n number of points (note default for rotate is from x axis proceeding anticlockwise, hence 90 and -rot in formula)
   if(n==3){
     # To have a triangle that fills the same area as a square with dimensions n*2 then it needs to be an isosceles traingle so need to modify a and r values
-      a = c(0,135,225)+90
+      a = c(0,135,225)+rot+90
     # Calculate length of longer sides
       l_r = sqrt(r^2+r^2)
     # Now create vector of radius values to be used
@@ -151,6 +151,12 @@ draw_polygons = function(x,y,r,n,rot=0, ...){
 #'   possible values are \code{triangle}, \code{square}, \code{diamond}.
 #' @param dimen The dimensions of the symbol. This is given as the maximum 
 #'   height/length of the total polygon and not the radii from the central point
+#' @param rot A numerical value specifying the rotation of the symbol in
+#'   degrees. The default \code{rot = 0} means that the symbol will be plotted
+#'   from 12 o'clock working around the central point going clockwise.  An 
+#'   exception to this is when \code{symbol = "square"} in which case the
+#'   vertices are rotated by 45 degrees so that the top edge is parallel with 
+#'   the x axis.
 #' @param n_circle A number specifying the number number of vertices in the
 #'   polygon that will be used to approximate a polygon. The default
 #'   \code{n_circle = 32} will give a good approximation of a circle in most
@@ -185,15 +191,15 @@ draw_polygons = function(x,y,r,n,rot=0, ...){
 #'     xy_vals = seq(10,50,by=10)
 #'     draw_symbols(xy_vals, xy_vals, "circle", dimen = 3, col="red")
 #'     
-draw_symbols = function(x, y, symbol = "circle", dimen, n_circle = 32, ...){
+draw_symbols = function(x, y, symbol = "circle", dimen, rot=0, n_circle = 32, ...){
     # Ensure values passed to symbol are lower case
       symbols = tolower(symbol)
     
     switch(symbol, 
-          circle = draw_polygons(x,y,r=dimen/2,n=n_circle, ...), 
-          triangle = draw_polygons(x,y,r=dimen/2,n=3, ...),
-          square = draw_polygons(x,y,r = 0.5*sqrt(dimen^2+dimen^2),n=4,rot=45, ...),
-          diamond = draw_polygons(x,y, r= 0.5*sqrt(dimen^2+dimen^2),n=4,rot=0, ...),
+          circle = draw_polygons(x,y,r=dimen/2,n=n_circle,rot=rot, ...), 
+          triangle = draw_polygons(x,y,r=dimen/2,n=3,rot=rot, ...),
+          square = draw_polygons(x,y,r = 0.5*sqrt(dimen^2+dimen^2),n=4,rot=rot+45, ...),
+          diamond = draw_polygons(x,y, r= 0.5*sqrt(dimen^2+dimen^2),n=4,rot=rot, ...),
           stop("Invalid option for argument 'symbol'")
     )
 }
@@ -217,6 +223,12 @@ draw_symbols = function(x, y, symbol = "circle", dimen, n_circle = 32, ...){
 #'   specified as a proportion of the grid reference dimension, e.g. 0.9 means
 #'   that the dimensions of the symbols will be 90% of dimensions of the
 #'   relevant grid square.
+#' @param rot A numerical value specifying the rotation of the symbol in
+#'   degrees. The default \code{rot = 0} means that the symbol will be plotted
+#'   from 12 o'clock working around the central point going clockwise. An 
+#'   exception to this is when \code{symbol = "square"} in which case the
+#'   vertices are rotated by 45 degrees so that the top edge is parallel with 
+#'   the x axis.
 #' @param centre A logical variable determing whether the symbol will be 
 #'   centered on the centre point of the grid reference or at the lower left 
 #'   corner. The default \code{centre = TRUE} will plot the symbol so that it is
@@ -256,7 +268,7 @@ draw_symbols = function(x, y, symbol = "circle", dimen, n_circle = 32, ...){
 #'    plotUK_gr_symbols(c("O13","J37"), symbol = "diamond", col="green", border="darkgreen")
 #'     
 plotUK_gr_symbols <-
-  function(gridref, symbol = "circle", dimen = NULL, dimen_type = "abs", centre = TRUE, gr_prec = NULL, ci_insert = FALSE, ci_origin = c(-180000,30000), ...){
+  function(gridref, symbol = "circle", dimen = NULL, dimen_type = "abs", rot = 0, centre = TRUE, gr_prec = NULL, ci_insert = FALSE, ci_origin = c(-180000,30000), ...){
     if(!dimen_type %in% c("abs","prop")){
       stop("invalid option for dimen_type (recognised values are 'prop' or 'abs')")
     }
@@ -318,7 +330,7 @@ plotUK_gr_symbols <-
       }
       
       # Plot symbols
-      draw_symbols(gr_points$EASTING, gr_points$NORTHING, symbol = symbol, dimen=dimen, ...)
+      draw_symbols(gr_points$EASTING, gr_points$NORTHING, symbol = symbol, dimen=dimen,rot=rot, ...)
       
       
       # Return gr_points invisibly
