@@ -4,7 +4,7 @@
 \alias{draw_symbols}
 \title{Add symbols to existing plot}
 \usage{
-draw_symbols(x, y, symbol = "circle", dimen, n_circle = 32, ...)
+draw_symbols(x, y, symbol = "circle", dimen, rot = 0, n_circle = 32, ...)
 }
 \arguments{
 \item{x}{a numerical vector specifying the x coordinates of the central
@@ -19,6 +19,13 @@ possible values are \code{triangle}, \code{square}, \code{diamond}.}
 
 \item{dimen}{The dimensions of the symbol. This is given as the maximum 
 height/length of the total polygon and not the radii from the central point}
+
+\item{rot}{A numerical value specifying the rotation of the symbol in
+degrees. The default \code{rot = 0} means that the symbol will be plotted
+from 12 o'clock working around the central point going clockwise.  An 
+exception to this is when \code{symbol = "square"} in which case the
+vertices are rotated by 45 degrees so that the top edge is parallel with 
+the x axis.}
 
 \item{n_circle}{A number specifying the number number of vertices in the
 polygon that will be used to approximate a polygon. The default

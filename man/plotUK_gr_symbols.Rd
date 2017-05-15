@@ -5,8 +5,8 @@
 \title{Add symbols to existing map}
 \usage{
 plotUK_gr_symbols(gridref, symbol = "circle", dimen = NULL,
-  dimen_type = "abs", centre = TRUE, gr_prec = NULL, ci_insert = FALSE,
-  ci_origin = c(-180000, 30000), ...)
+  dimen_type = "abs", rot = 0, centre = TRUE, gr_prec = NULL,
+  ci_insert = FALSE, ci_origin = c(-180000, 30000), ...)
 }
 \arguments{
 \item{gridref}{A character vector containg the grid refrences to be added to the map.}
@@ -28,6 +28,13 @@ dimensions are being given in plotting units. The alternative
 specified as a proportion of the grid reference dimension, e.g. 0.9 means
 that the dimensions of the symbols will be 90% of dimensions of the
 relevant grid square.}
+
+\item{rot}{A numerical value specifying the rotation of the symbol in
+degrees. The default \code{rot = 0} means that the symbol will be plotted
+from 12 o'clock working around the central point going clockwise. An 
+exception to this is when \code{symbol = "square"} in which case the
+vertices are rotated by 45 degrees so that the top edge is parallel with 
+the x axis.}
 
 \item{centre}{A logical variable determing whether the symbol will be 
 centered on the centre point of the grid reference or at the lower left 
