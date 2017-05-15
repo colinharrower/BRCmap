@@ -1,6 +1,75 @@
+
+#' @title Add a regular polgon to the existing plot
+#' @description \code{draw_polyon} draw a regular polyon with n vertices centred on the coordinates specified by x,y
+#' onto the existing plot
+#'
+#' @param x a single numerical value giving the x coordinate for the central
+#'   point.
+#' @param y a single numerical value giving the y coordinate for the central
+#'   point.
+#' @param r a single numerical value or a vector of values giving the radii of
+#'   the vertices from the central point.
+#' @param n a number specifying the number of vertices
+#' @param rot a numerical value specifying the rotational poisition of the first
+#'   point. The default \code{rot = 0} means the first point will be at the 12
+#'   o'clock position.
+#' @param ... any other arugments will be passed through the \code{polygon}
+#'   function used to actually add the polygon to the plot, e.g. \code{col =
+#'   "red"}, code{border = "blue"}, etc.
+#' 
+#' @details In most cases this function plots a regular polygon, i.e. where all 
+#'   angles are the same (equiangular) and where all sides are the same length 
+#'   (equilateral). An exception is made however in the case of a triangle 
+#'   (\code{n = 3}) where this function returns an isosceles triangle rather
+#'   than an equilateral one. This alteration is made so that the resulting
+#'   triangle fills as much of the area occupied by a square with dimensions r*2
+#'   by r*2.
+#'   
+#'   This function is also used by BRCmap to draw circular symbols of specified 
+#'   dimensions by using a polygon with sufficient vertices to approximate a 
+#'   circle. There is a trade-off in the number of vertices required to 
+#'   approximate a cirlce will with larger vectices producing a smoother polygon
+#'   but having increasing complexity.
+#'   
+#'   This funciton is an internal functiont that is used by other functions in 
+#'   BRCmap to plot symbols of specified dimesions onto maps. This function only
+#'   draws a single polyon but you can use the wrapper function 
+#'   \code{draw_polygons} that uses mapply to plot multiple polygons.
+#'
+#' @return The coordinates of the vertices are returned invisibly
+#' @author Colin Harrower
+#' @seealso \code{\link{draw_polygons}}, \code{\link{draw_symbols}}
+#' @export
+#'
+#' @examples 
+#'   ## An example of adding a regular polygon to a plot
+#' 
+#'   # First create a blank plot
+#'     plot(1:60,1:60, type="n")
+#'   # Now add a couple of different polygons
+#'     # Triangle (note this is an isosceles traingle not equilateral)
+#'       draw_polygon(10,10,r=3,n=3, col="red")
+#'     # Square (need to alter rotation of first point so that this is a square not diamond)
+#'       draw_polygon(20,20,r=3,n=4,rot=45,col="blue")
+#'       draw_polygon(30,30,r=3,n=4,rot=,col="blue")
+#'     # Pentagon
+#'       draw_polygon(40,40,r=3,n=5,rot=,col="green")
+#'     # Hexagon
+#'       draw_polygon(50,50,r=3,n=6,rot=,col="orange")
+#'  
+#' 
 draw_polygon = function(x,y, r, n, rot = 0, ...){
   # Determine angles required to make polygon with n number of points (note default for rotate is from x axis proceeding anticlockwise, hence 90 and -rot in formula)
-  a = (-rot + 90 + (0:(n-1) * (360/n)) ) %% 360
+  if(n==3){
+    # To have a triangle that fills the same area as a square with dimensions n*2 then it needs to be an isosceles traingle so need to modify a and r values
+      a = c(0,135,225)+90
+    # Calculate length of longer sides
+      l_r = sqrt(r^2+r^2)
+    # Now create vector of radius values to be used
+      r = c(r,l_r,l_r)
+  } else {
+    a = (-rot + 90 + (0:(n-1) * (360/n)) ) %% 360
+  }
   # Determine x coordinates for points between which polygon will be draw
   x = round(x + r * cos(a*(pi/180)),4)
   # Determine y coordinates for points between which polygon will be draw
@@ -11,6 +80,57 @@ draw_polygon = function(x,y, r, n, rot = 0, ...){
   return(invisible(data.frame(x,y)))
 }
 
+#' @title Add a series of regular polygons to the existing plot
+#'   
+#' @param x a single numerical value giving the x coordinate for the central 
+#'   point.
+#' @param y a single numerical value giving the y coordinate for the central 
+#'   point.
+#' @param r a single numerical value or a vector of values giving the radii of 
+#'   the vertices from the central point.
+#' @param n a number specifying the number of vertices.
+#' @param rot a numerical value specifying the rotational poisition of the first
+#'   point. The default \code{rot = 0} means the first point will be at the 12 
+#'   o'clock position.
+#' @param ... any other arugments will be passed through the \code{polygon} 
+#'   function used to actually add the polygon to the plot, e.g. \code{col = 
+#'   "red"}, code{border = "blue"}, etc.
+#'   
+#' @details In most cases this function plots a regular polygon, i.e. where all 
+#'   angles are the same (equiangular) and where all sides are the same length 
+#'   (equilateral). An exception is made however in the case of a triangle 
+#'   (\code{n = 3}) where this function returns an isosceles triangle rather 
+#'   than an equilateral one. This alteration is made so that the resulting 
+#'   triangle fills as much of the area occupied by a square with dimensions r*2
+#'   by r*2.
+#'   
+#'   This function is also used by BRCmap to draw circular symbols of specified 
+#'   dimensions by using a polygon with sufficient vertices to approximate a 
+#'   circle. There is a trade-off in the number of vertices required to 
+#'   approximate a cirlce will with larger vectices producing a smoother polygon
+#'   but having increasing complexity.
+#'   
+#'   This funciton is an internal functiont that is used by other functions in 
+#'   BRCmap to plot symbols of specified dimesions onto maps.
+#'  
+#' @author Colin Harrower    
+#' @seealso \code{\link{draw_polygon}}, \code{\link{draw_symbols}}
+#' @export
+#' 
+#' @examples
+#'   # Examples of adding regular polygons to a plot
+#'   # First create a blank plot
+#'     plot(1:60,1:60, type="n")
+#'   # Now add a series of pentagons across the diagonal
+#'     xy_vals = seq(10,50,by=10)
+#'     draw_polygons(xy_vals, xy_vals, r=3,n=5, col="red")
+#'   
+#'   # Open a blank plot
+#'     plot(1:60,1:60, type="n")
+#'   # Now add a series of polygons across the diagonal starting with
+#'   ## a triangle increasing the vertices by 1 each time
+#'     draw_polygons(xy_vals, xy_vals, r=3, n = 3:7, col=1:5)
+#'
 draw_polygons = function(x,y,r,n,rot=0, ...){
   # Determine addition arguments that match polygons
   matched_args = list(...)[intersect( names(list(...)), names(formals(polygon))) ]
@@ -18,46 +138,125 @@ draw_polygons = function(x,y,r,n,rot=0, ...){
   temp = mapply(draw_polygon, x, y, r, n, rot, ...)	
 }
 
-draw_triangle = function(x,y,dimen,rot=0, ...){
-  # First determine coordinates of square as that give lower 2 points (assuming 1st point is at 0 degrees)
-  n = 4
-  sq_rot = rot+45
-  r = 0.5*sqrt(dimen^2+dimen^2)
-  # Determine angles required to make polygon with n number of points (note default for rotate is from x axis proceeding anticlockwise, hence 90 and -rot in formula)
-  a = (-sq_rot + 90 + (0:(n-1) * (360/n)) ) %% 360
-  # Determine x coordinates for points between which polygon will be draw
-  x = round(x + r * cos(a*(pi/180)),4)
-  # Determine y coordinates for points between which polygon will be draw
-  y = round(y + r * sin(a*(pi/180)),4)
-  # Now average first 2 x values and same for y values while keeping the other 2 unchanged
-  x = c(mean(x[1:2]),x[3:4])
-  y = c(mean(y[1:2]),y[3:4])
-  polygon(x,y,...)
-  # return points invisibly
-  return(invisible(data.frame(x,y)))
-}
-
-draw_triangles = function(x,y,dimen,rot=0,...){
-  # Determine addition arguments that match polygons
-  matched_args = list(...)[intersect( names(list(...)), names(formals(polygon))) ]
-  # Build x,y,r,n, rot into a data.frame
-  temp = mapply(draw_triangle, x, y, dimen, rot, ...)
-}
-
-
-# Wrapper function to drawn common sympbols of a specified dimension (many are plotted as n pointed polygons
-draw_symbol = function(x, y, symbol = "circle", dimen, n = NULL, ...){
-    symbols = tolower(symbol)
+#' @title Add symbols to existing plot
+#' @description \code{draw_symbols} draws symbols of specified type and size
+#'   onto the existing plot
+#'
+#' @param x a numerical vector specifying the x coordinates of the central
+#'   points for each symbol.
+#' @param y a numerical vector specifying the y coordinates of the central
+#'   points for each symbol.
+#' @param symbol A text string specifying the type of symbols to be draw. The 
+#'   default \code{symbol = "circle"} draws a circle with radius dimen/2. Other
+#'   possible values are \code{triangle}, \code{square}, \code{diamond}.
+#' @param dimen The dimensions of the symbol. This is given as the maximum 
+#'   height/length of the total polygon and not the radii from the central point
+#' @param n_circle A number specifying the number number of vertices in the
+#'   polygon that will be used to approximate a polygon. The default
+#'   \code{n_circle = 32} will give a good approximation of a circle in most
+#'   cases, however if you require smooth approximations then inccrease this
+#'   value.
+#' @param ... any other arugments will be passed through the \code{polygon} 
+#'   function used to actually add the polygon to the plot, e.g. \code{col = 
+#'   "red"}, code{border = "blue"}, etc.
+#'
+#' @details This function is used by functions in BRCmap (see See Also seciton
+#'   below) to place plotting symbols of a given size at coordinates specified.
+#'   At present only a couple of symbols (circle, triangle, square, diamond) are
+#'   possible at present. Other commonly used mapping symbols will be added in
+#'   the future.
+#'   
+#'   It should be noted that the 'circles' produced are actually n-vertice
+#'   polygons that in most cases should give acceptable approximations for a
+#'   true circle. If you require a smoother circle increase the number of
+#'   vertices in the polygon used to approximate the circle (via
+#'   \code{n_circle}). It should be noted that symbols can appear more jagged in
+#'   the default R device that they will when plotted to other devices such as
+#'   pdf.
+#' @author Colin Harrower
+#' @seealso \code{\link{plotUK_gr_symbols}}
+#' @export
+#'
+#' @examples
+#'   ## Example of adding symbols to a plot
+#'   # First create a blank plot
+#'     plot(1:60,1:60, type="n")
+#'   # Now add a series of pentagons across the diagonal
+#'     xy_vals = seq(10,50,by=10)
+#'     draw_symbols(xy_vals, xy_vals, "circle", dimen = 3, col="red")
+#'     
+draw_symbols = function(x, y, symbol = "circle", dimen, n_circle = 32, ...){
+    # Ensure values passed to symbol are lower case
+      symbols = tolower(symbol)
+    
     switch(symbol, 
-          circle = draw_polygons(x,y,r=dimen/2,n=32, ...), 
-          triangle = draw_triangles(x,y,dimen=dimen, ...),
+          circle = draw_polygons(x,y,r=dimen/2,n=n_circle, ...), 
+          triangle = draw_polygons(x,y,r=dimen/2,n=3, ...),
           square = draw_polygons(x,y,r = 0.5*sqrt(dimen^2+dimen^2),n=4,rot=45, ...),
-          diamond = draw_polygons(x,y, r= 0.5*sqrt(dimen^2+dimen^2),n=4,rot=0, ...)
+          diamond = draw_polygons(x,y, r= 0.5*sqrt(dimen^2+dimen^2),n=4,rot=0, ...),
+          stop("Invalid option for argument 'symbol'")
     )
 }
 
+#' @title Add symbols to existing map
+#' @description Function to plot valud UK grid references as symbols onto a existing map
+#'
+#' @param gridref A character vector containg the grid refrences to be added to the map.
+#' @param symbol A text string specifying the type of symbol to be added. The default
+#' \code{symbol="circle"} will add a circle (see details). Other possible values are; 
+#' \code{triangle}, \code{square}, \code{diamond}.
+#' @param dimen A vector of numerical values specifying the dimensions for the
+#'   symbols to be plotted. The default \code{dimen = NULL} means that the
+#'   dimensions of each symbols will be the dimensions of the corresponding grid
+#'   references, e.g. a 10km grid square will be represented by a symbols with
+#'   dimensions of 10km
+#' @param dimen_type A text string specifying how the dimensions are being
+#'   specified. The default \code{dimen_type = "abs"} indicates that the
+#'   dimensions are being given in plotting units. The alternative
+#'   \code{dimen_type = "prop"} indicates that the dimensions are being
+#'   specified as a proportion of the grid reference dimension, e.g. 0.9 means
+#'   that the dimensions of the symbols will be 90% of dimensions of the
+#'   relevant grid square.
+#' @param centre A logical variable determing whether the symbol will be 
+#'   centered on the centre point of the grid reference or at the lower left 
+#'   corner. The default \code{centre = TRUE} will plot the symbol so that it is
+#'   centered on the central point of the square.
+#' @param gr_prec A numerical vector specifying the precision of each grid
+#'   reference. The default \code{gr_prec = NULL} will determine the precision directly
+#'   from the grid reference. This variable will only be needed if the default
+#'   precision needs to be overridden.
+#' @param ci_insert A logical variable determining whether Channel Islands grid
+#'   references are to be plotted in an insert box to the left of the UK. The
+#'   default \code{ci_insert = FALSE} will plot the Channel Islands grid references in
+#'   their true position to the south of the UK.
+#' @param ci_origin A vector of two values giving the x & y cooridinates for the
+#'   origin of the Channel Islands grid relative to the the UK when using the
+#'   insert box.
+#' @param ... Any other arguments that will be passed to the functions
+#'   used to add the symbols to the map. Examples of typical arguments that you
+#'   may want to pass through are \code{col}, \code{border}.
+#'
+#' @return By default this function does not return anything, but if the output
+#'   from the function is assigned it will return the x,y values (eastings &
+#'   northings on OSGB) of the grid references via the invisible function.
+#' @author Colin Harrower   
+#' @seealso \code{\link{plotUK_gr}}, \code{\link{plotUK_gr_cats}}, \code{\link{plotUK_gr_points}}
+#' @export
+#'
+#' @examples
+#'   ## Example of adding grid references to a map as symbols
+#'   # Create blank map of UK
+#'     plot_GIS(UK, show.grid = FALSE, xlab = "", ylab="", show.axis = FALSE)
+#'     
+#'   # Add some points as circles
+#'     plotUK_gr_symbols(c("SU68","SP50","SU77"), col="red", border="darkred")
+#'   # Add some other points this time as triangles
+#'     plotUK_gr_symbols(c("NT27","NS56","NJ90"), symbol = "triangle", col="blue", border="darkblue")
+#'   # Add some more as diamonds
+#'    plotUK_gr_symbols(c("O13","J37"), symbol = "diamond", col="green", border="darkgreen")
+#'     
 plotUK_gr_symbols <-
-  function(gridref, symbol = "circle", dimen = NULL, dimen_type = "prop", centre = TRUE, gr_prec = NULL, ci_insert = FALSE, ci_origin = c(-180000,30000), unit_conv = NULL, ...){
+  function(gridref, symbol = "circle", dimen = NULL, dimen_type = "abs", centre = TRUE, gr_prec = NULL, ci_insert = FALSE, ci_origin = c(-180000,30000), ...){
     if(!dimen_type %in% c("abs","prop")){
       stop("invalid option for dimen_type (recognised values are 'prop' or 'abs')")
     }
@@ -107,10 +306,6 @@ plotUK_gr_symbols <-
           gr_points[ci_inds,] = OSgridReprojection(gr_points$EASTING[ci_inds], gr_points$NORTHING[ci_inds], org_grid = "UTM30", out_grid = "OSGB")
         }
       }
-      # Apply unit conversion if necessary
-      if(!is.null(unit_conv)){
-        gr_points = gr_points * unit_conv
-      }
       
       # Figure out symbol dimensions
       if(is.null(dimen)){
@@ -123,7 +318,7 @@ plotUK_gr_symbols <-
       }
       
       # Plot symbols
-      draw_symbol(gr_points$EASTING, gr_points$NORTHING, symbol = symbol, dimen=dimen, ...)
+      draw_symbols(gr_points$EASTING, gr_points$NORTHING, symbol = symbol, dimen=dimen, ...)
       
       
       # Return gr_points invisibly
