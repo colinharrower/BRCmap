@@ -6,7 +6,8 @@
 \usage{
 plotUK_gr_symbols(gridref, symbol = "circle", dimen = NULL,
   dimen_type = "abs", rot = 0, centre = TRUE, gr_prec = NULL,
-  ci_insert = FALSE, ci_origin = c(-180000, 30000), ...)
+  add_irish_rot = 5, ci_insert = FALSE, ci_origin = c(-180000, 30000),
+  ...)
 }
 \arguments{
 \item{gridref}{A character vector containg the grid refrences to be added to the map.}
