@@ -62,7 +62,7 @@ draw_polygon = function(x,y, r, n, rot = 0, ...){
   # Determine angles required to make polygon with n number of points (note default for rotate is from x axis proceeding anticlockwise, hence 90 and -rot in formula)
   if(n==3){
     # To have a triangle that fills the same area as a square with dimensions n*2 then it needs to be an isosceles traingle so need to modify a and r values
-      a = c(0,135,225)+rot+90
+      a = c(0,135,225)-rot+90
     # Calculate length of longer sides
       l_r = sqrt(r^2+r^2)
     # Now create vector of radius values to be used
@@ -268,7 +268,7 @@ draw_symbols = function(x, y, symbol = "circle", dimen, rot=0, n_circle = 32, ..
 #'    plotUK_gr_symbols(c("O13","J37"), symbol = "diamond", col="green", border="darkgreen")
 #'     
 plotUK_gr_symbols <-
-  function(gridref, symbol = "circle", dimen = NULL, dimen_type = "abs", rot = 0, centre = TRUE, gr_prec = NULL, ci_insert = FALSE, ci_origin = c(-180000,30000), ...){
+  function(gridref, symbol = "circle", dimen = NULL, dimen_type = "abs", rot = 0,  centre = TRUE, gr_prec = NULL, add_irish_rot = 5, ci_insert = FALSE, ci_origin = c(-180000,30000), ...){
     if(!dimen_type %in% c("abs","prop")){
       stop("invalid option for dimen_type (recognised values are 'prop' or 'abs')")
     }
@@ -303,6 +303,11 @@ plotUK_gr_symbols <-
       # Find Irish gridrefs
       ir_inds = which(grepl("(^[[:upper:]]{1}[[:digit:]]{2}([[:upper:]]?|[[:upper:]]{2})$)|(^[[:upper:]]{1}[[:digit:]]{2,}$)", gridref) & !is.na(gr_points$EASTING))
       if(length(ir_inds) > 0){
+        # If Irish grid references found add add_irish_rot != 0 then will need to covert rot to a vector of the same length as the grid refs and then add additional irish rotation to the existing rotation values
+        if(add_irish_rot != 0){
+          rot = rep(rot,nrow(gr_points))
+          rot[ir_inds] = rot[ir_inds] + add_irish_rot
+        }
         gr_points[ir_inds,] = OSgridReprojection(gr_points$EASTING[ir_inds], gr_points$NORTHING[ir_inds], org_grid = "OSNI", out_grid = "OSGB")
       }
       

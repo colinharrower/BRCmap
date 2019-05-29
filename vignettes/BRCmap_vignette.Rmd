@@ -1,0 +1,93 @@
+---
+title: "BRCmap - An R package to produce species distribution maps in styles suitable for use in distribution atlases"
+author: "Colin Harrower"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{BRCmap - An R package to produce species distribution maps in styles suitable for use in distribution atlases}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+# Introduction 
+BRCmap is an R package developed within the [Biological Record Centre (BRC)](http://www.brc.ac.uk) to simplify the production of publication quality distributions maps. BRCmap was designed initially for internal use within BRC but it was felt that it could be of use in the wider community particularly the recording schemes and biological recording community in the UK.  As BRC typically deals with UK data and  UK recording schemes the package is primarily focused upon producing distributions maps for the UK & Ireland. BRCmap does however include funcitons to deal with some coordinates systems that can be used worldwide (WGS84 Latitude & Longitude, Miltary Grid Reference System (MGRS) and Universal Tranverse Mercator Coordinates (UTM) and therefore may be of use outwith the UK.
+
+The packages contains functions to:
+
+- Process and convert the grid reference formats typically used within the UK (e.g. the Ordnance Survey of Great Britain (OSGB), Ordnance Survey of Ireland (OSI), and a truncated version of the Miltary Grid Rerence System (MGRS) often used for the Channel Islands).
+- Create base maps from one or more spatial objects (e.g.coastlines loaded from shape files)
+- Add distribution data to base maps in a range of styles (e.g. plotting grid references as polygons or points)
+- Produce Spatial objects such as `SpatialPolygonsDataFrame` or `SpatialPointsDataFrame` from grid reference data including attribute information which can then be used in R and/or saved to shapefiles
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+  # Load the library
+  library(BRCmap)
+```
+
+## Simple Example
+The simple example below shows how BRCmap can be used to quickly create a simple distribution map. 
+```{r, fig.width=6, fig.height=8, tidy=TRUE, eval = TRUE}
+  # Reduce margins
+  par(mar=c(0,0,0,0)+0.1)
+  # Create a base maps of the UK
+  plot_GIS(UK, show.grid = FALSE,show.axis = FALSE,xlab="", ylab="", new.window = FALSE)
+  # Create a vector of grid references
+  grs = c("SP50","SO29","SN03","NO19","NH22",
+            "H40","R99","S00","W09","WA50",
+            "WV37","WV64","HY33","HU55","HP71"
+            )
+  # Add some grid references to the map
+  plotUK_gr(grs, col="red")
+```
+
+BRCmap includes functions and options that allow you to tailor the distribution map to your requirements as well as functions for dealing with and processing UK grid reference data which will be detailed in the following sections
+
+# Dealing with UK grid references
+This section  the most commonly usedcovers tasks when processing grid references
+
+## Standardising Grid References
+  
+## Altering grid reference precision
+  
+## Converting grid references to eastings & northings and vice versa
+  
+## Converting between grid references and WGS84 latitudes & longitudes
+
+# Creating Distribution Maps
+## Customising the Base Map
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
