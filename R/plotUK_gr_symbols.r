@@ -241,6 +241,15 @@ draw_symbols = function(x, y, symbol = "circle", dimen, rot=0, n_circle = 32, ..
 #'   references are to be plotted in an insert box to the left of the UK. The
 #'   default \code{ci_insert = FALSE} will plot the Channel Islands grid references in
 #'   their true position to the south of the UK.
+#' @param add_irish_rot A numberical value specifying the additional rotation to be
+#' applied to symbols used to plot Irish grid references. This rotation is applied in 
+#' addition to the rotation given to all grid references specified by the 
+#' argument \code{rot}. The default \code{add_irish_rot = 5} will rotate Irish grid
+#' references and extra 5 degrees clockwise to account for the difference in alignment
+#' between the GB and Irish grids when plotted together, meaning that symbols in Ireland
+#' should appear correctly aligned relative to the Irish grid even thoughy they are
+#' actually being plotted on the GB grid. To avoid this additional rotation 
+#' for Irish grid reference use a value of 0.
 #' @param ci_origin A vector of two values giving the x & y cooridinates for the
 #'   origin of the Channel Islands grid relative to the the UK when using the
 #'   insert box.
