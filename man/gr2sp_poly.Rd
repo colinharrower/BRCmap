@@ -48,7 +48,7 @@ Colin Harrower
 
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
-\code{\link{CRS}}, \code{\link{SpatialPolygonDataFrame}}
+\code{\link{CRS}}
 }
 \examples{
 ## Example of using gr2sp_poly function to convert grid references to SpatialPolygonDataFrame objects and then add this polygons to a plot

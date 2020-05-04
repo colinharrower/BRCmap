@@ -55,7 +55,7 @@ The code for this function is modified version of javascript code created by Chr
    
 }
 \seealso{
-\code{\link{MGRStoUTM}}, \code{\link{gps_latlon2utm}}
+\code{\link{MGRStoUTM}}
 }
 \author{
 Colin Harrower

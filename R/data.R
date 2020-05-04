@@ -1,6 +1,6 @@
 #' @name UK_lowres
 #' @title A dataset containing the coastline of the UK, Ireland and the Channel 
-#'   Islands for uses as a background to species maps
+#'   Islands for use as a background to species maps
 #' @docType data
 #' @usage UK_lowres
 #' @author Colin Harrower
@@ -30,15 +30,301 @@
 #'   attributed with four possible values; Great Britain, Ireland, Isle of Man, 
 #'   and Channel Islands} \item{ID}{A field contain numerical IDs corresponding 
 #'   to the four regions} }
-#' @seealso \code{\link{UK_VC}}, \code{\link{UK_VC_lowres}}
+#' @seealso \code{\link{UK}}, \code{\link{UK_countries_lowres}}, \code{\link{UK_VC_lowres}}
 #' @source
 #'   \url{https://nbn.org.uk/tools-and-resources/nbn-toolbox/watsonian-vice-county-boundaries/}
-#'    for Great Britain Watsonian Vice County Boundaries, 
+#'    for Great Britain Watsonian Vice County Boundaries. \cr 
 #'   \url{https://github.com/SK53/Irish-Vice-Counties} for Irish Watsonian Vice
-#'   County Boundaries, 
+#'   County Boundaries.\cr
 #'   \url{https://www.openstreetmap.org/export#map=10/49.3980/-2.2179} for 
-#'   Channel Islands boundaries
+#'   Channel Islands boundaries.
 #'   
 #'   
 #'   
 "UK_lowres"
+
+#' @name UK
+#' @title A dataset containing a detailed coastline of the UK, Ireland and the Channel 
+#'   Islands for use as a background to species maps
+#' @docType data
+#' @usage UK
+#' @author Colin Harrower
+#'   
+#' @description A dataset containing a detailed high resolution coastline of the
+#'   UK, Ireland and the Channel Islands as a series of multipolygon features to
+#'   be used as the base of maps produced by \code{BRCmap}. This spatial object
+#'   is a detailed high resolution outline and may contain more detail than
+#'   required when mapping large areas and or producing maps at limited sizes
+#'   and depending on the plotting device being used can result in notably
+#'   larger output files, in which case it may be better to use the lower
+#'   resolution version \code{UK_lowres}. The coodrinates system used in the
+#'   dataset is the EPSG:27700 - OSGB 1936 / British National Grid - Projected
+#'   Coodinate References System (CRS), therefore the Irish data and Channel
+#'   Islands data have been reprojected. The data in this dataset, along with
+#'   all other coastline datasets included with BRCmap (see links below), are
+#'   derived from the \code{UK_VC} dataset where different datasets were derived
+#'   by merging and/or simplifying the features to create the each dataset. This
+#'   dataset is version of the \code{UK_VC} datasets where the features have
+#'   been simplified using GIS tools before merging the features till there is a
+#'   single feature for each region (Great Britain, Ireland, Isle of Man,
+#'   Channel Islands) in the dataset. The \code{UK_VC} dataset used to produce
+#'   the other datasets included with this package was created using a couple of
+#'   different open source datasets (see source section below)
+#'   
+#'   
+#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons 
+#'   required to plot the coastline of the UK, Ireland and Channel Islands. The 
+#'   attribute data table associated with the polygons has the following fields 
+#'   which can be used to plot subsets of the whole. \describe{ \item{REGION}{A 
+#'   field containing a factor stating the region to which each feature is 
+#'   attributed with four possible values; Great Britain, Ireland, Isle of Man, 
+#'   and Channel Islands} \item{ID}{A field contain numerical IDs corresponding 
+#'   to the four regions} }
+#'   
+#' @seealso \code{\link{UK_lowres}}, \code{\link{UK_countries}}, \code{\link{UK_VC}}
+#' @source
+#'   \url{https://nbn.org.uk/tools-and-resources/nbn-toolbox/watsonian-vice-county-boundaries/}
+#'    for Great Britain Watsonian Vice County Boundaries. \cr 
+#'   \url{https://github.com/SK53/Irish-Vice-Counties} for Irish Watsonian Vice
+#'   County Boundaries.\cr
+#'   \url{https://www.openstreetmap.org/export#map=10/49.3980/-2.2179} for 
+#'   Channel Islands boundaries.
+#'   
+#'   
+#'   
+"UK"
+
+
+#' @name UK_countries_lowres
+#' @title A dataset containing the boundaries of the countries in the UK,
+#'   Ireland and the Channel Islands for use as a background to species maps
+#' @docType data
+#' @usage UK_lowres
+#' @author Colin Harrower
+#'
+#' @description A dataset containing the boundaries of the countries within the
+#'   UK, Ireland and the Channel Islands as a series of multipolygon features to
+#'   be used as the base of maps produced by \code{BRCmap}. The coodrinates
+#'   system used in the dataset is the EPSG:27700 - OSGB 1936 / British National
+#'   Grid - Projected Coodinate References System (CRS), therefore the Irish
+#'   data and Channel Islands data have been reprojected. The data in this
+#'   dataset, along with all other coastline datasets included with BRCmap (see
+#'   links below), are derived from the \code{UK_VC} dataset where different
+#'   datasets were derived by merging and/or simplifying the features to create
+#'   the each dataset. This dataset is version of the \code{UK_VC} datasets
+#'   where the features have been simplified using GIS tools before merging the
+#'   features till there is a single feature for each country (see format
+#'   section below) in the dataset. The \code{UK_VC} dataset used to produce the
+#'   other datasets included with this package was created using a couple of
+#'   different open source datasets (see source section below)
+#'
+#'
+#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons
+#'   required to plot the outlines of the countires comprising the UK, Ireland
+#'   and Channel Islands. The attribute data table associated with the polygons
+#'   has the following fields which can be used to plot subsets of the whole.
+#'   \describe{ \item{COUNTRY}{A field contain a factor stating the country to
+#'   which each feature is attributed. Values in this field are: England,
+#'   Scotland, Wales, Northern Ireland, Republic of Ireland, Bailiwick of
+#'   Guerynsey, Bailiwick of Jersey, Isle of Man} \item{REGION}{A field
+#'   containing a factor stating the region to which each feature is attributed
+#'   with four possible values; Great Britain, Ireland, Isle of Man, and Channel
+#'   Islands} \item{GOVERNMENT}{a factor containing determining the Government
+#'   region the features belong to (United Kingom, Republic of Ireland, Crown
+#'   Dependencies)}\item{ID}{A field contain numerical IDs} }
+#' @seealso \code{\link{UK_countries}}, \code{\link{UK_lowres}}, \code{\link{UK_VC_lowres}}
+#' @source
+#' \url{https://nbn.org.uk/tools-and-resources/nbn-toolbox/watsonian-vice-county-boundaries/}
+#' for Great Britain Watsonian Vice County Boundaries.\cr
+#' \url{https://github.com/SK53/Irish-Vice-Counties} for Irish Watsonian Vice
+#' County Boundaries.\cr
+#' \url{https://www.openstreetmap.org/export#map=10/49.3980/-2.2179} for Channel
+#' Islands boundaries.
+#'
+#'
+#' 
+"UK_countries_lowres"
+
+#' @name UK_countries
+#' @title A dataset containing detailed boundaries of the countries in the UK,
+#'   Ireland and the Channel Islands for use as a background to species maps
+#' @docType data
+#' @usage UK_countries
+#' @author Colin Harrower
+#'
+#' @description A dataset containing detailed high resolution boundaries for the
+#'   countries within the UK, Ireland and the Channel Islands as a series of
+#'   multipolygon features to be used as the base of maps produced by
+#'   \code{BRCmap}. This spatial object is a detailed high resolution outline
+#'   and may contain more detail than required when mapping large areas and or
+#'   producing maps at limited sizes and depending on the plotting device being
+#'   used can result in notably larger output files, in which case it may be
+#'   better to use the lower resolution version \code{UK_countries_lowres}. The
+#'   coodrinates system used in the dataset is the EPSG:27700 - OSGB 1936 /
+#'   British National Grid - Projected Coodinate References System (CRS),
+#'   therefore the Irish data and Channel Islands data have been reprojected.
+#'   The data in this dataset, along with all other coastline datasets included
+#'   with BRCmap (see links below), are derived from the \code{UK_VC} dataset
+#'   where different datasets were derived by merging and/or simplifying the
+#'   features to create the each dataset. This dataset is version of the
+#'   \code{UK_VC} datasets where the features have been simplified using GIS
+#'   tools before merging the features till there is a single feature for each
+#'   country (see format section below) in the dataset. The \code{UK_VC} dataset
+#'   used to produce the other datasets included with this package was created
+#'   using a couple of different open source datasets (see source section below).
+#'   
+#'
+#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons
+#'   required to plot the outlines of the countires comprising the UK, Ireland
+#'   and Channel Islands. The attribute data table associated with the polygons
+#'   has the following fields which can be used to plot subsets of the whole.
+#'   \describe{ \item{COUNTRY}{A field contain a factor stating the country to
+#'   which each feature is attributed. Values in this field are: England,
+#'   Scotland, Wales, Northern Ireland, Republic of Ireland, Bailiwick of
+#'   Guerynsey, Bailiwick of Jersey, Isle of Man} \item{REGION}{A field
+#'   containing a factor stating the region to which each feature is attributed
+#'   with four possible values; Great Britain, Ireland, Isle of Man, and Channel
+#'   Islands} \item{GOVERNMENT}{a factor containing determining the Government
+#'   region the features belong to (United Kingom, Republic of Ireland, Crown
+#'   Dependencies)}\item{ID}{A field contain numerical IDs} }
+#' @seealso \code{\link{UK_countries_lowres}}, \code{\link{UK_VC}}, \code{\link{UK}}
+#' @source
+#' \url{https://nbn.org.uk/tools-and-resources/nbn-toolbox/watsonian-vice-county-boundaries/}
+#' for Great Britain Watsonian Vice County Boundaries.\cr
+#' \url{https://github.com/SK53/Irish-Vice-Counties} for Irish Watsonian Vice
+#' County Boundaries.\cr
+#' \url{https://www.openstreetmap.org/export#map=10/49.3980/-2.2179} for Channel
+#' Islands boundaries.
+#'
+#'
+#' 
+"UK_countries"
+
+#' @name UK_VC_lowres
+#' @title A dataset containing the boundaries of the Watsonian vice counties in
+#'   the UK, Ireland and the Channel Islands for use as a background to species
+#'   maps
+#' @docType data
+#' @usage UK_VC_lowres
+#' @author Colin Harrower
+#'
+#' @description A dataset containing the boundaries of the Watsonian Vice
+#'   Counties within the UK, Ireland and the Channel Islands as a series of
+#'   multipolygon features to be used as the base of maps produced by
+#'   \code{BRCmap}. The coodrinates system used in the dataset is the EPSG:27700
+#'   - OSGB 1936 / British National Grid - Projected Coodinate References System
+#'   (CRS), therefore the Irish data and Channel Islands data have been
+#'   reprojected. The data in this dataset, along with all other coastline
+#'   datasets included with BRCmap (see links below), are derived from the
+#'   \code{UK_VC} dataset where different datasets were derived by merging
+#'   and/or simplifying the features to create the each dataset. This dataset is
+#'   version of the \code{UK_VC} datasets where the features have been
+#'   simplified using GIS tools before merging the features till there is a
+#'   single feature for each country (see format section below) in the dataset.
+#'   The \code{UK_VC} dataset used to produce the other datasets included with
+#'   this package was created using a couple of different open source datasets
+#'   (see source section below). Note, that in this object the Bailiwick of
+#'   Jersey and Bailwick of Guernsey have been kept as seperate elements in the
+#'   spatial object so that they can be plotted seperately if required meaning
+#'   there are 2 elements for VC 113. Similarly there is one Irish VC (H34) that
+#'   has been divided into two seperate elements  as the VC boundary did not
+#'   align sufficiently with the country boudary, resulting in seperate elements
+#'   for the Northern Irish and Republic of Ireland parts of this VC.
+#'
+#'
+#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons
+#'   required to plot the outlines of the countires comprising the UK, Ireland
+#'   and Channel Islands. The attribute data table associated with the polygons
+#'   has the following fields which can be used to plot subsets of the whole.
+#'   \describe{ \item{COUNTRY}{A field contain a factor stating the country to
+#'   which each feature is attributed. Values in this field are: England,
+#'   Scotland, Wales, Northern Ireland, Republic of Ireland, Bailiwick of
+#'   Guerynsey, Bailiwick of Jersey, Isle of Man} \item{VCNAME}{A text field
+#'   containg the Watsonian Vice County names} \item{VCNUMBER}{A numerical field
+#'   containg the Vice County ID number. Note Irish VCs have been given values >
+#'   200, so that 201 = H1, 202 = H2, etc.} \item{VC}{The Vice County ID code.
+#'   For GB & Channel Islands VCs this is a number for Irish VCs this is a H
+#'   followed by a number} \item{REGION}{A field containing a factor stating the
+#'   region to which each feature is attributed with four possible values; Great
+#'   Britain, Ireland, Isle of Man, and Channel Islands} \item{GOVERNMENT}{a
+#'   factor containing determining the Government region the features belong to
+#'   (United Kingom, Republic of Ireland, Crown Dependencies)}}
+#' @seealso \code{\link{UK_lowres}}
+#' @source
+#' \url{https://nbn.org.uk/tools-and-resources/nbn-toolbox/watsonian-vice-county-boundaries/}
+#' for Great Britain Watsonian Vice County Boundaries.\cr
+#' \url{https://github.com/SK53/Irish-Vice-Counties} for Irish Watsonian Vice
+#' County Boundaries.\cr
+#' \url{https://www.openstreetmap.org/export#map=10/49.3980/-2.2179} for Channel
+#' Islands boundaries.
+#'
+#'
+#' 
+"UK_VC_lowres"
+
+#' @name UK_VC
+#' @title A dataset containing detailed boundaries of the Watsonian vice counties in
+#'   the UK, Ireland and the Channel Islands for use as a background to species
+#'   maps
+#' @docType data
+#' @usage UK_VC
+#' @author Colin Harrower
+#'
+#' @description A dataset containing detailed high resolution boundaries for the
+#'   countries within the UK, Ireland and the Channel Islands as a series of
+#'   multipolygon features to be used as the base of maps produced by
+#'   \code{BRCmap}. This spatial object is a detailed high resolution outline
+#'   suitable for plotting individual vice counties and may contain more detail
+#'   than required when mapping large areas and or producing maps at limited
+#'   sizes and depending on the plotting device being used can result in notably
+#'   larger output files, in which case it may be better to use the lower
+#'   resolution version \code{UK_VC_lowres}. The coodrinates system used in the
+#'   dataset is the EPSG:27700 - OSGB 1936 / British National Grid - Projected
+#'   Coodinate References System (CRS), therefore the Irish data and Channel
+#'   Islands data have been reprojected. The data in this dataset, along with
+#'   all other coastline datasets included with BRCmap (see links below), are
+#'   derived from the \code{UK_VC} dataset where different datasets were derived
+#'   by merging and/or simplifying the features to create the each dataset. This
+#'   dataset is version of the \code{UK_VC} datasets where the features have
+#'   been simplified using GIS tools before merging the features till there is a
+#'   single feature for each country (see format section below) in the dataset.
+#'   The \code{UK_VC} dataset used to produce the other datasets included with
+#'   this package was created using a couple of different open source datasets
+#'   (see source section below). Note, that in this object the Bailiwick of
+#'   Jersey and Bailwick of Guernsey have been kept as seperate elements in the
+#'   spatial object so that they can be plotted seperately if required meaning
+#'   there are 2 elements for VC 113. Similarly there is one Irish VC (H34) that
+#'   has been divided into two seperate elements  as the VC boundary did not
+#'   align sufficiently with the country boudary, resulting in seperate elements
+#'   for the Northern Irish and Republic of Ireland parts of this VC.
+#'   
+#'
+#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons
+#'   required to plot the outlines of the countires comprising the UK, Ireland
+#'   and Channel Islands. The attribute data table associated with the polygons
+#'   has the following fields which can be used to plot subsets of the whole.
+#'   \describe{ \item{COUNTRY}{A field contain a factor stating the country to
+#'   which each feature is attributed. Values in this field are: England,
+#'   Scotland, Wales, Northern Ireland, Republic of Ireland, Bailiwick of
+#'   Guerynsey, Bailiwick of Jersey, Isle of Man} \item{VCNAME}{A text field
+#'   containg the Watsonian Vice County names} \item{VCNUMBER}{A numerical field
+#'   containg the Vice County ID number. Note Irish VCs have been given values >
+#'   200, so that 201 = H1, 202 = H2, etc.} \item{VC}{The Vice County ID code.
+#'   For GB & Channel Islands VCs this is a number for Irish VCs this is a H
+#'   followed by a number} \item{REGION}{A field containing a factor stating the
+#'   region to which each feature is attributed with four possible values; Great
+#'   Britain, Ireland, Isle of Man, and Channel Islands} \item{GOVERNMENT}{a
+#'   factor containing determining the Government region the features belong to
+#'   (United Kingom, Republic of Ireland, Crown Dependencies)}}
+#' @seealso \code{\link{UK_VC_lowres}}, \code{\link{UK}}, \code{\link{UK_countries}}
+#' @source
+#' \url{https://nbn.org.uk/tools-and-resources/nbn-toolbox/watsonian-vice-county-boundaries/}
+#' for Great Britain Watsonian Vice County Boundaries.\cr
+#' \url{https://github.com/SK53/Irish-Vice-Counties} for Irish Watsonian Vice
+#' County Boundaries.\cr
+#' \url{https://www.openstreetmap.org/export#map=10/49.3980/-2.2179} for Channel
+#' Islands boundaries.
+#'
+#'
+#' 
+"UK_VC"

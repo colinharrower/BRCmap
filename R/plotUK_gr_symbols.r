@@ -205,70 +205,73 @@ draw_symbols = function(x, y, symbol = "circle", dimen, rot=0, n_circle = 32, ..
 }
 
 #' @title Add symbols to existing map
-#' @description Function to plot valud UK grid references as symbols onto a existing map
+#' @description Function to plot valud UK grid references as symbols onto a
+#'   existing map
 #'
-#' @param gridref A character vector containg the grid refrences to be added to the map.
-#' @param symbol A text string specifying the type of symbol to be added. The default
-#' \code{symbol="circle"} will add a circle (see details). Other possible values are; 
-#' \code{triangle}, \code{square}, \code{diamond}.
+#' @param gridref A character vector containg the grid refrences to be added to
+#'   the map.
+#' @param symbol A text string specifying the type of symbol to be added. The
+#'   default \code{symbol="circle"} will add a circle (see details). Other
+#'   possible values are; \code{triangle}, \code{square}, \code{diamond}.
 #' @param dimen A vector of numerical values specifying the dimensions for the
 #'   symbols to be plotted. The default \code{dimen = NULL} means that the
 #'   dimensions of each symbols will be the dimensions of the corresponding grid
 #'   references, e.g. a 10km grid square will be represented by a symbols with
 #'   dimensions of 10km
 #' @param dimen_type A text string specifying how the dimensions are being
-#'   specified. The default \code{dimen_type = "abs"} indicates that the
-#'   dimensions are being given in plotting units. The alternative
-#'   \code{dimen_type = "prop"} indicates that the dimensions are being
-#'   specified as a proportion of the grid reference dimension, e.g. 0.9 means
-#'   that the dimensions of the symbols will be 90% of dimensions of the
-#'   relevant grid square.
+#'   specified. The default \code{dimen_type = "prop"} indicates that the
+#'   dimensions are being specified as a proportion of the grid reference
+#'   dimension, e.g. 0.9 means that the dimensions of the symbols will be 90"\%" of
+#'   dimensions of the relevant grid square. The alternative \code{dimen_type =
+#'   "abs"} indicates that the dimensions are being given in plotting units
 #' @param rot A numerical value specifying the rotation of the symbol in
 #'   degrees. The default \code{rot = 0} means that the symbol will be plotted
-#'   from 12 o'clock working around the central point going clockwise. An 
+#'   from 12 o'clock working around the central point going clockwise. An
 #'   exception to this is when \code{symbol = "square"} in which case the
-#'   vertices are rotated by 45 degrees so that the top edge is parallel with 
+#'   vertices are rotated by 45 degrees so that the top edge is parallel with
 #'   the x axis.
-#' @param centre A logical variable determing whether the symbol will be 
-#'   centered on the centre point of the grid reference or at the lower left 
+#' @param centre A logical variable determing whether the symbol will be
+#'   centered on the centre point of the grid reference or at the lower left
 #'   corner. The default \code{centre = TRUE} will plot the symbol so that it is
 #'   centered on the central point of the square.
 #' @param gr_prec A numerical vector specifying the precision of each grid
-#'   reference. The default \code{gr_prec = NULL} will determine the precision directly
-#'   from the grid reference. This variable will only be needed if the default
-#'   precision needs to be overridden.
+#'   reference. The default \code{gr_prec = NULL} will determine the precision
+#'   directly from the grid reference. This variable will only be needed if the
+#'   default precision needs to be overridden.
 #' @param ci_insert A logical variable determining whether Channel Islands grid
 #'   references are to be plotted in an insert box to the left of the UK. The
-#'   default \code{ci_insert = FALSE} will plot the Channel Islands grid references in
-#'   their true position to the south of the UK.
-#' @param add_irish_rot A numberical value specifying the additional rotation to be
-#' applied to symbols used to plot Irish grid references. This rotation is applied in 
-#' addition to the rotation given to all grid references specified by the 
-#' argument \code{rot}. The default \code{add_irish_rot = 5} will rotate Irish grid
-#' references and extra 5 degrees clockwise to account for the difference in alignment
-#' between the GB and Irish grids when plotted together, meaning that symbols in Ireland
-#' should appear correctly aligned relative to the Irish grid even thoughy they are
-#' actually being plotted on the GB grid. To avoid this additional rotation 
-#' for Irish grid reference use a value of 0.
+#'   default \code{ci_insert = FALSE} will plot the Channel Islands grid
+#'   references in their true position to the south of the UK.
+#' @param add_irish_rot A numberical value specifying the additional rotation to
+#'   be applied to symbols used to plot Irish grid references. This rotation is
+#'   applied in addition to the rotation given to all grid references specified
+#'   by the argument \code{rot}. The default \code{add_irish_rot = 5} will
+#'   rotate Irish grid references and extra 5 degrees clockwise to account for
+#'   the difference in alignment between the GB and Irish grids when plotted
+#'   together, meaning that symbols in Ireland should appear correctly aligned
+#'   relative to the Irish grid even thoughy they are actually being plotted on
+#'   the GB grid. To avoid this additional rotation for Irish grid reference use
+#'   a value of 0.
 #' @param ci_origin A vector of two values giving the x & y cooridinates for the
 #'   origin of the Channel Islands grid relative to the the UK when using the
 #'   insert box.
-#' @param ... Any other arguments that will be passed to the functions
-#'   used to add the symbols to the map. Examples of typical arguments that you
-#'   may want to pass through are \code{col}, \code{border}.
+#' @param ... Any other arguments that will be passed to the functions used to
+#'   add the symbols to the map. Examples of typical arguments that you may want
+#'   to pass through are \code{col}, \code{border}.
 #'
 #' @return By default this function does not return anything, but if the output
 #'   from the function is assigned it will return the x,y values (eastings &
 #'   northings on OSGB) of the grid references via the invisible function.
-#' @author Colin Harrower   
-#' @seealso \code{\link{plotUK_gr}}, \code{\link{plotUK_gr_cats}}, \code{\link{plotUK_gr_points}}
+#' @author Colin Harrower
+#' @seealso \code{\link{plotUK_gr}}, \code{\link{plotUK_gr_cats}},
+#'   \code{\link{plotUK_gr_points}}
 #' @export
 #'
 #' @examples
 #'   ## Example of adding grid references to a map as symbols
 #'   # Create blank map of UK
 #'     plot_GIS(UK, show.grid = FALSE, xlab = "", ylab="", show.axis = FALSE)
-#'     
+#'
 #'   # Add some points as circles
 #'     plotUK_gr_symbols(c("SU68","SP50","SU77"), col="red", border="darkred")
 #'   # Add some other points this time as triangles
@@ -277,7 +280,7 @@ draw_symbols = function(x, y, symbol = "circle", dimen, rot=0, n_circle = 32, ..
 #'    plotUK_gr_symbols(c("O13","J37"), symbol = "diamond", col="green", border="darkgreen")
 #'     
 plotUK_gr_symbols <-
-  function(gridref, symbol = "circle", dimen = NULL, dimen_type = "abs", rot = 0,  centre = TRUE, gr_prec = NULL, add_irish_rot = 5, ci_insert = FALSE, ci_origin = c(-180000,30000), ...){
+  function(gridref, symbol = "circle", dimen = NULL, dimen_type = "prop", rot = 0,  centre = TRUE, gr_prec = NULL, add_irish_rot = 5, ci_insert = FALSE, ci_origin = c(-180000,30000), ...){
     if(!dimen_type %in% c("abs","prop")){
       stop("invalid option for dimen_type (recognised values are 'prop' or 'abs')")
     }

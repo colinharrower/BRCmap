@@ -63,7 +63,7 @@ variable determing the background colour of the plot area. Default = \code{"whit
 variable determining the colour of the border surrounding the plot area. Default = \code{NA} results in no border to plotting region.
 }
   \item{new.window}{
-logical, determing whether plot should force a new device window to be opened. Default = \code{TRUE}. If new window is opened dimensions are set based on dimensions of object to be plotted.
+logical, determing whether plot should force a new device window to be opened. Default = \code{FALSE}. If new window is opened dimensions are set based on dimensions of object to be plotted.
 }
   \item{no.margin}{
 logical, determing whether plot is to include a margin. Default = \code{FALSE}. NOTE title, xlab and ylab are written to margin area so will no show if margin removed.

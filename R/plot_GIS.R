@@ -1,19 +1,19 @@
 plot_GIS <-
 function(
 	gis_data, main = "", 
-	xlab = "Easting (km)", 
-	ylab="Northing (km)", 
+	xlab = "", 
+	ylab = "", 
 	xlim = NULL, 
 	ylim = NULL, 
-	show.axis = TRUE, 
-	show.grid = TRUE, 
+	show.axis = FALSE, 
+	show.grid = FALSE, 
 	grid.div = 100000, 
 	grid.col = "grey",  
 	fill.col = NA, 
 	line.col = par("fg"), 
 	bg.col = "white", 
 	box.col = NA, 
-	new.window = TRUE, 
+	new.window = FALSE, 
 	no.margin = FALSE, 
 	max.dimen = 13, 
 	cex.main = 1.2, 
@@ -40,7 +40,9 @@ function(
       }
       
     }
-    xlim = c(floor(xlim[1]/grid.div) * grid.div, ceiling(xlim[2]/grid.div) * grid.div ) # Round xlim to nearest grid divisions that include xlims specified
+    if(show.grid){
+      xlim = c(floor(xlim[1]/grid.div) * grid.div, ceiling(xlim[2]/grid.div) * grid.div ) # Round xlim to nearest grid divisions that include xlims specified
+    }
     
     if(is.null(ylim)){
       if(is.list(gis_data)){
@@ -57,7 +59,9 @@ function(
       }
       
     }
-    ylim = c(floor(ylim[1]/grid.div) * grid.div, ceiling(ylim[2]/grid.div) * grid.div ) # Round xlim to nearest grid divisions that include xlims specified
+    if(show.grid){
+      ylim = c(floor(ylim[1]/grid.div) * grid.div, ceiling(ylim[2]/grid.div) * grid.div ) # Round xlim to nearest grid divisions that include xlims specified
+    }
   
     fill_col <- fill.col
     line_col <- line.col

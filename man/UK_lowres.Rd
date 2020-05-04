@@ -4,18 +4,22 @@
 \name{UK_lowres}
 \alias{UK_lowres}
 \title{A dataset containing the coastline of the UK, Ireland and the Channel 
-  Islands for uses as a background to species maps}
+  Islands for use as a background to species maps}
 \format{A \code{SpatialPolygonsDataFrame} object containing of the polygons 
   required to plot the coastline of the UK, Ireland and Channel Islands. The 
   attribute data table associated with the polygons has the following fields 
-  which can be used to plot subsets of the whole. \describe{ 
-  \item{REGION}{The polygons comprosing the coastline in this object are 
-  distingished into 4 distinct regions; Great Britain, Ireland, Isle of Man, 
-  Channel Islands} \item{ID}{The numerical IDs for the different regions} }}
+  which can be used to plot subsets of the whole. \describe{ \item{REGION}{A 
+  field containing a factor stating the region to which each feature is 
+  attributed with four possible values; Great Britain, Ireland, Isle of Man, 
+  and Channel Islands} \item{ID}{A field contain numerical IDs corresponding 
+  to the four regions} }}
 \source{
-\url{https://github.com/SK53/Irish-Vice-Counties} for Irish Watsonian Vice County Boundaries, 
-  \url{https://nbn.org.uk/tools-and-resources/nbn-toolbox/watsonian-vice-county-boundaries/} for Great Britain Watsonian Vice County Boundaries, 
-  \url{https://www.openstreetmap.org/export#map=10/49.3980/-2.2179} for Channel Islands boundaries
+\url{https://nbn.org.uk/tools-and-resources/nbn-toolbox/watsonian-vice-county-boundaries/}
+   for Great Britain Watsonian Vice County Boundaries. \cr 
+  \url{https://github.com/SK53/Irish-Vice-Counties} for Irish Watsonian Vice
+  County Boundaries.\cr
+  \url{https://www.openstreetmap.org/export#map=10/49.3980/-2.2179} for 
+  Channel Islands boundaries.
 }
 \usage{
 UK_lowres
@@ -23,17 +27,22 @@ UK_lowres
 \description{
 A dataset containing the coastline of the UK, Ireland and the 
   Channel Islands as a series of multipolygon features to be used as the base
-  of maps produced by \code{BRCmap}. The coodrinates system used in the
-  dataset is the EPSG:27700 - OSGB 1936 / British National Grid - Projected
-  Coodinate References System (CRS), therefore the Irish data and Channel
-  Islands data have been reprojected. The data in this dataset, along with all other coastline datasets included with BRCmap (see links below), are derived
-  from the \code{UK_VC} dataset where different datasets were derived by merging and/or simplifying the features to create the each dataset. This dataset is 
-  version of the \code{UK_VC} datasets where the features have been simplified using GIS tools before merging the features till there is a single feature
-  for each region (Great Britain, Ireland, Isle of Man, Channel Islands) in the dataset. The \code{UK_VC} dataset used to produce the other datasets
-  included with this package was created using a couple of different open source datasets (see source section below)
+  of maps produced by \code{BRCmap}. The coodrinates system used in the 
+  dataset is the EPSG:27700 - OSGB 1936 / British National Grid - Projected 
+  Coodinate References System (CRS), therefore the Irish data and Channel 
+  Islands data have been reprojected. The data in this dataset, along with 
+  all other coastline datasets included with BRCmap (see links below), are 
+  derived from the \code{UK_VC} dataset where different datasets were derived
+  by merging and/or simplifying the features to create the each dataset. This
+  dataset is version of the \code{UK_VC} datasets where the features have 
+  been simplified using GIS tools before merging the features till there is a
+  single feature for each region (Great Britain, Ireland, Isle of Man, 
+  Channel Islands) in the dataset. The \code{UK_VC} dataset used to produce 
+  the other datasets included with this package was created using a couple of
+  different open source datasets (see source section below)
 }
 \seealso{
-\code{\link{UK_VC}}, \code{\link{UK_VC_lowres}}
+\code{\link{UK}}, \code{\link{UK_countries_lowres}}, \code{\link{UK_VC_lowres}}
 }
 \author{
 Colin Harrower

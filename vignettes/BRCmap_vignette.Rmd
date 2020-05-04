@@ -25,7 +25,7 @@ The packages contains functions to:
 ## Simple Example
 The simple example below shows how BRCmap can be used to quickly create a simple distribution map. 
 ```{r, fig.width=6, fig.height=8, tidy=TRUE, eval = TRUE}
-  # Reduce margins
+# Reduce margins
   par(mar=c(0,0,0,0)+0.1)
   # Create a base maps of the UK
   plot_GIS(UK, show.grid = FALSE,show.axis = FALSE,xlab="", ylab="", new.window = FALSE)

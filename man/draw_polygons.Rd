@@ -26,6 +26,9 @@ o'clock position.}
 function used to actually add the polygon to the plot, e.g. \code{col = 
 "red"}, code{border = "blue"}, etc.}
 }
+\description{
+Add a series of regular polygons to the existing plot
+}
 \details{
 In most cases this function plots a regular polygon, i.e. where all 
   angles are the same (equiangular) and where all sides are the same length 

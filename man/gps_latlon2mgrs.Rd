@@ -31,7 +31,7 @@ the coordiantes for the 2nd WGS84 point, and so on.
    
 }
 \seealso{
-\code{\link{UTMtoMGRS}}, \code{\link{gps_latlon2UTM}}
+\code{\link{UTMtoMGRS}}
 }
 \author{
 Colin Harrower

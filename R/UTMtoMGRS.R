@@ -49,7 +49,7 @@
 #' 
 #' @export
 #'
-#' @seealso \code{\link{MGRStoUTM}}, \code{\link{gps_latlon2utm}}
+#' @seealso \code{\link{MGRStoUTM}}
 #' @examples 
 #' ## Example converting a UTM grid reference to MGRS
 #'    UTMtoMGRS("30U 630855 5718493")
@@ -126,7 +126,7 @@ UTMtoMGRS = function(utm_str){
 #' @author Colin Harrower
 #' 
 #' @export
-#' @seealso \code{\link{UTMtoMGRS}}, \code{\link{gps_latlon2UTM}}
+#' @seealso \code{\link{UTMtoMGRS}}
 #' @examples
 #' ## Converting WGS84 latitude and longitude values to MGRS grid references
 #'    gps_latlon2mgrs(51.602382,-1.110548)
