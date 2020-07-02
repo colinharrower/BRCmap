@@ -12,7 +12,7 @@
 #'@param main character string giving the main title that will be given to the
 #'  plot. The default \code{main = ""} is to have no title
 #'@param xlab character string giving the label to be used on the x axis of the
-#'  plot. The default \code {xlab = ""} is to have no x label
+#'  plot. The default \code{xlab = ""} is to have no x label
 #'@param ylab character string giving the label to be used on the y axis of the
 #'  plot. The default \code{ylab = ""} is to have no y label
 #'@param xlim numerical vector of length 2 giving the limits of the x axis of
@@ -43,8 +43,8 @@
 #'  Default \code{box.col = NA} results in no border to the plotting region
 #'@param new.window logical value determing wehtehr the plot should be created
 #'  in a new window. If a new window is ty be opened the dimensions of the
-#'  window  are set basede on the dimensions of object to be plotted (\code
-#'  {gis_data}). The default \code{new.window = FALSE} is to not open a new
+#'  window  are set basede on the dimensions of object to be plotted 
+#'  (\code{gis_data}). The default \code{new.window = FALSE} is to not open a new
 #'  window
 #'@param no.margin logical value determining whether the plot is to include a
 #'  margin. The default \code{no.margin = FALSE} will include a margin. NOTE the
@@ -83,6 +83,7 @@
 #'  case the plotting dimensions will be returned
 #'@export
 #'
+#'
 #'@details This function has alot of arguments allowing the base plot to be
 #'  tailored in a number of ways, however the defaults for most arguments should
 #'  be the most commonly required options only requiring specification if you
@@ -94,10 +95,13 @@
 #'
 #'@author Colin Harrower
 #'
-#'@seealso \code{\link{plotUK_gr}}, \code{\link{UK}},
+#'@seealso \code{\link{plotUK_gr}}, 
+#'  \code{\link{UK}},
 #'  \code{\link{UK_countries}},
-#'  code{\link{UK_VC}},\code{\link{UK_lowres}},\code{\link{UK_countries_lowres}}
-#'  code{\link{UK_VC_lowres}}
+#'  \code{\link{UK_VC}},
+#'  \code{\link{UK_lowres}},
+#'  \code{\link{UK_countries_lowres}}
+#'  \code{\link{UK_VC_lowres}}
 #'
 #' @examples
 #'
@@ -259,10 +263,10 @@ function(
 			# Plot GIS data onto plot
 			if(is.list(gis_data)){
 			  for(i in 1:length(gis_data)){
-				plot(gis_data[[i]], add = TRUE, col = fill.col, border = line.col)
+				sp::plot(gis_data[[i]], add = TRUE, col = fill.col, border = line.col)
 			  }
 			} else {
-			  plot(gis_data, add=TRUE, col = fill.col, border = line.col)
+			  sp::plot(gis_data, add=TRUE, col = fill.col, border = line.col)
 			}
 		}
 		
