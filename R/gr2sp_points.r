@@ -2,7 +2,7 @@ gr2sp_points = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, out_pr
 	# Requires rgdal package in addition to standard BRCmaps packages
 	# Check out_proj4 if supplied
 	if(!is.null(out_proj4)){
-		test = checkCRSArgs(out_proj4)
+		test = rgdal::checkCRSArgs_ng(out_proj4)
 		# Check to see if CRS check returns true (a valid CRS value) otherwise produce error and stop
 		if(!test[[1]]){
 			stop("PROJ.4 string passed to out_proj4 is not a recognised CRS")
@@ -96,7 +96,7 @@ gr2sp_points = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, out_pr
 		# Test whether out_proj4 is not NULL (i.e. it was supplied or either sep_proj_layers = FALSE or there is only 1 grid ref type present)		
 		if(!is.null(out_proj4)){
 			# Test whether current projection set matches output project if not reproject
-			if(all(checkCRSArgs(tp_proj4)[[1]] & checkCRSArgs(out_proj4)[[1]]) & checkCRSArgs(tp_proj4)[[2]] != checkCRSArgs(out_proj4)[[2]]){
+			if(all(checkCRSArgs_ng(tp_proj4)[[1]] & checkCRSArgs_ng(out_proj4)[[1]]) & checkCRSArgs_ng(tp_proj4)[[2]] != checkCRSArgs_ng(out_proj4)[[2]]){
 				sp_pointsdf = spTransform(sp_pointsdf, CRS(out_proj4))
 			}
 		}
