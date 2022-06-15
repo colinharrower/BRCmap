@@ -81,6 +81,9 @@ GB_EN2wgs84_sp_poly = function(easting, northing, precision, gr_atts = NULL){
 			poly_no = rep(1:gr_len, each = 5)
 		# Create a list of Polygon objects (one for each grid reference)
 			sp_pol = by(gr_poly,poly_no, FUN = sp::Polygon)
+			# For some reason this is now adding a names attribute that is being carried through and has issues when the final spatial object is plotted by leaflet
+			# Set this attribute to NULL effictively removing it while retaining any other attributes
+				attributes(sp_pol)$names = NULL
 			rm(gr_poly)
 		# Convert list of Polygon objects to a a Polygons object where each polygon has its own ID
 			# Need to make sure gr_ids are unique across all grid refs types so they can be combined if necessary
@@ -169,6 +172,9 @@ GB_EN2sp_poly = function(easting, northing, precision, gr_atts = NULL,out_proj4 
 			poly_no = rep(1:gr_len, each = 5)
 		# Create a list of Polygon objects (one for each grid reference)
 			sp_pol = by(gr_poly,poly_no, FUN = sp::Polygon)
+			# For some reason this is now adding a names attribute that is being carried through and has issues when the final spatial object is plotted by leaflet
+			# Set this attribute to NULL effictively removing it while retaining any other attributes
+				attributes(sp_pol)$names = NULL
 			rm(gr_poly)
 		# Convert list of Polygon objects to a a Polygons object where each polygon has its own ID
 			# Need to make sure gr_ids are unique across all grid refs types so they can be combined if necessary
