@@ -1,8 +1,8 @@
 Package: BRCmap
 Type: Package
 Title: Biological Records Centre Atlas Mapping Tool
-Version: 0.10.3.9
-Date: 2022-06-07
+Version: 0.10.4.0
+Date: 2022-11-14
 Author: Colin Harrower <corr@ceh.ac.uk>
 Maintainer: Colin Harrower <corr@ceh.ac.uk>
 Description: Produce biological atlas style maps directly from UK and Irish biological record
