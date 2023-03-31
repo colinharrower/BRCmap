@@ -1,15 +1,15 @@
 Package: BRCmap
 Type: Package
 Title: Biological Records Centre Atlas Mapping Tool
-Version: 0.10.4.0
-Date: 2022-11-14
+Version: 0.10.4.1
+Date: 2023-03-31
 Author: Colin Harrower <corr@ceh.ac.uk>
 Maintainer: Colin Harrower <corr@ceh.ac.uk>
 Description: Produce biological atlas style maps directly from UK and Irish biological record
 			 data where the geographic information is stored as UK, Irish or Channel Island grid 
-			 reference strings. Includes functions to reformat grid references to different precisions, 
-			 convert them to eastings and northings or latitude and longitudes or even grid reference
-			 data to R spatial polygons or points objects.
+			 reference character strings. Includes functions to reformat grid references to different precisions, 
+			 convert them to eastings and northings, latitude and longitudes, or convert them
+			 to R spatial polygons or points objects using the sp or sf packages.
 License: GPL-3
 Imports: maptools,sp,rgeos,rgdal
 Suggests: knitr, rmarkdown
