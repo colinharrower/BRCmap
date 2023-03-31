@@ -1,5 +1,5 @@
 ---
-title: "BRCmap - An R package to produce species distribution maps in styles suitable for use in distribution atlases"
+title: "BRCmap - An R package to produce species distribution maps of the type used in distribution atlases"
 author: "Colin Harrower"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -9,26 +9,27 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 # Introduction 
-BRCmap is an R package developed within the [Biological Record Centre (BRC)](http://www.brc.ac.uk) to simplify the production of publication quality distributions maps. BRCmap was designed initially for internal use within BRC but it was felt that it could be of use in the wider community particularly the recording schemes and biological recording community in the UK.  As BRC typically deals with UK data and  UK recording schemes the package is primarily focused upon producing distributions maps for the UK & Ireland. BRCmap does however include funcitons to deal with some coordinates systems that can be used worldwide (WGS84 Latitude & Longitude, Miltary Grid Reference System (MGRS) and Universal Tranverse Mercator Coordinates (UTM) and therefore may be of use outwith the UK.
+BRCmap is an R package developed within the [Biological Record Centre (BRC)](http://www.brc.ac.uk) to simplify the production of publication quality distributions maps. BRCmap was initially designed for internal use within BRC but once developed it was felt it could be of use in the wider community, particularly recording schemes and the biological recording community in the UK.  As BRC typically deals with data from Britain, Ireland and the Channel Islands the package is focused upon producing distributions maps for these regions.
 
-The packages contains functions to:
+BRCmap includes functions and options that allow you to tailor the distribution map to your requirements as well as accessory functions that help with dealing with and or processing UK grid reference data. In summary the packages contains functions to:
 
-- Process and convert the grid reference formats typically used within the UK (e.g. the Ordnance Survey of Great Britain (OSGB), Ordnance Survey of Ireland (OSI), and a truncated version of the Miltary Grid Rerence System (MGRS) often used for the Channel Islands).
-- Create base maps from one or more spatial objects (e.g.coastlines loaded from shape files)
-- Add distribution data to base maps in a range of styles (e.g. plotting grid references as polygons or points)
-- Produce Spatial objects such as `SpatialPolygonsDataFrame` or `SpatialPointsDataFrame` from grid reference data including attribute information which can then be used in R and/or saved to shapefiles
+- Interpret and convert the grid reference formats typically used within the Britain, Ireland and Channel Islands, specifically the Ordnance Survey of Great Britain (OSGB), the Ordnance Survey of Ireland (OSI), and the truncated version of the Miltary Grid Rerence System (MGRS) often used for the Channel Islands).
+- Create distributions maps with background layers such UK outline, country boundaries, or Watsonian County boundaries (all included as datasets in the BRCmap package) or even user supplied outlines loaded to R as spatial objects
+- Add distribution data directly from grid reference data onto the background layers (e.g. UK outline) in a range of styles (e.g. as grid square boundaries, or as points/plotting symbols)
+- Produce R spatial objects such as `SpatialPolygonsDataFrame`,`SpatialPointsDataFrame`,`Simple features polygons object`, `simple features points object` from grid reference data including any associated attribute information. These R spatial objects which can then be used within R in mapping or Geographic Information Systems (GIS) workflows and or saved to a number of spatial data file types, such as ESRI shapefiles, GeoPackage, etc for use in other GIS software.
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
   # Load the library
   library(BRCmap)
+  # Load sf but suppress startup
+    suppressPackageStartupMessages(library(sf))
 ```
 
-## Simple Example
-The simple example below shows how BRCmap can be used to quickly create a simple distribution map. 
+The example below shows how BRCmap can be used to quickly create a simple distribution map. 
 ```{r, fig.width=6, fig.height=8, tidy=TRUE, eval = TRUE}
-# Reduce margins
+  # Reduce margins
   par(mar=c(0,0,0,0)+0.1)
   # Create a base maps of the UK
-  plot_GIS(UK, show.grid = FALSE,show.axis = FALSE,xlab="", ylab="", new.window = FALSE)
+  plot_GIS(UK_lowres)
   # Create a vector of grid references
   grs = c("SP50","SO29","SN03","NO19","NH22",
             "H40","R99","S00","W09","WA50",
@@ -38,15 +39,100 @@ The simple example below shows how BRCmap can be used to quickly create a simple
   plotUK_gr(grs, col="red")
 ```
 
-BRCmap includes functions and options that allow you to tailor the distribution map to your requirements as well as functions for dealing with and processing UK grid reference data which will be detailed in the following sections
+# Dealing with grid references
+## Introduction to Grid Reference formats & standardising
+The three grid references systems used in the UK, Ireland, and Channel Islands have a number of factors in common. Firstly they all look essentially simialr and have similar patterns in their construction. They are built from a series of components each of which further refine the location being described going from left to write, starting one or two letter(s) followed by an even number of digits.  These starting letters specify a initial 100km x 100km square, though how they do this differs slightly between the systems but is not neccessary to understand (see Wikipedia pages for more details if interested [British National Grid](https://en.wikipedia.org/wiki/Ordnance_Survey_National_Grid), [Irish Grid Reference system](https://en.wikipedia.org/wiki/Irish_grid_reference_system), [Military Grid Reference System](https://en.wikipedia.org/wiki/Military_Grid_Reference_System)). The digits that follow the intial letter(s) describe a location within the relevant 100km square by specifying the location as an x,y offset (aka (easting, northing) from the origin (the south west/lower left corner of the square) in meters and there should always be an even number of digits. The first half of the digits specify the easting (a.k.a. the offset on the y axis) while the second half of the digits specify the northing (a.k.a. the offset on the x axis). The location described can be of varying resolutions depending on the number of digits given, for instance a 10km square is specified by one pair of digits (one easting & one northing digit), a 1km square by 2 pairs of digits (two easting & two northing digits), through to the 1m square with 10 digits (five easting & five northing) as shown in the table below.
 
-# Dealing with UK grid references
-This section  the most commonly usedcovers tasks when processing grid references
+Grid Reference | Square Resolution | digit pairs
+---------------|-------------------|-------------
+SU68           |  10km x 10km      |  1
+SU6189         |  1km x 1km        |  2
+SU616895       |  100m x 100m      |  3
+SU61698959     |  10m x 10m        |  4
+SU6169089594   |  1m x 1m          |  5
 
-## Standardising Grid References
+In rare cases the grid references can be terminated by a one or two character letter code. These special cases are called tetrads or quadrants and represent grid references used to represent a 2km x 2km square or a 5km x 5km square respectively. Tetrad or quadrant grid references are essentially 10km grid references which have had additional letter codes appended to then end to specify the relevant subsection of the 10km square to which they refer. In the case of tetrads the 10km squares are divided into 25 2km x 2km squares arranged in a 5 by 5 grid, each of which is assigned a letter code running from A, in the lower left, to Z, in the upper right, but omitting O to avoid confusion with zeros.
+
+
+```{r, fig.width=4, fig.asp = 1, tidy=TRUE, echo = FALSE, eval = TRUE, fig.cap = "Layout of tetrads within a 10km square"}
+  # Reduce margins
+  par(mar=c(0,0,0,0)+0.1)
+  # Create 10km square as a spatial polygon so it can be plotted
+    sq10km = gr2sf_poly("SU68")
+  # Create all tetrads within this 10km as spatial polygons
+    sq_tets = gr2sf_poly(paste0("SU68",LETTERS[-15]))
+  # Plot this square
+    plot(st_geometry(sq10km), lwd = 3, border = 3)
+  # add tetrads to plot
+    plot(st_geometry(sq_tets),lwd = 1, add = TRUE)
+  # Add label to each tetrad
+    text(gr_let2num(paste0("SU68",LETTERS[-15]), centre = TRUE), labels = LETTERS[-15],font = 2, cex = 0.9)
+    rm(sq10km, sq_tets)
+    
+```
+
+For quadrant grid references the 10km squares are divided into four 5km x 5km squares arranged in a 2 by 2 grid with each sections being allocated a two letters code to representing the corner of 10km square that the relevant section occupies, e.g. SW, NW, SE, NE for South West, North West, South East, and North East corners respectively.
+
+```{r, fig.width=4, fig.asp = 1, tidy=TRUE, echo = FALSE, eval = TRUE, fig.cap = "Layout of quadrants within a 10km square"}
+  # Reduce margins
+    par(mar=c(0,0,0,0)+0.1)
+  # Create 10km square as a spatial polygon so it can be plotted
+    sq10km = gr2sf_poly("SU68")
+  # Create all quadrants within this 10km as spatial polygons
+    sq_quads = gr2sf_poly(paste0("SU68",c("SW","NW","SE","NE")))
+  # Plot this square
+    plot(st_geometry(sq10km), lwd = 3, border = 3)
+  # add quadrants to plot
+    plot(st_geometry(sq_quads),lwd = 1, add = TRUE)
+  # Add label to each quadrants
+    text(gr_let2num(paste0("SU68",c("SW","NW","SE","NE")), centre = TRUE), labels = c("SW","NW","SE","NE"),font = 2, cex = 0.9)
+    rm(sq10km, sq_quads)
+```
+
+
+
+Although the essential components of a grid reference and their order are consistent the exact formatting can vary dramatically, for example sometimes spaces or hypens are used to seperate the individual components of the grid reference. In order for the functions in BRCmap to work consistently the grid references will need to be standardised to the format expected by the package. The standardised format is to use capital letters for the intial letter codes and any tetrad or quadrant and to have no spaces or other characters seperating the components of the grid reference. BRCmap contains a function `fmt_gridref` specifically for this purpose. This function will do some basic checks to also exclude/remove grid references that don't match the expected formats (e.g. that have uneven numbers of digits, too many letters a the start). 
+```{r}
+# Create a vector of grid references in a range of different formats
+# including some bad grid references
+  raw_grs = c("SP 43 27","W09","Wa50","sn0408","sN 02-02-", "SU06053919","SU687")
+  # Use the fmt_gridref function to standardise these grid refs
+  fmt_gridref(raw_grs)
+
+```
+In this case the function has remove the spaces and hypens from the grid references, converted the letters to upper case and has noticed that the last grid references has an uneven number of digits. **Note** this function only checks the basic structure of the grid references not whether the actual grid references is actually a valid grid reference or makes sense for the system (e.g. out of the typical plotting boundaries)
   
 ## Altering grid reference precision
-  
+
+In many cases you may want to take a grid reference or set of grid references and convert them to a lower resolution (e.g. determine what 1km or 10km square they occur in). The function `reformat_gr` can be used for this;
+
+```{r}
+  reformat_gr("SU6169089594")
+```
+by default `reformat_gr` will reformat to 10km square, but the output resolution can be supplied via the 2nd argument (`prec_out`) in metres.
+```{r}
+  # Output to 100m
+  reformat_gr("SU6169089594",100)
+```
+The input grid reference argument and or the precision argument can be supplied a single value or a vector of grid references and or precision values to allow a series of grid references to be output to a single precision or each to a different precision
+
+```{r}
+  # Create a set of input grid references
+   test_gr = c("SU6169089594","SU68","SP258597")
+  # Reformat all to 10km
+   reformat_gr(test_gr)
+  # Reformat each to different precision
+   reformat_gr(test_gr, c(100,10000,1000))
+  # Now reformat all to 1km
+   reformat_gr(test_gr,1000)
+```
+
+Notice that in the last example `reformat_gr` does not reformat a grid reference if the output resolution is that the original grid references resolution. In such cases it instead returns a `NA` as was the case of the 2nd grid references in the example above. In rare situation you may want to still force these coarser resolution records to a finer resolution grid reference by padding with zeros whjich can be achieved by setting the `pad_gr` argument to `TRUE` from the default `FALSE`, this will however display a message warning about false precision in grid references to make it is clear what is happening and that in most cases this is not desired or advisable.
+
+```{r}
+  reformat_gr(test_gr,1000, pad_gr = TRUE)
+```
+
 ## Converting grid references to eastings & northings and vice versa
   
 ## Converting between grid references and WGS84 latitudes & longitudes
