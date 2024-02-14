@@ -4,8 +4,7 @@
 \alias{draw_symbols}
 \title{Add symbols to existing plot}
 \usage{
-draw_symbols(x, y, symbol = "circle", dimen, rot = 0, n_circle = 32,
-  ...)
+draw_symbols(x, y, symbol = "circle", dimen, rot = 0, n_circle = 32, ...)
 }
 \arguments{
 \item{x}{a numerical vector specifying the x coordinates of the central

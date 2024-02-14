@@ -6,7 +6,8 @@
 \title{A dataset containing detailed boundaries of the Watsonian vice counties in
   the UK, Ireland and the Channel Islands for use as a background to species
   maps}
-\format{A \code{SpatialPolygonsDataFrame} object containing of the polygons
+\format{
+A \code{Simple Features data.frame} object containing of the polygons
   required to plot the outlines of the countires comprising the UK, Ireland
   and Channel Islands. The attribute data table associated with the polygons
   has the following fields which can be used to plot subsets of the whole.
@@ -22,7 +23,8 @@
   region to which each feature is attributed with four possible values; Great
   Britain, Ireland, Isle of Man, and Channel Islands} \item{GOVERNMENT}{a
   factor containing determining the Government region the features belong to
-  (United Kingom, Republic of Ireland, Crown Dependencies)}}}
+  (United Kingom, Republic of Ireland, Crown Dependencies)}}
+}
 \source{
 \url{https://nbn.org.uk/tools-and-resources/nbn-toolbox/watsonian-vice-county-boundaries/}
 for Great Britain Watsonian Vice County Boundaries.\cr

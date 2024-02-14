@@ -15,7 +15,7 @@
 #'   \code{gridref} contains grid references from different coordinate reference
 #'   systems (CRS) and no output CRS is specified (when \code{crs = NULL}). see
 #'   \code{details} for more information.
-#' @param crs A valid coordiante reference system reference that will be
+#' @param crs A valid coordinate reference system reference that will be
 #'   correctly interpreted by \code{\link[sf]{st_crs}}.
 #'
 #' @return This function will return either a single simple features polygon
@@ -51,7 +51,7 @@
 #'   spatial objects using the \code{sp} package.
 #' @export
 #' @author Colin Harrower
-#' @seealso \code{\link{gr2sf_points}}, \code{\link{gr2sp_poly}}
+#' @seealso \code{\link{gr2sf_points}}
 #'
 #' @examples
 #'
@@ -66,7 +66,6 @@
 #'    gr_sf = gr2sf_poly(gridrefs, gr_atts = gr_attributes)
 #'    
 gr2sf_poly = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, crs = NULL){
-  require(sf)
   
   # If gr_atts is supplied then check that the length/nrows matches gridref
   if(!is.null(gr_atts)){
@@ -220,7 +219,7 @@ gr2sf_poly = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, crs = NU
 #'   \code{gridref} contains grid references from different coordinate reference
 #'   systems (CRS) and no output CRS is specified (when \code{crs = NULL}). see
 #'   \code{details} for more information.
-#' @param crs A valid coordiante reference system reference that will be
+#' @param crs A valid coordinate reference system reference that will be
 #'   correctly interpreted by \code{\link[sf]{st_crs}}.
 #'
 #' @return This function will return either a single simple features points
@@ -257,7 +256,7 @@ gr2sf_poly = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, crs = NU
 #' @export
 #' @author Colin Harrower
 #'
-#' @seealso \code{\link{gr2sf_poly}}, \code{\link{gr2sp_points}}
+#' @seealso \code{\link{gr2sf_poly}}
 #'
 #' @examples
 #'
@@ -272,7 +271,6 @@ gr2sf_poly = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, crs = NU
 #'    gr_sf = gr2sf_points(gridrefs, gr_atts = gr_attributes)
 #'  
 gr2sf_points = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, crs = NULL){
-  require(sf)
   
   # If gr_atts is supplied then check that the length/nrows matches gridref
   if(!is.null(gr_atts)){

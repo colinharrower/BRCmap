@@ -10,7 +10,7 @@ utm2mgrs(utm_str, output_type = "full_gr")
 \item{utm_str}{A character vector containing the UTM coordinates. Note UTM
 coordinates must include MGRS band (see details for more information)}
 
-\item{output_type}{A character vector specifiying the desired option for the
+\item{output_type}{A character vector specifying the desired option for the
 output format. Valid options are \code{"full_gr"}, \code{"split_gr"}, or
 \code{"atomised"} with \code{full_gr} being the default. See the Value
 section for more information on these options}

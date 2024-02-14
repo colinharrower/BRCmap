@@ -1,5 +1,5 @@
 ---
-title: "BRCmap - An R package to produce species distribution maps of the type used in distribution atlases"
+title: "BRCmap - An R package to produce species distribution maps in styles suitable for use in distribution atlases"
 author: "Colin Harrower"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -25,10 +25,10 @@ BRCmap includes functions and options that allow you to tailor the distribution 
 ```
 
 The example below shows how BRCmap can be used to quickly create a simple distribution map. 
-```{r, fig.width=6, fig.height=8, tidy=TRUE, eval = TRUE}
+```{r, fig.width=5, fig.height=6.5, tidy=TRUE, eval = TRUE}
   # Reduce margins
   par(mar=c(0,0,0,0)+0.1)
-  # Create a base maps of the UK
+  # Create a base maps of the UK (using lower resolution outline)
   plot_GIS(UK_lowres)
   # Create a vector of grid references
   grs = c("SP50","SO29","SN03","NO19","NH22",
@@ -39,19 +39,135 @@ The example below shows how BRCmap can be used to quickly create a simple distri
   plotUK_gr(grs, col="red")
 ```
 
+# Creating Distribution Maps
+
+BRCmap is designed to help produce occurrence maps of the kinds typically found in species atlases by allowing the maps to be plotted directly from location information given as grid references as is often the case for Biolgoical Records data in the UK & Ireland. The maps produced by BRCmap typically have two main components the base map or background layer, which is used for context and is often something like the UK/Ireland outline(s) or country/Vice County boundaries, and then one or more plotting layer where occurrence data is plotted either by outlining specific grid squares or representing grid squares with symbols. I
+
+## Plotting the Base map
+Each of the functions in BRCmap that plot grid reference data are designed to add the occurrence data onto an existing base map, e.g. the UK outline, and do not by themselves open or create a plotting device. Instead you will first need to create a base plot onto which the grid reference data can subsequently be plotted, this can be done using the `plot_GIS` function. This function is passed the name of the spatial object you want to plot/use as the base map, this can either be one of the base layer spatial datasets included with BRCmap (see the section on customising the base map for more details) or a users supplied spatial object.
+
+```{r, fig.width=5, fig.height=6.5}
+  # Reduce margins
+    par(mar=c(0,0,0,0)+0.1)
+  # Plot UK coastline background map object using lower resolution version
+    plot_GIS(UK_lowres)
+
+```
+
+
+
+
+## Plot grid references as outlines
+The simplest way to plot grid reference data is where each grid references is represented by a square polygon outlining the boundaries of the square represented by the grid reference(s). This type of plotting is done in BRCmap using the `plotUK_gr` function. The colour used to fill the square and the colour of the border can be altered by providing appropriate values to `col` and `border` arguments respectively. These arguments accept the standard methods of specifying colour(s) in R e.g. named colours, rgb values, hex values, etc. As this function will plot the outline of the square represented by a grid references When plotting maps at the full UK scale you may want to avoid plotting fine resolution grid references, with grid refererences finer than 10km square often being  difficult to see on standard size plots.
+
+```{r, fig.width=5, fig.height=6.5}
+  # Reduce margins
+    par(mar=c(0,0,0,0)+0.1)
+  # Create a vector of grid references to be plotted
+    gridrefs <- c("SP49","WV57","H40","NN29","NT20","TL97", "SP24NW")
+  # Setup base map
+    plot_GIS(UK_lowres)
+  # Now add grid references to base map
+    plotUK_gr(gridrefs, col="lightgreen")
+```
+
+
+## Customising the Base Map
+BRCmap includes a few different commonmly used outlines that can be used as base layer(s) for any mapping. The base mapping options included in BRCmap are the:
+
+1. coastlines/outlines of the UK, Ireland and the Channel Islands (`UK`)
+2. Country boundaries for the UK, Ireland and the Channel Islands (`UK_countries`)
+3. Watsonian Vice county boundaries for the UK, Ireland and the Channel Islands (`UK_VC`)
+
+```{r, fig.width=5, fig.height=6.5, echo = FALSE,fig.cap = "'UK' contains coastline/outlines of UK, Ireland and the Channel Islands"}
+  # Reduce margins
+    par(mar=c(0,0,0,0)+0.1)
+  # Plot UK coastline background map object
+    plot_GIS(UK_lowres)
+```
+
+```{r, fig.width=5, fig.height=6.5, echo = FALSE, fig.cap = "'UK_countries' contains country boundaries for UK, Ireland and the Channel Islands"}
+  # Reduce margins
+    par(mar=c(0,0,0,0)+0.1)
+  # Plot UK coastline background map object
+    plot_GIS(UK_countries_lowres)
+```
+
+```{r, fig.width=5, fig.height=6.5, echo = FALSE, fig.cap = "'UK_VC' contains Watsonian Vice County boundaries for UK, Ireland and the Channel Islands"}
+  # Reduce margins
+    par(mar=c(0,0,0,0)+0.1)
+  # Plot UK coastline background map object
+    plot_GIS(UK_VC_lowres)
+```
+
+The base map outlines are stored as `sp` `SpatialPolygonsDataFrame` objects using the OSGB Coordinate References System (EPSG: 27700). Each consists of a different features with an attribute table so they can be subset if needed, for instance the `UK` object has seperate features for GB, Ireland, Isle of Man and the Channel Islands, while the `UK_countries` has features for England, Scotland, Wales, Isle of Man, Northern Ireland, Republic of Ireland and the Bailiwicks of Jersey and Guernesey. Each of the base mapping options is also available as a lower quality spatial object where the boundaries have been simplified that can be used in situations where where the background doesn't need to be as complex/detailed and or when there are size limitations on the final objects.
+
+
+```{r, fig.width=5, fig.height=6.5 }
+  # Reduce margins
+    par(mar=c(0,0,0,0)+0.1)
+  # Plot UK coastline background map object
+    plot_GIS(UK)
+  # Show attribute/data table for features in the object
+    UK@data
+  # Plot subset (only Ireland)
+    plot_GIS(subset(UK_lowres, REGION == "Ireland"))
+
+```
+
+If you want to plot a particular smaller section of one of the basemaps but whether it isn't a seperate feature of the dataset, e.g. a small part of a region/countyyou can do this by providing `xlim` and `ylim` values as arguments to the `plot_GIS` function. For example if you wanted to plot the Sheltland Isles you could use the following
+
+```{r, fig.width = 5, fig.height=6.5}
+  par(mar=c(0,0,0,0)+0.1)
+  plot_GIS(UK_countries[UK_countries$COUNTRY == "Scotland",], xlim = c(400000,500000), ylim = c(1100000,1250000), grid.div = 1000)
+```
+
+
+
+
 # Dealing with grid references
-## Introduction to Grid Reference formats & standardising
-The three grid references systems used in the UK, Ireland, and Channel Islands have a number of factors in common. Firstly they all look essentially simialr and have similar patterns in their construction. They are built from a series of components each of which further refine the location being described going from left to write, starting one or two letter(s) followed by an even number of digits.  These starting letters specify a initial 100km x 100km square, though how they do this differs slightly between the systems but is not neccessary to understand (see Wikipedia pages for more details if interested [British National Grid](https://en.wikipedia.org/wiki/Ordnance_Survey_National_Grid), [Irish Grid Reference system](https://en.wikipedia.org/wiki/Irish_grid_reference_system), [Military Grid Reference System](https://en.wikipedia.org/wiki/Military_Grid_Reference_System)). The digits that follow the intial letter(s) describe a location within the relevant 100km square by specifying the location as an x,y offset (aka (easting, northing) from the origin (the south west/lower left corner of the square) in meters and there should always be an even number of digits. The first half of the digits specify the easting (a.k.a. the offset on the y axis) while the second half of the digits specify the northing (a.k.a. the offset on the x axis). The location described can be of varying resolutions depending on the number of digits given, for instance a 10km square is specified by one pair of digits (one easting & one northing digit), a 1km square by 2 pairs of digits (two easting & two northing digits), through to the 1m square with 10 digits (five easting & five northing) as shown in the table below.
+## Introduction to Grid Reference formats used for Biological Recording in the UK, Ireland & Channel Islands
+There are three main grid references systems typically used in the UK, Ireland, and Channel Islands for Biological Recording. These are the Ordnance Survey of Great Britain (OSGB) national grid reference system which is used in UK, inlcuding Isle of Man, the Ordnance Survey of Ireland (OSI) national grid reference system used in Northern Ireland & the Republic of Ireland, and  the Military Grid References System (MGRS) used in the Channel Islands (though in many cases these MGRS grid references for the Channel Islands are tructated to exclude the initial zone code 30U which covers the entire region).
 
-Grid Reference | Square Resolution | digit pairs
----------------|-------------------|-------------
-SU68           |  10km x 10km      |  1
-SU6189         |  1km x 1km        |  2
-SU616895       |  100m x 100m      |  3
-SU61698959     |  10m x 10m        |  4
-SU6169089594   |  1m x 1m          |  5
+The grid references from all three systems look similar with grid references from all three systems typically starting with one or two letters, followed by an even number of digits. Grid references from UK & Channel Islands start with two letters, e.g. SP6489 or WV6347, with Channel Islands grid references being recognisable as they will start with WA or WA, while grid references from the Irish national grid start with a single letter, e.g H4107. Grid references from the Channel Islands can sometimes be presented as the full MGRS grid references, in which there will be zone identifier 30U at the start of the grid reference preceeding the WA or WV, e.g. 30UWV6347, however as the same zone applied for all of the region often the zone identifier may be omitted.
 
-In rare cases the grid references can be terminated by a one or two character letter code. These special cases are called tetrads or quadrants and represent grid references used to represent a 2km x 2km square or a 5km x 5km square respectively. Tetrad or quadrant grid references are essentially 10km grid references which have had additional letter codes appended to then end to specify the relevant subsection of the 10km square to which they refer. In the case of tetrads the 10km squares are divided into 25 2km x 2km squares arranged in a 5 by 5 grid, each of which is assigned a letter code running from A, in the lower left, to Z, in the upper right, but omitting O to avoid confusion with zeros.
+The starting letters of the grid references effectively specify a specific 100km x 100km square and the digits after specifying a location or area within this square. The digits specify position as distances from the south west/bottom left corner of the square in meters. The first half of the digits specify the horizontal distance, or Easting, from this point while the latter half specify the vertical distance, or Northing, and as such there should always be an even number of digits in the grid reference.
+
+The location described can be of varying resolutions depending on the number of digits provided in the grid reference. For example a 10km square is specified by one pair of digits (one easting & one northing digit), a 1km square by 2 pairs of digits (two easting & two northing digits) and so on as shown in the table below. As grid references always refer to a square area the resoultion of a grid references is often described by the dimension of one side rather than the area, for instance a "10km grid square" refers to a 10km x 10km area (or 100km^2) and not to a grid square that covers an area of 10km^2. A few of the historically most commonly used grid square resolutions have their own names, for instance a Hectad is the name for a 10km x 10km grid square/grid references, while a monad is a 1km x 1km grid square/reference.
+
+Occasionally you may encounter grid references that have a one or two character letter code after the digit pair. These special cases are referred to a Quadrants or Tetrads and are grid references used to represent 5km x 5km squares or a 2km x 2km squares respectively. Tetrad and quadrant grid references are essentially 10km grid references to which an additional letter code has been appended to indicate particular areas within the 10km square.
+
+Grid Reference | Square Resolution | digit pairs | Square Type
+---------------|-------------------|-------------|------------
+SU68           |  10km x 10km      |  1          |Hectad (10km)
+SU68NW         |  5km x 5km        |  1          |Quadrant (5km)
+SU68E          |  2km x 2km        |  1          |Tetrad (2km)
+SU6189         |  1km x 1km        |  2          |Monad (1km)
+SU616895       |  100m x 100m      |  3          |100m
+SU61698959     |  10m x 10m        |  4          |10m
+SU6169089594   |  1m x 1m          |  5          |1m
+
+
+
+In a quadrant grid reference the 10km squares has been divided into four 5km x 5km squares, arranged in a 2 by 2 grid, with each sections being allocated a two letter code to represent the corner of 10km square that the relevant section occupies, e.g. SW, NW, SE, NE for South West, North West, South East, and North East corners respectively as shown in the figure below.
+
+```{r, fig.width=4, fig.asp = 1, tidy=TRUE, echo = FALSE, eval = TRUE, fig.cap = "Layout of quadrants within a 10km square"}
+  # Reduce margins
+    par(mar=c(0,0,0,0)+0.1)
+  # Create 10km square as a spatial polygon so it can be plotted
+    sq10km = gr2sf_poly("SU68")
+  # Create all quadrants within this 10km as spatial polygons
+    sq_quads = gr2sf_poly(paste0("SU68",c("SW","NW","SE","NE")))
+  # Plot this square
+    plot(st_geometry(sq10km), lwd = 3, border = 3)
+  # add quadrants to plot
+    plot(st_geometry(sq_quads),lwd = 1, add = TRUE)
+  # Add label to each quadrants
+    text(gr_let2num(paste0("SU68",c("SW","NW","SE","NE")), centre = TRUE), labels = c("SW","NW","SE","NE"),font = 2, cex = 0.9)
+    rm(sq10km, sq_quads)
+```
+
+While in a tetrad grid reference the 10km squares has instread been divided into 25 2km x 2km squares, laid out in a 5 by 5 grid, each assigned a letter running from A, in the lower left, to Z, in the upper right, but omitting O to avoid confusion with zeros.
 
 
 ```{r, fig.width=4, fig.asp = 1, tidy=TRUE, echo = FALSE, eval = TRUE, fig.cap = "Layout of tetrads within a 10km square"}
@@ -71,26 +187,9 @@ In rare cases the grid references can be terminated by a one or two character le
     
 ```
 
-For quadrant grid references the 10km squares are divided into four 5km x 5km squares arranged in a 2 by 2 grid with each sections being allocated a two letters code to representing the corner of 10km square that the relevant section occupies, e.g. SW, NW, SE, NE for South West, North West, South East, and North East corners respectively.
+Hopefully this should be as enough information for you to understand and deal with these grid references but further information on these grid references systems can be found on the following Wikipedia pages [British National Grid](https://en.wikipedia.org/wiki/Ordnance_Survey_National_Grid), [Irish Grid Reference system](https://en.wikipedia.org/wiki/Irish_grid_reference_system), [Military Grid Reference System](https://en.wikipedia.org/wiki/Military_Grid_Reference_System).
 
-```{r, fig.width=4, fig.asp = 1, tidy=TRUE, echo = FALSE, eval = TRUE, fig.cap = "Layout of quadrants within a 10km square"}
-  # Reduce margins
-    par(mar=c(0,0,0,0)+0.1)
-  # Create 10km square as a spatial polygon so it can be plotted
-    sq10km = gr2sf_poly("SU68")
-  # Create all quadrants within this 10km as spatial polygons
-    sq_quads = gr2sf_poly(paste0("SU68",c("SW","NW","SE","NE")))
-  # Plot this square
-    plot(st_geometry(sq10km), lwd = 3, border = 3)
-  # add quadrants to plot
-    plot(st_geometry(sq_quads),lwd = 1, add = TRUE)
-  # Add label to each quadrants
-    text(gr_let2num(paste0("SU68",c("SW","NW","SE","NE")), centre = TRUE), labels = c("SW","NW","SE","NE"),font = 2, cex = 0.9)
-    rm(sq10km, sq_quads)
-```
-
-
-
+## Standardising Grid References
 Although the essential components of a grid reference and their order are consistent the exact formatting can vary dramatically, for example sometimes spaces or hypens are used to seperate the individual components of the grid reference. In order for the functions in BRCmap to work consistently the grid references will need to be standardised to the format expected by the package. The standardised format is to use capital letters for the intial letter codes and any tetrad or quadrant and to have no spaces or other characters seperating the components of the grid reference. BRCmap contains a function `fmt_gridref` specifically for this purpose. This function will do some basic checks to also exclude/remove grid references that don't match the expected formats (e.g. that have uneven numbers of digits, too many letters a the start). 
 ```{r}
 # Create a vector of grid references in a range of different formats
@@ -109,12 +208,12 @@ In many cases you may want to take a grid reference or set of grid references an
 ```{r}
   reformat_gr("SU6169089594")
 ```
-by default `reformat_gr` will reformat to 10km square, but the output resolution can be supplied via the 2nd argument (`prec_out`) in metres.
+by default `reformat_gr` will reformat to 10km square, but the output resolution can be changed via the 2nd argument (`prec_out`) by supplying a resolution value in metres.
 ```{r}
-  # Output to 100m
+  # Output to 100m grid reference
   reformat_gr("SU6169089594",100)
 ```
-The input grid reference argument and or the precision argument can be supplied a single value or a vector of grid references and or precision values to allow a series of grid references to be output to a single precision or each to a different precision
+The input grid reference argument and or the output precision arguments can accept a single value or be given vector(s) of grid references and or precision values to allow a series of grid references to be output to a either a single precision or each output to different precisions.
 
 ```{r}
   # Create a set of input grid references
@@ -127,53 +226,16 @@ The input grid reference argument and or the precision argument can be supplied 
    reformat_gr(test_gr,1000)
 ```
 
-Notice that in the last example `reformat_gr` does not reformat a grid reference if the output resolution is that the original grid references resolution. In such cases it instead returns a `NA` as was the case of the 2nd grid references in the example above. In rare situation you may want to still force these coarser resolution records to a finer resolution grid reference by padding with zeros whjich can be achieved by setting the `pad_gr` argument to `TRUE` from the default `FALSE`, this will however display a message warning about false precision in grid references to make it is clear what is happening and that in most cases this is not desired or advisable.
+Notice that in the last example `reformat_gr` does not by default reformat a grid reference if the output resolution is finer than the resolution of the supplied grid reference. In such cases it instead returns a `NA` as was the case of the 2nd grid references in the example above. In rare situation you may want to still force these coarser resolution records to a finer resolution grid reference by padding with zeros whjich can be achieved by setting the `pad_gr` argument to `TRUE` from the default `FALSE`, this will however display a message warning about false precision in grid references to make it is clear what is happening and that in most cases this is not desired or advisable.
 
 ```{r}
   reformat_gr(test_gr,1000, pad_gr = TRUE)
 ```
 
+
+## Styles
+
 ## Converting grid references to eastings & northings and vice versa
   
 ## Converting between grid references and WGS84 latitudes & longitudes
 
-# Creating Distribution Maps
-## Customising the Base Map
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))

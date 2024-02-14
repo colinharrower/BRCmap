@@ -4,10 +4,19 @@
 \alias{plotUK_gr_symbols}
 \title{Add symbols to existing map}
 \usage{
-plotUK_gr_symbols(gridref, symbol = "circle", dimen = NULL,
-  dimen_type = "prop", rot = 0, centre = TRUE, gr_prec = NULL,
-  add_irish_rot = 5, ci_insert = FALSE, ci_origin = c(-180000,
-  30000), ...)
+plotUK_gr_symbols(
+  gridref,
+  symbol = "circle",
+  dimen = NULL,
+  dimen_type = "prop",
+  rot = 0,
+  centre = TRUE,
+  gr_prec = NULL,
+  add_irish_rot = 5,
+  ci_insert = FALSE,
+  ci_origin = c(-180000, 30000),
+  ...
+)
 }
 \arguments{
 \item{gridref}{A character vector containg the grid refrences to be added to

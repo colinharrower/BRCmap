@@ -1,3 +1,30 @@
+#' Function to convert British & Irish grid references to eastings & northings on the GB ordnance survey system
+#' @description This function will convert grid references typically used in Britain (OSGB, OSNI, UTM30) to eastings & northings on the Ordnance Survey for Great Britain projection. In the case of Irish & Channel Islands grid references they will be reprojected to place them onto the GB ordnance survey system (OSGB) to allow comparisons, simple distance measures or plotting onto maps in the GB projection. GB grid reference are simply converted to eastings and northings in their native projection.
+#'
+#' @param gridref A character vector containing the grid references to be converted
+#' @param centre 	A logical variable determining whether the coordinates returned are for the grid centre or the bottom left corner. The default centre = TRUE will return the coordinates for the grid reference centre.
+#' @param gr_prec A numerical vector determining the precision of the grid references. The default gr_prec = NULL will determine the precision directly from the grid reference
+#'
+#' @return The function returns a data.frame containing two columns EASTING and NORTHING which give the eastings and northing in meters from the OSGB origin.
+#' 
+#' @export
+#'
+#' @author Colin Harrower
+#'
+#' @seealso \code{\link{gr_let2num}}
+#'
+#' @examples
+#' ## Example converting a range of UK grid references (OSGB, OSNI, & UTM30)
+#' ## to eastings & northings on the OSGB grid
+#' 
+#' # Create a vector of grid refs to be converted to OSGB easting & northing
+#' gridrefs <- c("SP49","NO58","WV55","H47","NN29","WV55","WA50","NT20","TL97"
+#'               ,"NH33","SE25","SN22","SH87","SO00","N20","M85","T01","SX59","NY78")
+#' 
+#' # Convert the gridrefs to OSGB eastings & northings
+#' OSgrid2GB_EN(gridrefs)
+
+
 OSgrid2GB_EN <-
 function(gridref, centre = TRUE, gr_prec = NULL){
 	# Check that values have been passed

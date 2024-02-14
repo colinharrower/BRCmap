@@ -22,7 +22,7 @@
 #'   different open source datasets (see source section below)
 #'   
 #'   
-#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons 
+#' @format A \code{Simple Features data.fram} object containing of the polygons 
 #'   required to plot the coastline of the UK, Ireland and Channel Islands. The 
 #'   attribute data table associated with the polygons has the following fields 
 #'   which can be used to plot subsets of the whole. \describe{ \item{REGION}{A 
@@ -72,7 +72,7 @@
 #'   different open source datasets (see source section below)
 #'   
 #'   
-#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons 
+#' @format A \code{Simple Features data.frame} object containing of the polygons 
 #'   required to plot the coastline of the UK, Ireland and Channel Islands. The 
 #'   attribute data table associated with the polygons has the following fields 
 #'   which can be used to plot subsets of the whole. \describe{ \item{REGION}{A 
@@ -119,7 +119,7 @@
 #'   different open source datasets (see source section below)
 #'
 #'
-#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons
+#' @format A \code{Simple Features data.frame} object containing of the polygons
 #'   required to plot the outlines of the countires comprising the UK, Ireland
 #'   and Channel Islands. The attribute data table associated with the polygons
 #'   has the following fields which can be used to plot subsets of the whole.
@@ -174,7 +174,7 @@
 #'   using a couple of different open source datasets (see source section below).
 #'   
 #'
-#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons
+#' @format A \code{Simple Features data.frame} object containing of the polygons
 #'   required to plot the outlines of the countires comprising the UK, Ireland
 #'   and Channel Islands. The attribute data table associated with the polygons
 #'   has the following fields which can be used to plot subsets of the whole.
@@ -232,7 +232,7 @@
 #'   for the Northern Irish and Republic of Ireland parts of this VC.
 #'
 #'
-#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons
+#' @format A \code{Simple Features data.frame} object containing of the polygons
 #'   required to plot the outlines of the countires comprising the UK, Ireland
 #'   and Channel Islands. The attribute data table associated with the polygons
 #'   has the following fields which can be used to plot subsets of the whole.
@@ -299,7 +299,7 @@
 #'   for the Northern Irish and Republic of Ireland parts of this VC.
 #'   
 #'
-#' @format A \code{SpatialPolygonsDataFrame} object containing of the polygons
+#' @format A \code{Simple Features data.frame} object containing of the polygons
 #'   required to plot the outlines of the countires comprising the UK, Ireland
 #'   and Channel Islands. The attribute data table associated with the polygons
 #'   has the following fields which can be used to plot subsets of the whole.

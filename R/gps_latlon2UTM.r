@@ -1,3 +1,24 @@
+#' Convert WGS84 Latitude & Longitude to UTM grid reference
+#'
+#' @param lat Numerical value giving the Latitude (in decimal format)
+#' @param lon Numerical value giving the Longitude (in decimal format)
+#' @param to_metre Should the UTM grid reference be rounded down to metre
+#'   precision. The default \code{to_metre = TRUE} will ensure that the UTM grid
+#'   reference(s) are rounded down to metre precision.
+#' @param out_string A logical value determining whether the results should only
+#'   be the UTM grid reference character string(s) or alternatively a data.frame
+#'   with columns for each individual components that make up the UTM string
+#'   (e.g. zone, hemispwhere, easting, northing). The default \code{out_string =
+#'   TRUE} will return onyl the UTM grid references strings, while
+#'   \code{out_string = FALSE} will return the data.frame.
+#' 
+#' @return A vector of strings or a data.frame depending on the values of `out_string`
+#' @export
+#'
+#' @examples
+#' 
+#' 
+#' 
 # Adapted from Script created by Chris Verness ((c) Chris Veness 2014-2015 / MIT Licence)
 # This script is provided on moveable type website (http://www.movable-type.co.uk/scripts/latlong-utm-mgrs.html) under MIT licence for
 # free use and adaptation.
@@ -5,7 +26,7 @@
 # Krüger 1912 ‘Konforme Abbildung des Erdellipsoids in der Ebene’.     
 
 # Also used webpage by Steven Dutch (http://www.uwgb.edu/dutchs/usefuldata/utmformulas.htm) to aid with checking code
- 
+
 gps_latlon2utm = function(lat, lon, to_metre = TRUE, out_string = TRUE){
 	# Error checking
 	if(length(lat) != length(lon)){
