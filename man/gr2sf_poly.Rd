@@ -32,7 +32,7 @@ This function will return either a single simple features polygon
   on the grid reference type(s) of the grid references supplied to
   \code{gridref}, whether a Coordinate Reference system is supplied to
   \code{crs}, and or whether \code{sep_proj_layers} is \code{TRUE} or
-  code{FALSE}
+  \code{FALSE}
 }
 \description{
 Takes one or more grid references, and any associated data or

@@ -13,18 +13,20 @@ points for each symbol.}
 \item{y}{a numerical vector specifying the y coordinates of the central
 points for each symbol.}
 
-\item{symbol}{A text string specifying the type of symbols to be draw. The 
+\item{symbol}{A text string specifying the type of symbols to be draw. The
 default \code{symbol = "circle"} draws a circle with radius dimen/2. Other
-possible values are \code{triangle}, \code{square}, \code{diamond}.}
+possible values are \code{triangle}, \code{square}, \code{polygon},
+\code{diamond}, \code{star}, \code{plus}, \code{cross}, \code{asterisk},
+\code{lines}.}
 
-\item{dimen}{The dimensions of the symbol. This is given as the maximum 
+\item{dimen}{The dimensions of the symbol. This is given as the maximum
 height/length of the total polygon and not the radii from the central point}
 
 \item{rot}{A numerical value specifying the rotation of the symbol in
 degrees. The default \code{rot = 0} means that the symbol will be plotted
-from 12 o'clock working around the central point going clockwise.  An 
+from 12 o'clock working around the central point going clockwise.  An
 exception to this is when \code{symbol = "square"} in which case the
-vertices are rotated by 45 degrees so that the top edge is parallel with 
+vertices are rotated by 45 degrees so that the top edge is parallel with
 the x axis.}
 
 \item{n_circle}{A number specifying the number number of vertices in the
@@ -33,9 +35,10 @@ polygon that will be used to approximate a polygon. The default
 cases, however if you require smooth approximations then inccrease this
 value.}
 
-\item{...}{any other arugments will be passed through the \code{polygon} 
-function used to actually add the polygon to the plot, e.g. \code{col = 
-"red"}, code{border = "blue"}, etc.}
+\item{...}{any other arugments will be passed through the
+\code{draw_polygons()}, \code{draw_stars()}, \code{draw_line_syms()}
+functions used to actually add the polygon to the plot, e.g. \code{col =
+"red"}, \code{border = "blue"}, etc.}
 }
 \description{
 \code{draw_symbols} draws symbols of specified type and size
@@ -44,10 +47,20 @@ function used to actually add the polygon to the plot, e.g. \code{col =
 \details{
 This function is used by functions in BRCmap (see See Also seciton
   below) to place plotting symbols of a given size at coordinates specified.
-  At present only a couple of symbols (circle, triangle, square, diamond) are
-  possible at present. Other commonly used mapping symbols will be added in
-  the future.
-  
+  At present the available options for symbol types are circle, triangle,
+  square, diamond, polygon, star, plus, cross, asterisk, lines are possible
+  at present.
+
+  This is a wrapper function for a set of more specific functions that do the
+  plotting for the different symbol types. Each of these individual functions
+  have their own specific arguments related to their symbol type that can be
+  specified and passed through \code{...}. For example the the function that
+  draws stars \code{draw_stars} has the arugments \code{nrays} that specifies
+  the number of rays or points that the star will have. \code{draw_polygons}
+  is used for plotting circles, triangles, squares and diamonds;
+  \code{draw_stars} for stars; \code{draw_line_syms} for plus, cross,
+  asterisk and other rotated line symbols.
+
   It should be noted that the 'circles' produced are actually n-vertice
   polygons that in most cases should give acceptable approximations for a
   true circle. If you require a smoother circle increase the number of
@@ -59,14 +72,22 @@ This function is used by functions in BRCmap (see See Also seciton
 \examples{
   ## Example of adding symbols to a plot
   # First create a blank plot
-    plot(1:60,1:60, type="n")
-  # Now add a series of pentagons across the diagonal
+    plot(1:60,1:60, type="n",asp=1)
+  # Now series of plot types
     xy_vals = seq(10,50,by=10)
-    draw_symbols(xy_vals, xy_vals, "circle", dimen = 3, col="red")
+    draw_symbols(xy_vals, xy_vals[1], "circle", dimen = 3, col="red")
+    draw_symbols(xy_vals, xy_vals[2], "triangle", dimen = 3, col="blue")
+    draw_symbols(xy_vals, xy_vals[3], "square", dimen = 3, col="orange")
+    draw_symbols(xy_vals, xy_vals[4],
+      "star", nrays = c(3,4,5,6,7), dimen = 3, col="purple"
+    )
+    draw_symbols(xy_vals, xy_vals[5], "lines", dimen = 3, col="red")
+  #
     
 }
 \seealso{
-\code{\link{plotUK_gr_symbols}}
+\code{\link{plotUK_gr_symbols}}, \code{\link{draw_polygons}},
+  \code{\link{draw_stars}}, \code{\link{draw_line_syms}}
 }
 \author{
 Colin Harrower

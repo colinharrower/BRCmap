@@ -23,7 +23,7 @@ A vector of northing coordinates to be converted
 A code determining the original mapping system. Valid values are; \code{"OSGB"}, \code{"OSNI"}, \code{"UTM30"}. The default \code{org_grid = "OSNI"} assumes intput coordinates are easting & northing on the Irish Grid
 }
   \item{out_grid}{
-A code determing the mapping system to which the coordinates are to be converted. As above the valid values are; \code{"OSGB"}, \code{"OSNI"}, code{"UTM30"}. The default (\code{org_grid = "OSGB"}) assumes coordinates returned are to be easting & northing on the British Grid
+A code determing the mapping system to which the coordinates are to be converted. As above the valid values are; \code{"OSGB"}, \code{"OSNI"}, \code{"UTM30"}. The default (\code{org_grid = "OSGB"}) assumes coordinates returned are to be easting & northing on the British Grid
 }
   \item{full_output}{
 Logical determining whether the output data.frame is to contain the full range of input and output columns or only the new coordinates. The default (\code{full_output} \code{= FALSE}) will return only columns containing the new eastings and northing coordinates.

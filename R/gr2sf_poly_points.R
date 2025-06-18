@@ -23,7 +23,7 @@
 #'   on the grid reference type(s) of the grid references supplied to
 #'   \code{gridref}, whether a Coordinate Reference system is supplied to
 #'   \code{crs}, and or whether \code{sep_proj_layers} is \code{TRUE} or
-#'   code{FALSE}
+#'   \code{FALSE}
 #'
 #' @details Each grid reference in \code{gridref} will be converted to a polygon
 #'   in the simple features object. This means that if \code{gridref} contains
@@ -227,7 +227,7 @@ gr2sf_poly = function(gridref, gr_atts = NULL, sep_proj_layers = FALSE, crs = NU
 #'   depend on the grid reference type(s) of the grid references supplied to
 #'   \code{gridref}, whether a Coordinate Reference system is supplied to
 #'   \code{crs}, and or whether \code{sep_proj_layers} is \code{TRUE} or
-#'   code{FALSE}
+#'   \code{FALSE}
 #'
 #' @details Each grid reference in \code{gridref} will be converted to a point
 #'   in the simple features points object. This means that if

@@ -28,8 +28,3 @@ A vector of strings or a data.frame depending on the values of `out_string`
 \description{
 Convert WGS84 Latitude & Longitude to UTM grid reference
 }
-\examples{
-
-
-
-}

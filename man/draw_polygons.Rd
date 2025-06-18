@@ -4,48 +4,50 @@
 \alias{draw_polygons}
 \title{Add a series of regular polygons to the existing plot}
 \usage{
-draw_polygons(x, y, r, n, rot = 0, ...)
+draw_polygons(x, y, r, n = 5, rot = 0, ...)
 }
 \arguments{
-\item{x}{a single numerical value giving the x coordinate for the central 
-point.}
+\item{x}{a numerical vector giving the x coordinates for the central points
+of the symbols.}
 
-\item{y}{a single numerical value giving the y coordinate for the central 
-point.}
+\item{y}{a numerical vector giving the y coordinates for the central points
+of the symbols.}
 
-\item{r}{a single numerical value or a vector of values giving the radii of 
+\item{r}{a single numerical value or a vector of values giving the radii of
 the vertices from the central point.}
 
-\item{n}{a number specifying the number of vertices.}
+\item{n}{a number specifying the number of vertices of the polygon to be
+plotted. For example n = 4 will draw a diamond or square (depending on
+\code{rot}), while n = 6 will plot a hexagon}
 
 \item{rot}{a numerical value specifying the rotational poisition of the first
-point. The default \code{rot = 0} means the first point will be at the 12 
+point. The default \code{rot = 0} means the first point will be at the 12
 o'clock position.}
 
-\item{...}{any other arugments will be passed through the \code{polygon} 
-function used to actually add the polygon to the plot, e.g. \code{col = 
-"red"}, code{border = "blue"}, etc.}
+\item{...}{any other arguments will be passed through the \code{polygon}
+function used to actually add the polygon to the plot, e.g. \code{col =
+"red"}, \code{border = "blue"}, etc.}
 }
 \description{
 Add a series of regular polygons to the existing plot
 }
 \details{
-In most cases this function plots a regular polygon, i.e. where all 
-  angles are the same (equiangular) and where all sides are the same length 
-  (equilateral). An exception is made however in the case of a triangle 
-  (\code{n = 3}) where this function returns an isosceles triangle rather 
-  than an equilateral one. This alteration is made so that the resulting 
+In most cases this function plots a regular polygon, i.e. where all
+  angles are the same (equiangular) and where all sides are the same length
+  (equilateral). An exception is made however in the case of a triangle
+  (\code{n = 3}) where this function returns an isosceles triangle rather
+  than an equilateral one. This alteration is made so that the resulting
   triangle fills as much of the area occupied by a square with dimensions r*2
   by r*2.
-  
-  This function is also used by BRCmap to draw circular symbols of specified 
-  dimensions by using a polygon with sufficient vertices to approximate a 
-  circle. There is a trade-off in the number of vertices required to 
-  approximate a cirlce will with larger vectices producing a smoother polygon
+
+  This function is also used by BRCmap to draw circular symbols of specified
+  dimensions by using a polygon with sufficient vertices to approximate a
+  circle. There is a trade-off in the number of vertices required to
+  approximate a cirlce will with larger vertices producing a smoother polygon
   but having increasing complexity.
-  
-  This funciton is an internal functiont that is used by other functions in 
-  BRCmap to plot symbols of specified dimesions onto maps.
+
+  This function is an internal function that is used by other functions in
+  BRCmap to plot symbols of specified dimensions onto maps.
 }
 \examples{
   # Examples of adding regular polygons to a plot
@@ -54,7 +56,7 @@ In most cases this function plots a regular polygon, i.e. where all
   # Now add a series of pentagons across the diagonal
     xy_vals = seq(10,50,by=10)
     draw_polygons(xy_vals, xy_vals, r=3,n=5, col="red")
-  
+
   # Open a blank plot
     plot(1:60,1:60, type="n")
   # Now add a series of polygons across the diagonal starting with

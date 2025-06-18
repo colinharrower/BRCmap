@@ -5,6 +5,7 @@
 #' with and map UK, Irish and Channel Islands grid reference strings.
 #' 
 #'
-#' @docType package
 #' @name BRCmap
 NULL
+
+"_PACKAGE"

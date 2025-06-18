@@ -92,14 +92,28 @@ Function to plot valud UK grid references as symbols onto a
 \examples{
   ## Example of adding grid references to a map as symbols
   # Create blank map of UK
-    plot_GIS(UK, show.grid = FALSE, xlab = "", ylab="", show.axis = FALSE)
-
+    plot_GIS(UK)
   # Add some points as circles
     plotUK_gr_symbols(c("SU68","SP50","SU77"), col="red", border="darkred")
   # Add some other points this time as triangles
-    plotUK_gr_symbols(c("NT27","NS56","NJ90"), symbol = "triangle", col="blue", border="darkblue")
+    plotUK_gr_symbols(
+      c("NT27","NS56","NJ90"), symbol = "triangle", 
+      col="blue", border="darkblue"
+    )
   # Add some more as diamonds
-   plotUK_gr_symbols(c("O13","J37"), symbol = "diamond", col="green", border="darkgreen")
+    plotUK_gr_symbols(
+      c("O13","J37"), symbol = "diamond", 
+      col="green", border="darkgreen"
+    )
+  # Add some plus and cross symbols
+    plotUK_gr_symbols(
+      c("NY32","NY58","NY98"), symbol = "plus", 
+      col="black", lwd = 2
+    )
+    plotUK_gr_symbols(
+      c("SE19","SE94","SE45"), symbol = "cross", 
+      col="black", lwd = 2
+    )  
     
 }
 \seealso{
