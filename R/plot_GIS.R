@@ -136,12 +136,14 @@ function(
     if("xlim" %in% names(d_args)){
       x_lims = d_args$xlim
     } else {
-      x_lims = sf::st_bbox(gis_data)[c("xmin","xmax")]
+      #x_lims = sf::st_bbox(gis_data)[c("xmin","xmax")]
+	  x_lims = par("usr")[1:2]
     }
     if("ylim" %in% names(d_args)){
       y_lims = d_args$ylim
     } else {
-      y_lims = sf::st_bbox(gis_data)[c("ymin","ymax")]
+      #y_lims = sf::st_bbox(gis_data)[c("ymin","ymax")]
+	  y_lims = par("usr")[3:4]
     }
       
     # Determine points from gridlines
